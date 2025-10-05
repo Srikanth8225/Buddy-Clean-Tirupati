@@ -196,53 +196,58 @@ export default function CheckoutPage() {
 
             <Card>
                 <CardHeader><CardTitle>2. Schedule Your Service</CardTitle></CardHeader>
-                <CardContent className="space-y-4 md:flex md:gap-8">
-                    <FormField control={form.control} name="serviceDate" render={({ field }) => (
-                        <FormItem className="flex flex-col">
-                            <FormLabel>Date</FormLabel>
-                            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-                                <PopoverTrigger asChild>
-                                <FormControl>
-                                    <Button variant={"outline"} className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}>
-                                    {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                <CardContent className="space-y-4">
+                    <div className="md:flex md:gap-8">
+                        <FormField control={form.control} name="serviceDate" render={({ field }) => (
+                            <FormItem className="flex flex-col">
+                                <FormLabel>Date</FormLabel>
+                                <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                                    <PopoverTrigger asChild>
+                                    <FormControl>
+                                        <Button variant={"outline"} className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}>
+                                        {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                        </Button>
+                                    </FormControl>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto p-0" align="start">
+                                        <Calendar
+                                            mode="single"
+                                            selected={field.value}
+                                            onSelect={(date) => {
+                                                field.onChange(date);
+                                                setSelectedTime(''); // Reset time when date changes
+                                                setIsCalendarOpen(false);
+                                            }}
+                                            disabled={(date) => date < new Date(new Date().setHours(0,0,0,0)) || date < new Date("1900-01-01")}
+                                            initialFocus
+                                        />
+                                    </PopoverContent>
+                                </Popover>
+                                <FormMessage />
+                            </FormItem>
+                        )} />
+                        <div>
+                            <FormLabel>Time Slot</FormLabel>
+                            <div className="grid grid-cols-3 gap-2 mt-2">
+                                {timeSlots.map(time => (
+                                    <Button 
+                                    key={time} 
+                                    type="button" 
+                                    variant={selectedTime === time ? "default" : "outline"} 
+                                    onClick={() => setSelectedTime(time)}
+                                    disabled={!selectedDate || bookedSlots.includes(time)}
+                                    >
+                                        {time}
                                     </Button>
-                                </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar
-                                        mode="single"
-                                        selected={field.value}
-                                        onSelect={(date) => {
-                                            field.onChange(date);
-                                            setSelectedTime(''); // Reset time when date changes
-                                            setIsCalendarOpen(false);
-                                        }}
-                                        disabled={(date) => date < new Date(new Date().setHours(0,0,0,0)) || date < new Date("1900-01-01")}
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
-                            <FormMessage />
-                        </FormItem>
-                    )} />
-                     <div>
-                        <FormLabel>Time Slot</FormLabel>
-                        <div className="grid grid-cols-3 gap-2 mt-2">
-                            {timeSlots.map(time => (
-                                <Button 
-                                  key={time} 
-                                  type="button" 
-                                  variant={selectedTime === time ? "default" : "outline"} 
-                                  onClick={() => setSelectedTime(time)}
-                                  disabled={!selectedDate || bookedSlots.includes(time)}
-                                >
-                                    {time}
-                                </Button>
-                            ))}
+                                ))}
+                            </div>
+                            {!selectedDate && <p className="text-xs text-muted-foreground mt-2">Please select a date to see available time slots.</p>}
                         </div>
-                        {!selectedDate && <p className="text-xs text-muted-foreground mt-2">Please select a date to see available time slots.</p>}
-                     </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                        Note: Service slots are subject to availability and may change.
+                    </p>
                 </CardContent>
             </Card>
 
@@ -304,5 +309,3 @@ export default function CheckoutPage() {
     </div>
   );
 }
-
-    
