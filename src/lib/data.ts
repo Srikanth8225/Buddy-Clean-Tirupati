@@ -62,6 +62,7 @@ const MOCK_CUSTOMERS: Customer[] = [
     { id: 'user-1-uid', name: 'Srinivas Rao', phone: '+919876543210', createdAt: new Date('2023-10-15') },
     { id: 'user-2-uid', name: 'Priya Reddy', phone: '+919123456789', createdAt: new Date('2023-11-02') },
     { id: 'admin-uid', name: 'Admin User', phone: '+919999999999', createdAt: new Date('2023-01-01') },
+    { id: 'admin-2-uid', name: 'New Admin', phone: '+917997707697', createdAt: new Date('2024-01-01') },
 ];
 
 const MOCK_ORDERS: Order[] = [
@@ -128,5 +129,5 @@ export const getServiceById = (id: string): Service | undefined => {
 export const getCustomers = (): Customer[] => MOCK_CUSTOMERS;
 export const getOrders = (): Order[] => MOCK_ORDERS;
 export const getOrdersByCustomerId = (customerId: string): Order[] => MOCK_ORDERS.filter(order => order.customerId === customerId);
-export const getAdminPhoneNumbers = (): string[] => ['+919999999999'];
+export const getAdminPhoneNumbers = (): string[] => ['+919999999999', '+917997707697'];
 export const getMockUserByPhone = (phone: string): Customer | undefined => MOCK_CUSTOMERS.find(c => c.phone === phone);
