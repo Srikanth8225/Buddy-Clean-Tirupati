@@ -51,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.setItem("buddy-clean-user", JSON.stringify(newUser));
       setUser(newUser);
       setLoading(false);
-      router.push("/account/orders");
+      router.push("/");
     }, 1000);
   };
 
