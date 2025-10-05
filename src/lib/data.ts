@@ -100,31 +100,60 @@ const MOCK_SERVICES: Service[] = [
     ],
   },
   {
-    id: 'car-exterior-wash',
-    name: 'Exterior Car Wash',
-    description: 'A meticulous hand wash for a sparkling clean exterior.',
+    id: 'car-express-wash',
+    name: 'Express Wash',
+    description: 'A quick and efficient wash to get your car looking fresh in no time.',
     category: 'car',
     image: allImages.find(img => img.id === 'car-wash-1')!,
-    features: ['Pressure Wash', 'Foam Cannon', 'Hand Wash & Dry', 'Tire Dressing'],
+    features: ['Exterior foam wash', 'Tire and rim cleaning', 'Exterior window wipe'],
     variants: [
-      { id: 'hatchback-ext', name: 'Hatchback', price: 499 },
-      { id: 'sedan-ext', name: 'Sedan', price: 599 },
-      { id: 'suv-ext', name: 'SUV / 7-Seater', price: 699 },
+      { id: 'hatchback-express', name: '5 Seater', price: 399 },
     ],
   },
   {
-    id: 'car-full-service',
-    name: 'Full Service Car Spa',
-    description: 'Complete interior and exterior detailing for a showroom finish.',
+    id: 'car-deluxe-wash',
+    name: 'Deluxe Wash',
+    description: 'A comprehensive wash that includes interior vacuuming and dashboard polishing.',
     category: 'car',
-    image: allImages.find(img => img.id === 'car-wash-2')!,
-    features: ['Exterior Wash', 'Interior Vacuum', 'Dashboard Polishing', 'Upholstery Cleaning'],
+    image: allImages.find(img => img.id === 'car-wash-red')!,
+    features: ['All Express Wash features', 'Interior vacuuming', 'Dashboard polishing'],
     variants: [
-      { id: 'hatchback-full', name: 'Hatchback', price: 1499 },
-      { id: 'sedan-full', name: 'Sedan', price: 1799 },
-      { id: 'suv-full', name: 'SUV / 7-Seater', price: 2199 },
+      { id: 'sedan-deluxe', name: '5 Seater', price: 699 },
     ],
   },
+  {
+    id: 'car-inner-wash',
+    name: 'Car Inner Wash',
+    description: "A deep clean for your car's interior, leaving it spotless and hygienic.",
+    category: 'car',
+    image: allImages.find(img => img.id === 'car-interior-detailing')!,
+    features: ['Deep interior vacuuming', 'Upholstery & carpet shampooing', 'Leather conditioning'],
+    variants: [
+        { id: 'suv-inner', name: '5 Seater', price: 999 },
+    ]
+  },
+  {
+    id: 'car-royal-treatment',
+    name: 'Royal Treatment',
+    description: 'The ultimate detailing package for a showroom finish, inside and out.',
+    category: 'car',
+    image: allImages.find(img => img.id === 'car-wash-bentley')!,
+    features: ['All Deluxe Wash features', 'Exterior wax and polish', 'Engine bay cleaning'],
+    variants: [
+        { id: 'suv-royal', name: '5 Seater', price: 1499 },
+    ]
+  },
+  {
+    id: 'bike-express-wash',
+    name: 'Bike Express Wash',
+    description: 'A professional wash to make your motorcycle sparkle.',
+    category: 'car',
+    image: allImages.find(img => img.id === 'bike-wash')!,
+    features: ['Full body foam wash', 'Chain cleaning and lubrication', 'Tire and rim detailing'],
+    variants: [
+        { id: 'bike-express', name: 'Standard Bike', price: 249 },
+    ]
+  }
 ];
 
 const MOCK_CUSTOMERS: Customer[] = [
@@ -156,9 +185,9 @@ const MOCK_ORDERS: Order[] = [
         customerName: 'Priya Reddy',
         customerPhone: '+919123456789',
         items: [
-            { serviceId: 'car-full-service', serviceName: 'Full Service Car Spa', variantId: 'suv-full', variantName: 'SUV / 7-Seater', price: 2199, quantity: 1, imageSrc: allImages.find(img => img.id === 'car-wash-2')!.imageUrl },
+            { serviceId: 'car-deluxe-wash', serviceName: 'Deluxe Wash', variantId: 'sedan-deluxe', variantName: '5 Seater', price: 699, quantity: 1, imageSrc: allImages.find(img => img.id === 'car-wash-red')!.imageUrl },
         ],
-        total: 2199,
+        total: 699,
         address: '456, Reddy Colony, Tirupati, Andhra Pradesh 517502',
         serviceDate: new Date('2023-12-05T14:00:00'),
         status: 'In Progress',
@@ -172,9 +201,9 @@ const MOCK_ORDERS: Order[] = [
         customerPhone: '+919876543210',
         items: [
             { serviceId: 'sofa-shampooing', serviceName: 'Sofa Shampooing', variantId: 'sofa-per-seat', variantName: 'Per Seat', price: 299, quantity: 5, imageSrc: allImages.find(img => img.id === 'home-cleaning-2')!.imageUrl },
-            { serviceId: 'car-exterior-wash', serviceName: 'Exterior Car Wash', variantId: 'sedan-ext', variantName: 'Sedan', price: 599, quantity: 1, imageSrc: allImages.find(img => img.id === 'car-wash-1')!.imageUrl },
+            { serviceId: 'car-express-wash', serviceName: 'Express Wash', variantId: 'hatchback-express', variantName: '5 Seater', price: 399, quantity: 1, imageSrc: allImages.find(img => img.id === 'car-wash-1')!.imageUrl },
         ],
-        total: (299 * 5) + 599,
+        total: (299 * 5) + 399,
         address: '123, SV Nagar, Tirupati, Andhra Pradesh 517501',
         serviceDate: new Date(),
         status: 'Pending',
