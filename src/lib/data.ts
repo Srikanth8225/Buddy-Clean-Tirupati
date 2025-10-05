@@ -163,7 +163,7 @@ const MOCK_CUSTOMERS: Customer[] = [
     { id: 'admin-2-uid', name: 'New Admin', phone: '+917997707697', createdAt: new Date('2024-01-01') },
 ];
 
-const MOCK_ORDERS: Order[] = [
+const MOCK_ORDERS: Omit<Order, 'createdAt' | 'serviceDate'> & { createdAt: string, serviceDate: string }[] = [
     {
         id: 'ORD001',
         customerId: 'user-1-uid',
@@ -174,10 +174,10 @@ const MOCK_ORDERS: Order[] = [
         ],
         total: 3499,
         address: '123, SV Nagar, Tirupati, Andhra Pradesh 517501',
-        serviceDate: new Date('2023-11-20T10:00:00'),
+        serviceDate: new Date('2023-11-20T10:00:00').toISOString(),
         status: 'Completed',
         paymentMethod: 'Online',
-        createdAt: new Date('2023-11-18T14:30:00'),
+        createdAt: new Date('2023-11-18T14:30:00').toISOString(),
     },
     {
         id: 'ORD002',
@@ -189,10 +189,10 @@ const MOCK_ORDERS: Order[] = [
         ],
         total: 699,
         address: '456, Reddy Colony, Tirupati, Andhra Pradesh 517502',
-        serviceDate: new Date('2023-12-05T14:00:00'),
+        serviceDate: new Date('2023-12-05T14:00:00').toISOString(),
         status: 'In Progress',
         paymentMethod: 'Cash on Delivery',
-        createdAt: new Date('2023-12-02T09:00:00'),
+        createdAt: new Date('2023-12-02T09:00:00').toISOString(),
     },
     {
         id: 'ORD003',
@@ -205,12 +205,18 @@ const MOCK_ORDERS: Order[] = [
         ],
         total: (299 * 5) + 399,
         address: '123, SV Nagar, Tirupati, Andhra Pradesh 517501',
-        serviceDate: new Date(),
+        serviceDate: new Date().toISOString(),
         status: 'Pending',
         paymentMethod: 'Online',
-        createdAt: new Date(),
+        createdAt: new Date().toISOString(),
     },
 ];
+
+const parseOrderDates = (order: any): Order => ({
+    ...order,
+    createdAt: new Date(order.createdAt),
+    serviceDate: new Date(order.serviceDate),
+});
 
 // API-like functions to simulate data fetching
 export const getServices = (category?: 'home' | 'car'): Service[] => {
@@ -224,8 +230,32 @@ export const getServiceById = (id: string): Service | undefined => {
     return MOCK_SERVICES.find(service => service.id === id);
 }
 
-export const getCustomers = (): Customer[] => MOCK_CUSTOMERS;
-export const getOrders = (): Order[] => MOCK_ORDERS;
-export const getOrdersByCustomerId = (customerId: string): Order[] => MOCK_ORDERS.filter(order => order.customerId === customerId);
+export const getCustomers = (): Customer[] => MOCK_CUSTOMERS.map(c => ({...c, createdAt: new Date(c.createdAt)}));
+export const getOrders = (): Order[] => {
+    let allOrders = [...MOCK_ORDERS.map(parseOrderDates)];
+    if (typeof window !== 'undefined') {
+        const storedOrders = JSON.parse(localStorage.getItem("buddy-clean-orders") || "[]");
+        allOrders = [...allOrders, ...storedOrders.map(parseOrderDates)];
+    }
+    return allOrders;
+}
+
+export const getOrdersByCustomerId = (customerId: string): Order[] => {
+    return getOrders().filter(order => order.customerId === customerId);
+}
+
+export const saveOrder = (order: Order) => {
+    if (typeof window === 'undefined') return;
+    const allOrders = getOrders();
+    const newOrders = [...allOrders, order];
+    const serializableOrders = newOrders.map(o => ({
+        ...o,
+        createdAt: o.createdAt.toISOString(),
+        serviceDate: o.serviceDate.toISOString()
+    }));
+    // We only store the orders placed by the user, not the mock ones
+    localStorage.setItem("buddy-clean-orders", JSON.stringify(serializableOrders.filter(o => !MOCK_ORDERS.find(mo => mo.id === o.id))));
+}
+
 export const getAdminPhoneNumbers = (): string[] => ['+919999999999', '+917997707697'];
 export const getMockUserByPhone = (phone: string): Customer | undefined => MOCK_CUSTOMERS.find(c => c.phone === phone);

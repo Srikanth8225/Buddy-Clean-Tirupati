@@ -6,13 +6,20 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
 import { getOrdersByCustomerId } from "@/lib/data";
 import { Order } from "@/lib/types";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function OrdersPage() {
   const { user } = useAuth();
-  // In a real app, this would be a data fetch.
-  const orders = user ? getOrdersByCustomerId(user.uid) : [];
+  const [orders, setOrders] = useState<Order[]>([]);
+
+  useEffect(() => {
+    if (user) {
+        const userOrders = getOrdersByCustomerId(user.uid);
+        setOrders(userOrders);
+    }
+  }, [user]);
+
 
   const getStatusVariant = (status: Order['status']) => {
     switch (status) {
@@ -40,7 +47,7 @@ export default function OrdersPage() {
                 <div>
                   <CardTitle>Order #{order.id}</CardTitle>
                   <CardDescription>
-                    Placed on {order.createdAt.toLocaleDateString()}
+                    Placed on {new Date(order.createdAt).toLocaleDateString()}
                   </CardDescription>
                 </div>
                 <Badge variant={getStatusVariant(order.status)}>{order.status}</Badge>
@@ -48,7 +55,7 @@ export default function OrdersPage() {
               <CardContent className="space-y-4">
                 <div>
                     <h4 className="font-semibold">Service on:</h4>
-                    <p className="text-muted-foreground">{order.serviceDate.toLocaleString([], { dateStyle: 'long', timeStyle: 'short' })}</p>
+                    <p className="text-muted-foreground">{new Date(order.serviceDate).toLocaleString([], { dateStyle: 'long', timeStyle: 'short' })}</p>
                 </div>
                 <Separator />
                 <div className="space-y-2">

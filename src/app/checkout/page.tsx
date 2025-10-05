@@ -23,6 +23,8 @@ import { CalendarIcon, Loader2, LocateIcon, MapPin } from "lucide-react";
 import { format } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
+import { saveOrder } from "@/lib/data";
+import { Order } from "@/lib/types";
 
 const checkoutSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -78,15 +80,40 @@ export default function CheckoutPage() {
   };
 
   function onSubmit(data: z.infer<typeof checkoutSchema>) {
+    if (!user) {
+        toast({ title: "Error", description: "You must be logged in to place an order.", variant: "destructive" });
+        return;
+    }
     if (!selectedTime) {
         toast({ title: "Error", description: "Please select a time slot.", variant: "destructive" });
         return;
     }
 
     setSubmitting(true);
-    console.log({ ...data, serviceTime: selectedTime, items });
     
-    // Simulate order placement
+    const serviceDateWithTime = new Date(data.serviceDate);
+    const [time, modifier] = selectedTime.split(' ');
+    let [hours, minutes] = time.split(':').map(Number);
+    if (modifier === 'PM' && hours < 12) hours += 12;
+    if (modifier === 'AM' && hours === 12) hours = 0;
+    serviceDateWithTime.setHours(hours, minutes);
+
+    const newOrder: Order = {
+        id: `ORD${Date.now()}`,
+        customerId: user.uid,
+        customerName: data.name,
+        customerPhone: data.phone,
+        items: items,
+        total: cartTotal,
+        address: data.address,
+        serviceDate: serviceDateWithTime,
+        status: 'Pending',
+        paymentMethod: data.paymentMethod,
+        createdAt: new Date(),
+    };
+
+    saveOrder(newOrder);
+    
     setTimeout(() => {
         toast({
             title: "Order Placed! 🎉",
