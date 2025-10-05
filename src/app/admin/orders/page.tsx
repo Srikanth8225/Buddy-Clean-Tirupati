@@ -5,16 +5,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { getOrders, updateOrderStatus } from "@/lib/data";
 import { Order } from "@/lib/types";
 import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 export default function AdminOrdersPage() {
     const [orders, setOrders] = useState<Order[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
     const { toast } = useToast();
     const router = useRouter();
 
@@ -43,11 +45,29 @@ export default function AdminOrdersPage() {
 
     const orderStatuses: Order['status'][] = ['Pending', 'In Progress', 'Completed', 'Cancelled'];
 
+    const filteredOrders = useMemo(() => {
+        if (!searchQuery) {
+            return orders;
+        }
+        return orders.filter(order =>
+            order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            order.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            order.total.toString().includes(searchQuery)
+        );
+    }, [orders, searchQuery]);
+
     return (
         <Card>
             <CardHeader>
                 <CardTitle>All Orders</CardTitle>
                 <CardDescription>A list of all bookings from your customers.</CardDescription>
+                <div className="pt-4">
+                    <Input 
+                        placeholder="Search by Order ID, Name, Amount..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </div>
             </CardHeader>
             <CardContent>
                 <Table>
@@ -62,7 +82,7 @@ export default function AdminOrdersPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {orders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).map(order => (
+                        {filteredOrders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).map(order => (
                             <TableRow key={order.id}>
                                 <TableCell className="font-medium">{order.id}</TableCell>
                                 <TableCell>
