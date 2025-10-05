@@ -4,7 +4,7 @@
 import { useAuth } from "@/hooks/use-auth";
 import { useCart } from "@/hooks/use-cart";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,10 +21,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { CalendarIcon, Loader2, LocateIcon, MapPin } from "lucide-react";
-import { format } from "date-fns";
+import { format, isSameDay } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
-import { saveOrder } from "@/lib/data";
+import { getOrders, saveOrder } from "@/lib/data";
 import { Order } from "@/lib/types";
 
 const checkoutSchema = z.object({
@@ -45,6 +45,7 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [selectedTime, setSelectedTime] = useState('');
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [allOrders, setAllOrders] = useState<Order[]>([]);
 
   const form = useForm<z.infer<typeof checkoutSchema>>({
     resolver: zodResolver(checkoutSchema),
@@ -54,6 +55,12 @@ export default function CheckoutPage() {
       paymentMethod: "Online",
     },
   });
+
+  const selectedDate = form.watch("serviceDate");
+
+  useEffect(() => {
+    setAllOrders(getOrders());
+  }, []);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -68,6 +75,14 @@ export default function CheckoutPage() {
     }
   }, [user, authLoading, router, form]);
   
+  const bookedSlots = useMemo(() => {
+    if (!selectedDate) return [];
+    
+    return allOrders
+      .filter(order => isSameDay(order.serviceDate, selectedDate))
+      .map(order => format(order.serviceDate, "hh:mm a"));
+  }, [selectedDate, allOrders]);
+
   const handleUseLocation = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -200,6 +215,7 @@ export default function CheckoutPage() {
                                         selected={field.value}
                                         onSelect={(date) => {
                                             field.onChange(date);
+                                            setSelectedTime(''); // Reset time when date changes
                                             setIsCalendarOpen(false);
                                         }}
                                         disabled={(date) => date < new Date(new Date().setHours(0,0,0,0)) || date < new Date("1900-01-01")}
@@ -214,11 +230,18 @@ export default function CheckoutPage() {
                         <FormLabel>Time Slot</FormLabel>
                         <div className="grid grid-cols-3 gap-2 mt-2">
                             {timeSlots.map(time => (
-                                <Button key={time} type="button" variant={selectedTime === time ? "default" : "outline"} onClick={() => setSelectedTime(time)}>
+                                <Button 
+                                  key={time} 
+                                  type="button" 
+                                  variant={selectedTime === time ? "default" : "outline"} 
+                                  onClick={() => setSelectedTime(time)}
+                                  disabled={!selectedDate || bookedSlots.includes(time)}
+                                >
                                     {time}
                                 </Button>
                             ))}
                         </div>
+                        {!selectedDate && <p className="text-xs text-muted-foreground mt-2">Please select a date to see available time slots.</p>}
                      </div>
                 </CardContent>
             </Card>
@@ -281,3 +304,5 @@ export default function CheckoutPage() {
     </div>
   );
 }
+
+    

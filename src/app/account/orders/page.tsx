@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
-import { getOrdersByCustomerId } from "@/lib/data";
+import { getOrders } from "@/lib/data";
 import { Order } from "@/lib/types";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -16,7 +16,8 @@ export default function OrdersPage() {
 
   useEffect(() => {
     if (user) {
-        const userOrders = getOrdersByCustomerId(user.uid);
+        const allOrders = getOrders();
+        const userOrders = allOrders.filter(order => order.customerId === user.uid);
         setOrders(userOrders);
     }
   }, [user]);
@@ -84,5 +85,3 @@ export default function OrdersPage() {
   </div>
   );
 }
-
-    
