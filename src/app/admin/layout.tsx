@@ -8,6 +8,8 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import './admin-theme.css';
+
 
 export default function AdminLayout({
   children,
