@@ -42,11 +42,11 @@ export default function AccountLayout({
 
       <Tabs value={pathname} className="space-y-4">
         <TabsList>
-          <TabsTrigger value="/account/orders" asChild>
-            <Link href="/account/orders">My Orders</Link>
-          </TabsTrigger>
           <TabsTrigger value="/account" asChild>
             <Link href="/account">Profile</Link>
+          </TabsTrigger>
+          <TabsTrigger value="/account/orders" asChild>
+            <Link href="/account/orders">My Orders</Link>
           </TabsTrigger>
         </TabsList>
         <TabsContent value={pathname}>
