@@ -1,4 +1,5 @@
 
+
 import { Service, Customer, Order } from './types';
 import placeholderImages from './placeholder-images.json';
 
@@ -55,6 +56,9 @@ const MOCK_SERVICES: Service[] = [
     variants: [
       { id: '1-bathroom', name: '1 Bathroom', price: 800 },
       { id: '2-bathrooms', name: '2 Bathrooms', price: 1400 },
+      { id: '3-bathrooms', name: '3 Bathrooms', price: 2000 },
+      { id: '4-bathrooms', name: '4 Bathrooms', price: 2500 },
+      { id: '5-bathrooms', name: '5 Bathrooms', price: 3000 },
     ],
   },
   {
