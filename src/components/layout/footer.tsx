@@ -8,6 +8,8 @@ import Link from "next/link";
 export default function Footer() {
     const { user } = useAuth();
 
+    return null;
+
     return (
         <footer className="bg-muted/50">
             <div className="container mx-auto px-4 py-8">
