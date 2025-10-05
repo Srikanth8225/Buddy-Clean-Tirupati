@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useAuth } from "@/hooks/use-auth";
@@ -99,7 +100,7 @@ export default function CheckoutPage() {
     serviceDateWithTime.setHours(hours, minutes);
 
     const newOrder: Order = {
-        id: `ORD${Date.now()}`,
+        id: `ORD${Date.now().toString().slice(-6)}`,
         customerId: user.uid,
         customerName: data.name,
         customerPhone: data.phone,
@@ -270,3 +271,5 @@ export default function CheckoutPage() {
     </div>
   );
 }
+
+    
