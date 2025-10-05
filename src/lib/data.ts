@@ -38,7 +38,8 @@ const MOCK_SERVICES: Service[] = [
     image: allImages.find(img => img.id === 'kitchen-cleaning')!,
     features: ['Stove and chimney cleaning', 'Degreasing of surfaces', 'Cabinet interior/exterior'],
     variants: [
-      { id: 'kitchen-standard', name: 'Standard Kitchen', price: 1500 },
+      { id: '1-kitchen', name: '1 Kitchen', price: 1500 },
+      { id: '2-kitchens', name: '2 Kitchens', price: 2800 },
     ],
   },
   {
