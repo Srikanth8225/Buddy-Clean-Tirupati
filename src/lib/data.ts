@@ -51,7 +51,7 @@ const MOCK_SERVICES: Service[] = [
     name: 'Bathroom Cleaning',
     description: 'A complete sanitization and deep clean of your bathrooms.',
     category: 'home',
-    image: allImages.find(img => img.id === 'washroom-cleaning')!,
+    image: allImages.find(img => img.id === 'bathroom-cleaning')!,
     features: ['Tile and grout scrubbing', 'Descaling of taps and showers', 'Toilet bowl sanitization'],
     variants: [
       { id: '1-bathroom', name: '1 Bathroom', price: 800 },
@@ -78,7 +78,7 @@ const MOCK_SERVICES: Service[] = [
     name: 'Sofa Shampooing',
     description: 'Bring your sofa back to life with our professional shampooing service.',
     category: 'home',
-    image: allImages.find(img => img.id === 'home-cleaning-2')!,
+    image: allImages.find(img => img.id === 'sofa-shampooing')!,
     features: ['Removes stains & dirt', 'Kills germs & allergens', 'Fabric protection'],
     variants: [
       { id: 'sofa-5-seater', name: '5 Seater', price: 1499 },
@@ -209,7 +209,7 @@ const MOCK_ORDERS: Omit<Order, 'createdAt' | 'serviceDate'> & { createdAt: strin
         customerName: 'Srinivas Rao',
         customerPhone: '+919876543210',
         items: [
-            { serviceId: 'sofa-shampooing', serviceName: 'Sofa Shampooing', variantId: 'sofa-5-seater', variantName: '5 Seater', price: 1499, quantity: 1, imageSrc: allImages.find(img => img.id === 'home-cleaning-2')!.imageUrl },
+            { serviceId: 'sofa-shampooing', serviceName: 'Sofa Shampooing', variantId: 'sofa-5-seater', variantName: '5 Seater', price: 1499, quantity: 1, imageSrc: allImages.find(img => img.id === 'sofa-shampooing')!.imageUrl },
             { serviceId: 'car-express-wash', serviceName: 'Express Wash', variantId: 'hatchback-express', variantName: '5 Seater', price: 399, quantity: 1, imageSrc: allImages.find(img => img.id === 'car-wash-1')!.imageUrl },
         ],
         total: (1499) + 399,
