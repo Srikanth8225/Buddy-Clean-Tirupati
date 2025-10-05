@@ -7,14 +7,14 @@ export default function Logo({ className }: { className?: string }) {
     <Link
       href="/"
       className={cn(
-        'flex items-center gap-2 text-xl font-bold text-primary-foreground transition-colors hover:text-primary-foreground/90',
+        'flex items-center gap-2 text-xl font-bold transition-colors',
         className
       )}
     >
       <div className="rounded-lg bg-primary p-2 text-primary-foreground">
         <Sparkles className="h-5 w-5" />
       </div>
-      <span className="font-headline">Buddy Clean</span>
+      <span className="font-headline text-foreground">Buddy Clean</span>
     </Link>
   );
 }
