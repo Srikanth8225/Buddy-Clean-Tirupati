@@ -1,8 +1,13 @@
+"use client";
+
 import Logo from "@/components/logo";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/hooks/use-auth";
 import Link from "next/link";
 
 export default function Footer() {
+    const { user } = useAuth();
+
     return (
         <footer className="bg-muted/50">
             <div className="container mx-auto px-4 py-8">
@@ -12,6 +17,9 @@ export default function Footer() {
                         <Link href="/services/home-cleaning" className="hover:text-foreground">Home Cleaning</Link>
                         <Link href="/services/car-wash" className="hover:text-foreground">Car Wash</Link>
                         <Link href="/#faq" className="hover:text-foreground">FAQs</Link>
+                        {user?.isAdmin && (
+                            <Link href="/admin" className="hover:text-foreground">Admin</Link>
+                        )}
                     </nav>
                 </div>
                 <Separator className="my-6" />
