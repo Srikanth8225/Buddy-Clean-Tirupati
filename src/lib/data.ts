@@ -1,3 +1,4 @@
+
 import { Service, Customer, Order } from './types';
 import placeholderImages from './placeholder-images.json';
 
@@ -28,6 +29,8 @@ const MOCK_SERVICES: Service[] = [
     variants: [
       { id: 'move-in-1bhk', name: '1 BHK', price: 2800 },
       { id: 'move-in-2bhk', name: '2 BHK', price: 4700 },
+      { id: 'move-in-3bhk', name: '3 BHK', price: 5499 },
+      { id: 'move-in-villa', name: 'Villa', price: 7999 },
     ],
   },
   {
