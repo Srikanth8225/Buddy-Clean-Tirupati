@@ -68,12 +68,13 @@ const MOCK_SERVICES: Service[] = [
   {
     id: 'sofa-shampooing',
     name: 'Sofa Shampooing',
-    description: 'Bring your sofa back to life. Price is per seat.',
+    description: 'Bring your sofa back to life with our professional shampooing service.',
     category: 'home',
     image: allImages.find(img => img.id === 'home-cleaning-2')!,
     features: ['Removes stains & dirt', 'Kills germs & allergens', 'Fabric protection'],
     variants: [
-      { id: 'sofa-per-seat', name: 'Per Seat', price: 299 },
+      { id: 'sofa-5-seater', name: '5 Seater', price: 1499 },
+      { id: 'sofa-7-seater', name: '7 Seater', price: 2099 },
     ],
   },
   {
@@ -200,10 +201,10 @@ const MOCK_ORDERS: Omit<Order, 'createdAt' | 'serviceDate'> & { createdAt: strin
         customerName: 'Srinivas Rao',
         customerPhone: '+919876543210',
         items: [
-            { serviceId: 'sofa-shampooing', serviceName: 'Sofa Shampooing', variantId: 'sofa-per-seat', variantName: 'Per Seat', price: 299, quantity: 5, imageSrc: allImages.find(img => img.id === 'home-cleaning-2')!.imageUrl },
+            { serviceId: 'sofa-shampooing', serviceName: 'Sofa Shampooing', variantId: 'sofa-5-seater', variantName: '5 Seater', price: 1499, quantity: 1, imageSrc: allImages.find(img => img.id === 'home-cleaning-2')!.imageUrl },
             { serviceId: 'car-express-wash', serviceName: 'Express Wash', variantId: 'hatchback-express', variantName: '5 Seater', price: 399, quantity: 1, imageSrc: allImages.find(img => img.id === 'car-wash-1')!.imageUrl },
         ],
-        total: (299 * 5) + 399,
+        total: (1499) + 399,
         address: '123, SV Nagar, Tirupati, Andhra Pradesh 517501',
         serviceDate: new Date().toISOString(),
         status: 'Pending',
