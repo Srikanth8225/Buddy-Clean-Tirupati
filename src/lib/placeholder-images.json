@@ -9,14 +9,50 @@
     {
       "id": "home-cleaning-1",
       "description": "Deep cleaning a modern kitchen.",
-      "imageUrl": "https://images.unsplash.com/photo-1598928473162-0316ade00bbe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjbGVhbiUyMGtpdGNoZW58ZW58MHx8fHwxNzU5NTY1NjgxfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "clean kitchen"
+      "imageUrl": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjbGVhbmluZyUyMHNlcnZpY2V8ZW58MHx8fHwxNzU5NzYyMTU3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cleaning service"
     },
     {
       "id": "home-cleaning-2",
-      "description": "Sanitizing a bathroom.",
-      "imageUrl": "https://images.unsplash.com/photo-1609879937493-56540300d8cc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjbGVhbiUyMGJhdGhyb29tfGVufDB8fHx8MTc1OTU2NTY4MXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "clean bathroom"
+      "description": "Cleaning a sofa with an upholstery cleaner.",
+      "imageUrl": "https://images.unsplash.com/photo-1620224103966-261626503c3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzb2ZhJTIwY2xlYW5pbmd8ZW58MHx8fHwxNzU5NzYyMjA3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sofa cleaning"
+    },
+    {
+      "id": "move-in-out-cleaning",
+      "description": "An empty, clean room, ready for moving in.",
+      "imageUrl": "https://images.unsplash.com/photo-1567016432779-1fee4425876d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxlbXB0eSUyMGNsZWFuJTIwcm9vbXxlbnwwfHx8fDE3NTk3NjIyNDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "empty clean room"
+    },
+    {
+      "id": "kitchen-cleaning",
+      "description": "A sparkling clean modern kitchen.",
+      "imageUrl": "https://images.unsplash.com/photo-1600585152220-90363fe7e115?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjbGVhbiUyMGtpdGNoZW58ZW58MHx8fHwxNzU5NzYyMjg2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "clean kitchen"
+    },
+    {
+      "id": "bathroom-cleaning",
+      "description": "A person cleaning a modern bathroom.",
+      "imageUrl": "https://images.unsplash.com/photo-1603791352528-b23616535234?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiYXRocm9vbSUyMGNsZWFuaW5nfGVufDB8fHx8MTc1OTc2MjMyOHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "bathroom cleaning"
+    },
+    {
+      "id": "mattress-cleaning",
+      "description": "A clean white mattress in a sunlit room.",
+      "imageUrl": "https://images.unsplash.com/photo-1617347454476-2d3453b31c18?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjZWFuJTIwbWF0dHJlc3N8ZW58MHx8fHwxNzU5NzYyMzcxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "clean mattress"
+    },
+    {
+      "id": "window-glass-polishing",
+      "description": "A person cleaning a large window.",
+      "imageUrl": "https://images.unsplash.com/photo-1596634431798-a8946a455a15?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aW5kb3clMjBjbGVhbmluZ3xlbnwwfHx8fDE3NTk3NjI0MDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "window cleaning"
+    },
+    {
+      "id": "water-tank-cleaning",
+      "description": "A person cleaning a large water tank.",
+      "imageUrl": "https://plus.unsplash.com/premium_photo-1661962343997-15d97f58d2b2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3YXRlciUyMHRhbmslMjBjbGVhbmluZ3xlbnwwfHx8fDE3NTk3NjI0NDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "water tank"
     },
     {
       "id": "home-cleaning-3",
