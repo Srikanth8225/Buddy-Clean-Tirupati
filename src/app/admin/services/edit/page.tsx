@@ -15,6 +15,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const variantSchema = z.object({
   id: z.string().optional(),
@@ -26,6 +27,7 @@ const serviceSchema = z.object({
   name: z.string().min(3, "Service name must be at least 3 characters."),
   description: z.string().min(10, "Description is too short."),
   category: z.enum(["home", "car"], { required_error: "Please select a category." }),
+  imageUrl: z.string().url("Please enter a valid image URL."),
   features: z.array(z.string().min(3, "Feature description is too short.")).min(1, "At least one feature is required."),
   variants: z.array(variantSchema).min(1, "At least one service variant is required."),
 });
@@ -45,6 +47,7 @@ export default function EditServicePage() {
     defaultValues: {
       name: "",
       description: "",
+      imageUrl: "",
       features: [""],
       variants: [{ name: "", price: 0 }],
     },
@@ -68,6 +71,7 @@ export default function EditServicePage() {
         setService(existingService);
         form.reset({
             ...existingService,
+            imageUrl: existingService.image.imageUrl,
             features: existingService.features.length > 0 ? existingService.features : [""]
         });
       }
@@ -89,6 +93,8 @@ export default function EditServicePage() {
     }, 1500);
   };
   
+  const imageUrl = form.watch("imageUrl");
+
   if (loading) {
     return <div className="flex justify-center items-center h-64"><Loader2 className="h-8 w-8 animate-spin" /></div>
   }
@@ -141,6 +147,22 @@ export default function EditServicePage() {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="imageUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image URL</FormLabel>
+                  <FormControl><Input {...field} placeholder="https://images.unsplash.com/..." /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {imageUrl && (
+                <div className="relative aspect-video w-full max-w-sm rounded-md overflow-hidden border">
+                    <Image src={imageUrl} alt="Service Image Preview" fill className="object-cover" />
+                </div>
+            )}
           </CardContent>
         </Card>
 
