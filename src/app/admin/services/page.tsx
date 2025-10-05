@@ -40,7 +40,7 @@ export default function AdminServicesPage() {
                   </span>
                 </TableCell>
                 <TableCell>{service.variants.length}</TableCell>
-                <TableCell>₹{service.variants[0].price}</TableCell>
+                <TableCell>INR {service.variants[0].price}</TableCell>
               </TableRow>
             ))}
           </TableBody>

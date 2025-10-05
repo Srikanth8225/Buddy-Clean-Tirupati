@@ -43,7 +43,7 @@ export default function AdminOrdersPage() {
                                     <div className="text-sm text-muted-foreground">{order.customerPhone}</div>
                                 </TableCell>
                                 <TableCell>{order.serviceDate.toLocaleDateString()}</TableCell>
-                                <TableCell className="text-right">₹{order.total.toFixed(2)}</TableCell>
+                                <TableCell className="text-right">INR {order.total.toFixed(2)}</TableCell>
                                 <TableCell>{order.paymentMethod}</TableCell>
                                 <TableCell>
                                     <Badge variant={getStatusVariant(order.status)}>{order.status}</Badge>

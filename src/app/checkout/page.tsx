@@ -224,11 +224,11 @@ export default function CheckoutPage() {
                                <p className="text-muted-foreground">{item.variantName} x{item.quantity}</p>
                             </div>
                         </div>
-                        <p className="font-medium">₹{item.price * item.quantity}</p>
+                        <p className="font-medium">INR {item.price * item.quantity}</p>
                     </div>
                 ))}
                 <Separator />
-                <div className="flex justify-between font-bold text-lg"><p>Total</p><p>₹{cartTotal.toFixed(2)}</p></div>
+                <div className="flex justify-between font-bold text-lg"><p>Total</p><p>INR {cartTotal.toFixed(2)}</p></div>
               </CardContent>
               <CardContent>
                 <Button type="submit" size="lg" className="w-full" disabled={submitting}>

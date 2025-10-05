@@ -85,7 +85,7 @@ export default function ServiceCard({ service }: { service: Service }) {
 
         <div className="flex justify-between items-center w-full">
             <div className="text-2xl font-bold text-foreground">
-            ₹{selectedVariant.price}
+            INR {selectedVariant.price}
             </div>
             <Button onClick={handleAddToCart}>
                 <ShoppingCart className="mr-2 h-4 w-4" />

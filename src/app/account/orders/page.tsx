@@ -63,14 +63,14 @@ export default function OrdersPage() {
                                 <p className="text-muted-foreground">{item.variantName} x{item.quantity}</p>
                                 </div>
                             </div>
-                            <p className="font-medium">₹{item.price * item.quantity}</p>
+                            <p className="font-medium">INR {item.price * item.quantity}</p>
                         </div>
                     ))}
                 </div>
               </CardContent>
               <CardFooter className="bg-muted/50 p-4 flex justify-between">
                 <span className="text-sm text-muted-foreground">Payment: {order.paymentMethod}</span>
-                <div className="font-bold">Total: ₹{order.total.toFixed(2)}</div>
+                <div className="font-bold">Total: INR {order.total.toFixed(2)}</div>
               </CardFooter>
             </Card>
           ))
