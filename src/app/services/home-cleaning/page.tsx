@@ -9,7 +9,7 @@ export default function HomeCleaningPage() {
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold font-headline">Home Cleaning Services</h1>
         <p className="mt-4 max-w-3xl mx-auto text-lg text-muted-foreground">
-          Reclaim your time and enjoy a spotless home. We offer a variety of cleaning packages to fit your needs, from deep cleans to specific area focus.
+          Enjoy a spotless home without the hassle. We offer cleaning packages for every need.
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
