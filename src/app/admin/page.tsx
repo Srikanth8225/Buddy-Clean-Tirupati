@@ -1,8 +1,11 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { getCustomers, getOrders } from "@/lib/data";
 import { DollarSign, ListOrdered, UserPlus } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { useEffect, useState } from "react";
 
 export default function AdminDashboardPage() {
     const orders = getOrders();
@@ -12,14 +15,18 @@ export default function AdminDashboardPage() {
     const newOrders = orders.filter(o => o.createdAt > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)).length;
     const newCustomers = customers.filter(c => c.createdAt > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)).length;
 
-    const chartData = [
-        { date: "Jan", revenue: Math.floor(Math.random() * 5000) + 1000 },
-        { date: "Feb", revenue: Math.floor(Math.random() * 5000) + 1000 },
-        { date: "Mar", revenue: Math.floor(Math.random() * 5000) + 1000 },
-        { date: "Apr", revenue: Math.floor(Math.random() * 5000) + 1000 },
-        { date: "May", revenue: Math.floor(Math.random() * 5000) + 1000 },
-        { date: "Jun", revenue: totalRevenue },
-      ]
+    const [chartData, setChartData] = useState<any[]>([]);
+
+    useEffect(() => {
+        setChartData([
+            { date: "Jan", revenue: Math.floor(Math.random() * 5000) + 1000 },
+            { date: "Feb", revenue: Math.floor(Math.random() * 5000) + 1000 },
+            { date: "Mar", revenue: Math.floor(Math.random() * 5000) + 1000 },
+            { date: "Apr", revenue: Math.floor(Math.random() * 5000) + 1000 },
+            { date: "May", revenue: Math.floor(Math.random() * 5000) + 1000 },
+            { date: "Jun", revenue: totalRevenue },
+          ]);
+    }, [totalRevenue]);
 
     const chartConfig = {
         revenue: {
