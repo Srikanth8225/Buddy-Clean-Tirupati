@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm, useFieldArray } from "react-hook-form";
@@ -27,7 +28,7 @@ const serviceSchema = z.object({
   name: z.string().min(3, "Service name must be at least 3 characters."),
   description: z.string().min(10, "Description is too short."),
   category: z.enum(["home", "car"], { required_error: "Please select a category." }),
-  imageUrl: z.string().url("Please enter a valid image URL."),
+  imageUrl: z.string().url("Please enter a valid image URL.").regex(/^https:\/\/images\.unsplash\.com\//, "Only images from images.unsplash.com are allowed."),
   features: z.array(z.string().min(3, "Feature description is too short.")).min(1, "At least one feature is required."),
   variants: z.array(variantSchema).min(1, "At least one service variant is required."),
 });
@@ -158,7 +159,7 @@ export default function EditServicePage() {
                 </FormItem>
               )}
             />
-            {imageUrl && (
+            {imageUrl && form.getFieldState('imageUrl').invalid === false && (
                 <div className="relative aspect-video w-full max-w-sm rounded-md overflow-hidden border">
                     <Image src={imageUrl} alt="Service Image Preview" fill className="object-cover" />
                 </div>
@@ -250,3 +251,5 @@ export default function EditServicePage() {
     </Form>
   );
 }
+
+    
