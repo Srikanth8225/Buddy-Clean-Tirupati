@@ -25,10 +25,10 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Separator } from './ui/separator';
 
 const menuItems = [
-  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/admin/orders', label: 'Orders', icon: ListOrdered },
-  { href: '/admin/services', label: 'Services', icon: Wrench },
-  { href: '/admin/customers', label: 'Customers', icon: Users },
+  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, tooltip: 'Dashboard' },
+  { href: '/admin/orders', label: 'Orders', icon: ListOrdered, tooltip: 'Orders' },
+  { href: '/admin/services', label: 'Services', icon: Wrench, tooltip: 'Services' },
+  { href: '/admin/customers', label: 'Customers', icon: Users, tooltip: 'Customers' },
 ];
 
 export function AdminSidebar() {
@@ -47,7 +47,7 @@ export function AdminSidebar() {
               <Link href={item.href} className="w-full">
                 <SidebarMenuButton
                   isActive={pathname === item.href}
-                  tooltip={{ children: item.label, side: 'right' }}
+                  tooltip={{ children: item.tooltip, side: 'right' }}
                 >
                   <item.icon />
                   <span>{item.label}</span>
