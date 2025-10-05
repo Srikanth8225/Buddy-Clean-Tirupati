@@ -63,6 +63,17 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
+          {user?.isAdmin && (
+             <Link
+                href="/admin"
+                className={cn(
+                    'transition-colors hover:text-foreground/80',
+                    pathname.startsWith('/admin') ? 'text-foreground' : 'text-foreground/60'
+                )}
+                >
+                Admin
+            </Link>
+          )}
         </nav>
 
         <div className="ml-auto flex items-center gap-4">
@@ -157,6 +168,19 @@ export default function Header() {
                     {link.label}
                   </Link>
                 ))}
+                 {user?.isAdmin && (
+                    <Link
+                        href="/admin"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={cn(
+                            'flex items-center gap-3 rounded-md p-2 transition-colors hover:bg-muted',
+                            pathname.startsWith('/admin') ? 'bg-muted' : ''
+                        )}
+                    >
+                        <ShieldCheck className="h-5 w-5" />
+                        Admin
+                    </Link>
+                )}
               </nav>
               {!user && (
                  <Button asChild size="lg" className="w-full mt-8">
