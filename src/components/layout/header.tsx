@@ -67,10 +67,11 @@ export default function Header() {
              <Link
                 href="/admin"
                 className={cn(
-                    'transition-colors hover:text-foreground/80',
+                    'flex items-center gap-2 transition-colors hover:text-foreground/80',
                     pathname.startsWith('/admin') ? 'text-foreground' : 'text-foreground/60'
                 )}
                 >
+                <ShieldCheck className="h-5 w-5" />
                 Admin
             </Link>
           )}
