@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { getCustomers, getOrders } from "@/lib/data";
+import { Order } from "@/lib/types";
 import { DollarSign, ListOrdered, UserPlus } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { useEffect, useState } from "react";
@@ -18,15 +19,25 @@ export default function AdminDashboardPage() {
     const [chartData, setChartData] = useState<any[]>([]);
 
     useEffect(() => {
-        setChartData([
-            { date: "Jan", revenue: Math.floor(Math.random() * 5000) + 1000 },
-            { date: "Feb", revenue: Math.floor(Math.random() * 5000) + 1000 },
-            { date: "Mar", revenue: Math.floor(Math.random() * 5000) + 1000 },
-            { date: "Apr", revenue: Math.floor(Math.random() * 5000) + 1000 },
-            { date: "May", revenue: Math.floor(Math.random() * 5000) + 1000 },
-            { date: "Jun", revenue: totalRevenue },
-          ]);
-    }, [totalRevenue]);
+        const monthlyRevenue: { [key: string]: number } = {};
+        
+        orders.forEach((order: Order) => {
+            const month = new Date(order.createdAt).toLocaleString('default', { month: 'short' });
+            if (!monthlyRevenue[month]) {
+                monthlyRevenue[month] = 0;
+            }
+            monthlyRevenue[month] += order.total;
+        });
+
+        const monthOrder = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        
+        const data = monthOrder.slice(0, new Date().getMonth() + 1).map(month => ({
+            date: month,
+            revenue: monthlyRevenue[month] || 0
+        }));
+
+        setChartData(data);
+    }, [orders]);
 
     const chartConfig = {
         revenue: {
