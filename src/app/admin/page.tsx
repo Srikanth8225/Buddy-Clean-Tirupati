@@ -9,16 +9,25 @@ import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { useEffect, useState } from "react";
 
 export default function AdminDashboardPage() {
-    const orders = getOrders();
-    const customers = getCustomers();
-
-    const totalRevenue = orders.reduce((acc, order) => acc + order.total, 0);
-    const newOrders = orders.filter(o => o.createdAt > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)).length;
-    const newCustomers = customers.filter(c => c.createdAt > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)).length;
-
+    const [totalRevenue, setTotalRevenue] = useState(0);
+    const [newOrders, setNewOrders] = useState(0);
+    const [newCustomers, setNewCustomers] = useState(0);
     const [chartData, setChartData] = useState<any[]>([]);
 
     useEffect(() => {
+        const orders = getOrders();
+        const customers = getCustomers();
+
+        const totalRev = orders.reduce((acc, order) => acc + order.total, 0);
+        setTotalRevenue(totalRev);
+
+        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+        const newOrd = orders.filter(o => o.createdAt > thirtyDaysAgo).length;
+        setNewOrders(newOrd);
+
+        const newCust = customers.filter(c => c.createdAt > thirtyDaysAgo).length;
+        setNewCustomers(newCust);
+
         const monthlyRevenue: { [key: string]: number } = {};
         
         orders.forEach((order: Order) => {
@@ -37,7 +46,7 @@ export default function AdminDashboardPage() {
         }));
 
         setChartData(data);
-    }, [orders]);
+    }, []);
 
     const chartConfig = {
         revenue: {
