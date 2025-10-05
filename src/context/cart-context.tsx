@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
@@ -68,14 +69,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const removeFromCart = (variantId: string) => {
-    setItems((prevItems) =>
-      prevItems.filter((item) => item.variantId !== variantId)
-    );
-    toast({
-        title: "Item removed",
-        description: "The item has been removed from your cart.",
-        variant: "destructive"
-    })
+    setItems((prevItems) => {
+      const newItems = prevItems.filter((item) => item.variantId !== variantId);
+      if (newItems.length < prevItems.length) {
+          toast({
+              title: "Item removed",
+              description: "The item has been removed from your cart.",
+              variant: "destructive"
+          })
+      }
+      return newItems;
+    });
   };
 
   const updateQuantity = (variantId: string, quantity: number) => {
