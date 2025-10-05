@@ -44,6 +44,7 @@ export default function CheckoutPage() {
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
   const [selectedTime, setSelectedTime] = useState('');
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const form = useForm<z.infer<typeof checkoutSchema>>({
     resolver: zodResolver(checkoutSchema),
@@ -184,7 +185,7 @@ export default function CheckoutPage() {
                     <FormField control={form.control} name="serviceDate" render={({ field }) => (
                         <FormItem className="flex flex-col">
                             <FormLabel>Date</FormLabel>
-                            <Popover>
+                            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                                 <PopoverTrigger asChild>
                                 <FormControl>
                                     <Button variant={"outline"} className={cn("w-[240px] pl-3 text-left font-normal", !field.value && "text-muted-foreground")}>
@@ -194,7 +195,16 @@ export default function CheckoutPage() {
                                 </FormControl>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar mode="single" selected={field.value} onSelect={field.onChange} disabled={(date) => date < new Date() || date < new Date("1900-01-01")} initialFocus />
+                                    <Calendar
+                                        mode="single"
+                                        selected={field.value}
+                                        onSelect={(date) => {
+                                            field.onChange(date);
+                                            setIsCalendarOpen(false);
+                                        }}
+                                        disabled={(date) => date < new Date(new Date().setHours(0,0,0,0)) || date < new Date("1900-01-01")}
+                                        initialFocus
+                                    />
                                 </PopoverContent>
                             </Popover>
                             <FormMessage />
@@ -271,5 +281,3 @@ export default function CheckoutPage() {
     </div>
   );
 }
-
-    
