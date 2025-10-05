@@ -33,10 +33,10 @@ export default function Home() {
             <span className="font-semibold">Your Trusted Cleaning Partner in Tirupati</span>
           </div>
           <h1 className="text-4xl font-bold md:text-6xl font-headline tracking-tight text-shadow-lg">
-            Impeccable Cleaning, Every Time
+            Pro Cleaning, Every Time.
           </h1>
           <p className="max-w-2xl text-lg text-primary-foreground/90">
-            From sparkling homes to gleaming cars, Buddy Clean delivers professional cleaning services tailored to your needs. Book now and experience the difference.
+            Home & car cleaning, tailored for you. Book now for a sparkling clean experience.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 mt-4">
             <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
