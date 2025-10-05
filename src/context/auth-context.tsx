@@ -10,6 +10,7 @@ interface AuthContextType {
   loading: boolean;
   login: (phone: string, name: string) => void;
   logout: () => void;
+  updateUser: (data: Partial<User>) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -59,9 +60,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
     router.push("/");
   };
+  
+  const updateUser = async (data: Partial<User>) => {
+    return new Promise<void>((resolve) => {
+        setLoading(true);
+        setTimeout(() => {
+            if (user) {
+                const updatedUser = { ...user, ...data };
+                setUser(updatedUser);
+                localStorage.setItem("buddy-clean-user", JSON.stringify(updatedUser));
+            }
+            setLoading(false);
+            resolve();
+        }, 500);
+    });
+  }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

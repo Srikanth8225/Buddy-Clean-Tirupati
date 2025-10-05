@@ -71,10 +71,10 @@ export default function Header() {
                 href="/account/orders"
                 className={cn(
                     'transition-colors hover:text-foreground/80',
-                    pathname === '/account/orders' ? 'text-foreground' : 'text-foreground/60'
+                    pathname.startsWith('/account') ? 'text-foreground' : 'text-foreground/60'
                 )}
                 >
-                My Orders
+                My Account
             </Link>
           )}
           {user?.isAdmin && (
@@ -125,6 +125,12 @@ export default function Header() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/account">
+                      <UserIcon className="mr-2 h-4 w-4" />
+                      <span>My Account</span>
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/account/orders">
                       <ListOrdered className="mr-2 h-4 w-4" />
@@ -185,15 +191,15 @@ export default function Header() {
                 ))}
                 {user && (
                     <Link
-                        href="/account/orders"
+                        href="/account"
                         onClick={() => setMobileMenuOpen(false)}
                         className={cn(
                             'flex items-center gap-3 rounded-md p-2 transition-colors hover:bg-muted',
-                            pathname === '/account/orders' ? 'bg-muted' : ''
+                            pathname.startsWith('/account') ? 'bg-muted' : ''
                         )}
                     >
-                        <ListOrdered className="h-5 w-5" />
-                        My Orders
+                        <UserIcon className="h-5 w-5" />
+                        My Account
                     </Link>
                 )}
                  {user?.isAdmin && (
