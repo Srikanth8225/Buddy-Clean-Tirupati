@@ -33,7 +33,7 @@ export default function Home() {
             <span className="font-semibold">Your Trusted Cleaning Partner in Tirupati</span>
           </div>
           <h1 className="text-4xl font-bold md:text-6xl font-headline tracking-tight text-shadow-lg">
-            Pro Cleaning, Every Time.
+            Your Cleaning Buddy.
           </h1>
           <p className="max-w-2xl text-lg text-primary-foreground/90">
             Home & car cleaning, tailored for you. Book now for a sparkling clean experience.
