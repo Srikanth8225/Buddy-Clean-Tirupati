@@ -9,6 +9,7 @@ import {
   ShoppingCart,
   User as UserIcon,
   X,
+  ListOrdered,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -63,6 +64,17 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
+          {user && !user.isAdmin && (
+             <Link
+                href="/account/orders"
+                className={cn(
+                    'transition-colors hover:text-foreground/80',
+                    pathname === '/account/orders' ? 'text-foreground' : 'text-foreground/60'
+                )}
+                >
+                My Orders
+            </Link>
+          )}
           {user?.isAdmin && (
              <Link
                 href="/admin"
@@ -113,7 +125,7 @@ export default function Header() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link href="/account/orders">
-                      <UserIcon className="mr-2 h-4 w-4" />
+                      <ListOrdered className="mr-2 h-4 w-4" />
                       <span>My Orders</span>
                     </Link>
                   </DropdownMenuItem>
@@ -169,6 +181,19 @@ export default function Header() {
                     {link.label}
                   </Link>
                 ))}
+                {user && (
+                    <Link
+                        href="/account/orders"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={cn(
+                            'flex items-center gap-3 rounded-md p-2 transition-colors hover:bg-muted',
+                            pathname === '/account/orders' ? 'bg-muted' : ''
+                        )}
+                    >
+                        <ListOrdered className="h-5 w-5" />
+                        My Orders
+                    </Link>
+                )}
                  {user?.isAdmin && (
                     <Link
                         href="/admin"
