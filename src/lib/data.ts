@@ -165,7 +165,7 @@ let MOCK_SERVICES: Service[] = [
   }
 ];
 
-const MOCK_CUSTOMERS: Customer[] = [
+let MOCK_CUSTOMERS: Customer[] = [
     { id: 'user-1-uid', name: 'Srinivas Rao', phone: '+919876543210', createdAt: new Date('2023-10-15') },
     { id: 'user-2-uid', name: 'Priya Reddy', phone: '+919123456789', createdAt: new Date('2023-11-02') },
     { id: 'admin-uid', name: 'Admin User', phone: '+919999999999', createdAt: new Date('2023-01-01') },
@@ -240,6 +240,10 @@ export const getServiceById = (id: string): Service | undefined => {
 }
 
 export const getCustomers = (): Customer[] => MOCK_CUSTOMERS.map(c => ({...c, createdAt: new Date(c.createdAt)}));
+
+export const deleteCustomer = (id: string): void => {
+    MOCK_CUSTOMERS = MOCK_CUSTOMERS.filter(customer => customer.id !== id);
+};
 
 export const getOrders = (): Order[] => {
     let allOrders = [...MOCK_ORDERS.map(parseOrderDates)];
