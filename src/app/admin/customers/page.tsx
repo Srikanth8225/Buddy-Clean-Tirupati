@@ -1,10 +1,19 @@
+
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getCustomers } from "@/lib/data";
+import { Customer } from "@/lib/types";
+import { useEffect, useState } from "react";
 
 export default function AdminCustomersPage() {
-    const customers = getCustomers();
+    const [customers, setCustomers] = useState<Customer[]>([]);
+
+    useEffect(() => {
+        setCustomers(getCustomers());
+    }, []);
 
   return (
     <Card>
@@ -34,7 +43,7 @@ export default function AdminCustomersPage() {
                                 </div>
                             </TableCell>
                             <TableCell>{customer.phone}</TableCell>
-                            <TableCell>{customer.createdAt.toLocaleDateString()}</TableCell>
+                            <TableCell>{new Date(customer.createdAt).toLocaleDateString()}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
