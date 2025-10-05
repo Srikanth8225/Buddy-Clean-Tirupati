@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -19,8 +20,10 @@ import {
 } from "@/components/ui/select";
 import { useCart } from "@/hooks/use-cart";
 import { Service } from "@/lib/types";
-import { CheckCircle, ShoppingCart, ChevronDown, ChevronUp } from "lucide-react";
+import { CheckCircle, ShoppingCart, ChevronDown, ChevronUp, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function ServiceCard({ service }: { service: Service }) {
@@ -29,19 +32,26 @@ export default function ServiceCard({ service }: { service: Service }) {
   );
   const { addToCart } = useCart();
   const [featuresExpanded, setFeaturesExpanded] = useState(false);
+  const router = useRouter();
 
   const selectedVariant = service.variants.find(
     (v) => v.id === selectedVariantId
   )!;
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
     addToCart(service, selectedVariant);
   };
+  
+  const handleVariantChange = (value: string) => {
+    setSelectedVariantId(value);
+  }
 
   const featuresToShow = featuresExpanded ? service.features : service.features.slice(0, 2);
 
   return (
-    <Card className="flex flex-col overflow-hidden transition-all hover:shadow-lg">
+    <Card className="flex flex-col overflow-hidden transition-all hover:shadow-lg group">
+        <Link href={`/service/${service.id}`} className="flex flex-col flex-grow">
       <CardHeader className="p-0">
         <div className="relative aspect-video w-full">
           <Image
@@ -68,18 +78,19 @@ export default function ServiceCard({ service }: { service: Service }) {
             ))}
         </ul>
         {service.features.length > 2 && (
-            <Button variant="link" size="sm" onClick={() => setFeaturesExpanded(!featuresExpanded)} className="p-0 h-auto mt-2">
+            <Button variant="link" size="sm" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setFeaturesExpanded(!featuresExpanded); }} className="p-0 h-auto mt-2">
                 {featuresExpanded ? 'View Less' : 'View More'}
                 {featuresExpanded ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />}
             </Button>
         )}
       </CardContent>
+      </Link>
       <CardFooter className="flex-col items-start gap-4 p-6 pt-0 bg-muted/50 mt-auto">
-        <div className="w-full">
+        <div className="w-full" onClick={(e) => e.stopPropagation()}>
             <label htmlFor={`variant-select-${service.id}`} className="text-sm font-medium text-muted-foreground">
                 Select Variant
             </label>
-            <Select value={selectedVariantId} onValueChange={setSelectedVariantId}>
+            <Select value={selectedVariantId} onValueChange={handleVariantChange}>
             <SelectTrigger id={`variant-select-${service.id}`} className="w-full mt-1 bg-background">
                 <SelectValue placeholder="Select a size" />
             </SelectTrigger>
@@ -102,8 +113,14 @@ export default function ServiceCard({ service }: { service: Service }) {
                 Add to Cart
             </Button>
         </div>
+        <div className="w-full pt-2 border-t">
+          <Link href={`/service/${service.id}`} className="text-sm font-medium text-primary hover:underline flex items-center justify-center">
+            View Details <ArrowRight className="ml-1 h-4 w-4" />
+          </Link>
+        </div>
       </CardFooter>
     </Card>
   );
 }
+
 
