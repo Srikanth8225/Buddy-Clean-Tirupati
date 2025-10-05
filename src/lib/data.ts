@@ -42,15 +42,15 @@ const MOCK_SERVICES: Service[] = [
     ],
   },
   {
-    id: 'washroom-cleaning',
-    name: 'Washroom Cleaning',
-    description: 'A complete sanitization and deep clean of your washrooms.',
+    id: 'bathroom-cleaning',
+    name: 'Bathroom Cleaning',
+    description: 'A complete sanitization and deep clean of your bathrooms.',
     category: 'home',
     image: allImages.find(img => img.id === 'washroom-cleaning')!,
     features: ['Tile and grout scrubbing', 'Descaling of taps and showers', 'Toilet bowl sanitization'],
     variants: [
-      { id: '1-washroom', name: '1 Washroom', price: 800 },
-      { id: '2-washrooms', name: '2 Washrooms', price: 1400 },
+      { id: '1-bathroom', name: '1 Bathroom', price: 800 },
+      { id: '2-bathrooms', name: '2 Bathrooms', price: 1400 },
     ],
   },
   {
@@ -259,3 +259,5 @@ export const saveOrder = (order: Order) => {
 
 export const getAdminPhoneNumbers = (): string[] => ['+919999999999', '+917997707697'];
 export const getMockUserByPhone = (phone: string): Customer | undefined => MOCK_CUSTOMERS.find(c => c.phone === phone);
+
+    
