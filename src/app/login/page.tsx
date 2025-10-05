@@ -55,8 +55,9 @@ export default function LoginPage() {
   function onPhoneSubmit(data: z.infer<typeof phoneFormSchema>) {
     setFormData(data);
     // In a real app, you'd send an OTP here.
-    // For this mock, we'll just move to the next step.
+    // For this mock, we'll just move to the next step and pre-fill a demo OTP.
     setStep(2);
+    otpForm.setValue("otp", "123456");
   }
 
   function onOtpSubmit(data: z.infer<typeof otpFormSchema>) {
@@ -75,7 +76,7 @@ export default function LoginPage() {
           <CardDescription>
             {step === 1
               ? "Enter your details to receive an OTP for verification."
-              : `We've sent an OTP to ${formData.phone}. (Hint: Any 6 digits will work)`}
+              : `We've sent an OTP to ${formData.phone}. (Demo: 123456)`}
           </CardDescription>
         </CardHeader>
         <CardContent>
