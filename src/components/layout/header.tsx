@@ -92,7 +92,7 @@ export default function Header() {
         </nav>
 
         <div className="ml-auto flex items-center gap-4">
-          <Button asChild variant="ghost" size="icon">
+          <Button asChild variant="ghost" size="icon" className="relative">
             <Link href="/cart" aria-label="Shopping Cart">
               <ShoppingCart className="h-5 w-5" />
               {cartCount > 0 && (
