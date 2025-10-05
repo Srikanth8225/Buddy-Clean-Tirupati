@@ -5,7 +5,7 @@ import placeholderImages from './placeholder-images.json';
 
 const allImages = placeholderImages.placeholderImages;
 
-const MOCK_SERVICES: Service[] = [
+let MOCK_SERVICES: Service[] = [
   {
     id: 'full-home-clean',
     name: 'Full Home Clean',
@@ -172,7 +172,7 @@ const MOCK_CUSTOMERS: Customer[] = [
     { id: 'admin-2-uid', name: 'New Admin', phone: '+917997707697', createdAt: new Date('2024-01-01') },
 ];
 
-const MOCK_ORDERS: Omit<Order, 'createdAt' | 'serviceDate'> & { createdAt: string, serviceDate: string }[] = [
+let MOCK_ORDERS: Omit<Order, 'createdAt' | 'serviceDate'> & { createdAt: string, serviceDate: string }[] = [
     {
         id: '431336',
         customerId: 'user-1-uid',
@@ -204,7 +204,7 @@ const MOCK_ORDERS: Omit<Order, 'createdAt' | 'serviceDate'> & { createdAt: strin
         createdAt: new Date('2023-12-02T09:00:00').toISOString(),
     },
     {
-        id: new Date().getTime().toString().slice(-6),
+        id: '982345',
         customerId: 'user-1-uid',
         customerName: 'Srinivas Rao',
         customerPhone: '+919876543210',
@@ -214,10 +214,10 @@ const MOCK_ORDERS: Omit<Order, 'createdAt' | 'serviceDate'> & { createdAt: strin
         ],
         total: (1499) + 399,
         address: '123, SV Nagar, Tirupati, Andhra Pradesh 517501',
-        serviceDate: new Date().toISOString(),
+        serviceDate: new Date('2024-07-25T11:00:00').toISOString(),
         status: 'Pending',
         paymentMethod: 'Online',
-        createdAt: new Date().toISOString(),
+        createdAt: new Date('2024-07-22T10:00:00').toISOString(),
     },
 ];
 
@@ -240,22 +240,30 @@ export const getServiceById = (id: string): Service | undefined => {
 }
 
 export const getCustomers = (): Customer[] => MOCK_CUSTOMERS.map(c => ({...c, createdAt: new Date(c.createdAt)}));
+
 export const getOrders = (): Order[] => {
     let allOrders = [...MOCK_ORDERS.map(parseOrderDates)];
     if (typeof window !== 'undefined') {
-        const storedOrders = JSON.parse(localStorage.getItem("buddy-clean-orders") || "[]");
-        allOrders = [...allOrders, ...storedOrders.map(parseOrderDates)];
+        try {
+            const storedOrders = JSON.parse(localStorage.getItem("buddy-clean-orders") || "[]");
+            const combined = [...MOCK_ORDERS.map(parseOrderDates), ...storedOrders.map(parseOrderDates)];
+            // Remove duplicates, giving preference to stored orders
+            const uniqueOrders = Array.from(new Map(combined.map(o => [o.id, o])).values());
+            return uniqueOrders;
+        } catch (e) {
+            console.error("Failed to parse orders from local storage", e);
+            return MOCK_ORDERS.map(parseOrderDates);
+        }
     }
     return allOrders;
-}
-
-export const getOrdersByCustomerId = (customerId: string): Order[] => {
-    return getOrders().filter(order => order.customerId === customerId);
 }
 
 export const saveOrder = (order: Order) => {
     if (typeof window === 'undefined') return;
     const allOrders = getOrders();
+    // Check if order already exists to prevent duplicates
+    if (allOrders.some(o => o.id === order.id)) return;
+    
     const newOrders = [...allOrders, order];
     const serializableOrders = newOrders.map(o => ({
         ...o,
@@ -265,6 +273,24 @@ export const saveOrder = (order: Order) => {
     // We only store the orders placed by the user, not the mock ones
     localStorage.setItem("buddy-clean-orders", JSON.stringify(serializableOrders.filter(o => !MOCK_ORDERS.find(mo => mo.id === o.id))));
 }
+
+export const updateOrderStatus = (orderId: string, status: Order['status']) => {
+    const isMockOrder = MOCK_ORDERS.some(o => o.id === orderId);
+
+    if (isMockOrder) {
+        MOCK_ORDERS = MOCK_ORDERS.map(o => o.id === orderId ? { ...o, status } : o);
+    }
+
+    if (typeof window !== 'undefined') {
+        try {
+            const storedOrders = JSON.parse(localStorage.getItem("buddy-clean-orders") || "[]");
+            const updatedStoredOrders = storedOrders.map((o: any) => o.id === orderId ? { ...o, status } : o);
+            localStorage.setItem("buddy-clean-orders", JSON.stringify(updatedStoredOrders));
+        } catch (e) {
+            console.error("Failed to update order status in local storage", e);
+        }
+    }
+};
 
 export const getAdminPhoneNumbers = (): string[] => ['+919999999999', '+917997707697'];
 export const getMockUserByPhone = (phone: string): Customer | undefined => MOCK_CUSTOMERS.find(c => c.phone === phone);

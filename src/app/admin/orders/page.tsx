@@ -1,11 +1,26 @@
+
+"use client";
+
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { getOrders } from "@/lib/data";
+import { useToast } from "@/hooks/use-toast";
+import { getOrders, updateOrderStatus } from "@/lib/data";
 import { Order } from "@/lib/types";
+import { ChevronDown } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function AdminOrdersPage() {
-    const orders = getOrders();
+    const [orders, setOrders] = useState<Order[]>([]);
+    const { toast } = useToast();
+    const router = useRouter();
+
+    useEffect(() => {
+        setOrders(getOrders());
+    }, []);
 
     const getStatusVariant = (status: Order['status']) => {
         switch (status) {
@@ -15,6 +30,18 @@ export default function AdminOrdersPage() {
             case 'Cancelled': return 'destructive';
         }
     }
+
+    const handleStatusChange = (orderId: string, newStatus: Order['status']) => {
+        updateOrderStatus(orderId, newStatus);
+        setOrders(getOrders()); // Refresh data
+        toast({
+            title: "Status Updated",
+            description: `Order #${orderId} has been updated to "${newStatus}".`
+        });
+        router.refresh();
+    };
+
+    const orderStatuses: Order['status'][] = ['Pending', 'In Progress', 'Completed', 'Cancelled'];
 
     return (
         <Card>
@@ -46,7 +73,25 @@ export default function AdminOrdersPage() {
                                 <TableCell className="text-right">INR {order.total.toFixed(2)}</TableCell>
                                 <TableCell>{order.paymentMethod}</TableCell>
                                 <TableCell>
-                                    <Badge variant={getStatusVariant(order.status)}>{order.status}</Badge>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="outline" className="flex items-center gap-2">
+                                                 <Badge variant={getStatusVariant(order.status)} className="m-0 p-1 px-2 pointer-events-none">{order.status}</Badge>
+                                                 <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            {orderStatuses.map(status => (
+                                                <DropdownMenuItem 
+                                                    key={status} 
+                                                    onClick={() => handleStatusChange(order.id, status)}
+                                                    disabled={order.status === status}
+                                                >
+                                                    {status}
+                                                </DropdownMenuItem>
+                                            ))}
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
                                 </TableCell>
                             </TableRow>
                         ))}
