@@ -1,11 +1,9 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Car, Home as HomeIcon, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import placeholderImages from '@/lib/placeholder-images.json';
-import { cn } from '@/lib/utils';
-import { Service, getServices } from '@/lib/data';
+import { getServices } from '@/lib/data';
 import ServiceCard from '@/components/service-card';
 
 const heroImage = placeholderImages.placeholderImages.find(p => p.id === 'hero-1');
@@ -50,6 +48,27 @@ export default function Home() {
                 <Car className="mr-2 h-5 w-5" />
                 Book Car Wash
               </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 md:py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold font-headline">Featured Services</h2>
+            <p className="mt-2 text-lg text-muted-foreground">
+              Top-rated services, loved by our customers.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featuredServices.map((service) => (
+              <ServiceCard key={service.id} service={service} />
+            ))}
+          </div>
+          <div className="text-center mt-12">
+            <Button asChild size="lg">
+              <Link href="/services">View All Services</Link>
             </Button>
           </div>
         </div>

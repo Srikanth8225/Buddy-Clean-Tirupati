@@ -10,6 +10,7 @@ import {
   User as UserIcon,
   X,
   ListOrdered,
+  Wrench,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -34,6 +35,7 @@ import { cn } from '@/lib/utils';
 
 const navLinks = [
   { href: '/', label: 'Home', icon: HomeIcon },
+  { href: '/services', label: 'All Services', icon: Wrench },
   { href: '/services/home-cleaning', label: 'Home Cleaning', icon: HomeIcon },
   { href: '/services/car-wash', label: 'Car Wash', icon: Car },
 ];
