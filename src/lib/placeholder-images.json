@@ -1,3 +1,64 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-1",
+      "description": "A bright and clean living room, sunlit and freshly tidied.",
+      "imageUrl": "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjbGVhbiUyMGxpdmluZyUyMHJvb218ZW58MHx8fHwxNzU5NjgzNzczfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "clean living room"
+    },
+    {
+      "id": "home-cleaning-1",
+      "description": "Deep cleaning a modern kitchen.",
+      "imageUrl": "https://images.unsplash.com/photo-1598928473162-0316ade00bbe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjbGVhbiUyMGtpdGNoZW58ZW58MHx8fHwxNzU5NTY1NjgxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "clean kitchen"
+    },
+    {
+      "id": "home-cleaning-2",
+      "description": "Sanitizing a bathroom.",
+      "imageUrl": "https://images.unsplash.com/photo-1609879937493-56540300d8cc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjbGVhbiUyMGJhdGhyb29tfGVufDB8fHx8MTc1OTU2NTY4MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "clean bathroom"
+    },
+    {
+      "id": "home-cleaning-3",
+      "description": "Full home cleaning service.",
+      "imageUrl": "https://images.unsplash.com/photo-1595715316313-1730ee539c64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx0aWR5JTIwaG91c2V8ZW58MHx8fHwxNzU5NjgzNzczfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "tidy house"
+    },
+    {
+      "id": "car-wash-1",
+      "description": "Exterior wash of a sedan.",
+      "imageUrl": "https://images.unsplash.com/photo-1697252312641-561fba5494c8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y2FyJTIwd2FzaHxlbnwwfHx8fDE3NTk2NjQ0MzB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "car wash"
+    },
+    {
+      "id": "car-wash-2",
+      "description": "Interior detailing of a car.",
+      "imageUrl": "https://images.unsplash.com/photo-1527109577087-239bb8295d3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y2FyJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzU5NjgzNzcyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "car interior"
+    },
+    {
+      "id": "car-wash-3",
+      "description": "Full service car wash for an SUV.",
+      "imageUrl": "https://images.unsplash.com/photo-1662531805933-db8cb556201d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjbGVhbiUyMHN1dnxlbnwwfHx8fDE3NTk2ODM3NzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "clean suv"
+    },
+    {
+      "id": "avatar-1",
+      "description": "User avatar 1.",
+      "imageUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NTk2MjQ1ODZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "avatar-2",
+      "description": "User avatar 2.",
+      "imageUrl": "https://images.unsplash.com/photo-1593351799227-75df2026356b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx3b21hbiUyMHBvcnRyYWl0fGVufDB8fHx8MTc1OTYyOTkwN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman portrait"
+    },
+    {
+      "id": "avatar-3",
+      "description": "User avatar 3.",
+      "imageUrl": "https://images.unsplash.com/photo-1621624666561-84d0107001dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bWFuJTIwc21pbGluZ3xlbnwwfHx8fDE3NTk2Njg4MjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man smiling"
+    }
+  ]
 }
