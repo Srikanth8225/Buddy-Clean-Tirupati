@@ -174,7 +174,7 @@ const MOCK_CUSTOMERS: Customer[] = [
 
 const MOCK_ORDERS: Omit<Order, 'createdAt' | 'serviceDate'> & { createdAt: string, serviceDate: string }[] = [
     {
-        id: 'ORD001',
+        id: '431336',
         customerId: 'user-1-uid',
         customerName: 'Srinivas Rao',
         customerPhone: '+919876543210',
@@ -189,7 +189,7 @@ const MOCK_ORDERS: Omit<Order, 'createdAt' | 'serviceDate'> & { createdAt: strin
         createdAt: new Date('2023-11-18T14:30:00').toISOString(),
     },
     {
-        id: 'ORD002',
+        id: '298900',
         customerId: 'user-2-uid',
         customerName: 'Priya Reddy',
         customerPhone: '+919123456789',
@@ -204,7 +204,7 @@ const MOCK_ORDERS: Omit<Order, 'createdAt' | 'serviceDate'> & { createdAt: strin
         createdAt: new Date('2023-12-02T09:00:00').toISOString(),
     },
     {
-        id: 'ORD003',
+        id: new Date().getTime().toString().slice(-6),
         customerId: 'user-1-uid',
         customerName: 'Srinivas Rao',
         customerPhone: '+919876543210',
@@ -268,5 +268,7 @@ export const saveOrder = (order: Order) => {
 
 export const getAdminPhoneNumbers = (): string[] => ['+919999999999', '+917997707697'];
 export const getMockUserByPhone = (phone: string): Customer | undefined => MOCK_CUSTOMERS.find(c => c.phone === phone);
+
+    
 
     
