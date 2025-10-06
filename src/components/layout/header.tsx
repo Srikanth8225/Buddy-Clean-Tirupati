@@ -97,9 +97,10 @@ export default function Header() {
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
-            <Button asChild variant="ghost" size="icon">
-                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
-                    <WhatsappIcon className="h-6 w-6 fill-green-500" />
+            <Button asChild size="sm">
+                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="bg-[#25D366] hover:bg-[#1EBE57] text-white">
+                    <WhatsappIcon className="h-4 w-4 mr-1 fill-white" />
+                    WhatsApp
                 </a>
             </Button>
 
