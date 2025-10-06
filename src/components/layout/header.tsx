@@ -10,6 +10,7 @@ import {
   ShoppingCart,
   User as UserIcon,
   Wrench,
+  ListOrdered
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -54,12 +55,6 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
-        {!isHomePage ? (
-          <Button variant="ghost" size="icon" className="mr-2 md:hidden" onClick={() => router.back()}>
-            <ArrowLeft className="h-5 w-5" />
-            <span className="sr-only">Back</span>
-          </Button>
-        ) : null}
         <Logo />
         <nav className="hidden md:flex md:ml-6 md:items-center md:gap-6 text-sm font-medium">
           {navLinks.map((link) => (
