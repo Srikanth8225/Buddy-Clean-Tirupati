@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,10 +23,11 @@ export default function AdminDashboardPage() {
         setTotalRevenue(totalRev);
 
         const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-        const newOrd = orders.filter(o => o.createdAt > thirtyDaysAgo).length;
+        
+        const newOrd = orders.filter(o => new Date(o.createdAt) > thirtyDaysAgo).length;
         setNewOrders(newOrd);
 
-        const newCust = customers.filter(c => c.createdAt > thirtyDaysAgo).length;
+        const newCust = customers.filter(c => new Date(c.createdAt) > thirtyDaysAgo).length;
         setNewCustomers(newCust);
 
         const monthlyRevenue: { [key: string]: number } = {};
