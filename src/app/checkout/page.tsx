@@ -181,6 +181,16 @@ export default function CheckoutPage() {
             theme: {
                 color: '#166534', // This is a dark green from your theme
             },
+            modal: {
+              ondismiss: () => {
+                setSubmitting(false);
+                toast({
+                  title: "Payment Cancelled",
+                  description: "You can try again anytime.",
+                  variant: "destructive"
+                });
+              }
+            }
         };
 
         // @ts-ignore
