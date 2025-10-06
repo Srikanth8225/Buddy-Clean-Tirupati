@@ -9,9 +9,9 @@ export default function HomeCleaningPage() {
   return (
     <div className="container mx-auto px-4 py-12 md:py-16">
        <div className="mb-8">
-            <Link href="/services" className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground">
+            <Link href="/" className="flex items-center text-sm font-medium text-muted-foreground hover:text-foreground">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                All Services
+                Back to Home
             </Link>
         </div>
       <div className="text-center mb-12">
