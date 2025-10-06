@@ -51,7 +51,7 @@ export default function LoginPage() {
 
   const otpForm = useForm<z.infer<typeof otpFormSchema>>({
     resolver: zodResolver(otpFormSchema),
-    defaultValues: { otp: "123456" },
+    defaultValues: { otp: "" },
   });
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,7 +86,7 @@ export default function LoginPage() {
           <CardDescription>
             {step === 1
               ? "Enter your details to receive an OTP for verification."
-              : `We've sent an OTP to ${formData.phone}. (Demo OTP is 123456)`}
+              : `We've sent an OTP to ${formData.phone}.`}
           </CardDescription>
         </CardHeader>
         <CardContent>
