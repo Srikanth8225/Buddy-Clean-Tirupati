@@ -47,7 +47,7 @@ export default function ServiceCard({ service }: { service: Service }) {
     setSelectedVariantId(value);
   }
 
-  const featuresToShow = featuresExpanded ? service.features : service.features.slice(0, 2);
+  const featuresToShow = featuresExpanded ? service.features : service.features.slice(0, 3);
 
   return (
     <Card className="flex flex-col overflow-hidden transition-all hover:shadow-lg group">
@@ -77,7 +77,7 @@ export default function ServiceCard({ service }: { service: Service }) {
                 </li>
             ))}
         </ul>
-        {service.features.length > 2 && (
+        {service.features.length > 3 && (
             <Button variant="link" size="sm" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setFeaturesExpanded(!featuresExpanded); }} className="p-0 h-auto mt-2">
                 {featuresExpanded ? 'View Less' : 'View More'}
                 {featuresExpanded ? <ChevronUp className="ml-1 h-4 w-4" /> : <ChevronDown className="ml-1 h-4 w-4" />}
@@ -122,5 +122,6 @@ export default function ServiceCard({ service }: { service: Service }) {
     </Card>
   );
 }
+
 
 
