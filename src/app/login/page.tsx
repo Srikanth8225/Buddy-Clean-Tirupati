@@ -36,11 +36,11 @@ const phoneFormSchema = z.object({
 });
 
 const otpFormSchema = z.object({
-  otp: z.string().min(6, { message: "OTP must be 6 digits." }).max(6),
+  otp: z.string().min(6, { message: "OTP must be 6 digits." }).max(6, { message: "OTP must be 6 digits." }),
 });
 
 export default function LoginPage() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState<'phone' | 'otp'>('phone');
   const [phoneData, setPhoneData] = useState({ name: '', phone: '' });
   const { login, loading } = useAuth();
   
@@ -59,19 +59,19 @@ export default function LoginPage() {
     phoneForm.setValue('phone', phone);
     const existingUser = getMockUserByPhone(phone);
     if (existingUser) {
-        phoneForm.setValue('name', existingUser.name);
+        phoneForm.setValue('name', existingUser.name, { shouldValidate: true });
     }
-  }
+  };
 
   function onPhoneSubmit(data: z.infer<typeof phoneFormSchema>) {
     setPhoneData(data);
     // In a real app, you'd send an OTP here.
     // For this mock, we'll just move to the next step.
-    setStep(2);
+    setStep('otp');
   }
 
   function onOtpSubmit(data: z.infer<typeof otpFormSchema>) {
-    // In a real app, you'd verify the OTP here.
+    // In a real app, you'd verify the OTP (data.otp) here.
     // We'll just use the mock login function with the stored phone data.
     login(phoneData.phone, phoneData.name);
   }
@@ -81,16 +81,16 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-headline">
-            {step === 1 ? "Login or Sign Up" : "Enter OTP"}
+            {step === 'phone' ? "Login or Sign Up" : "Enter OTP"}
           </CardTitle>
           <CardDescription>
-            {step === 1
+            {step === 'phone'
               ? "Enter your details to receive an OTP for verification."
-              : `We've sent an OTP to ${phoneData.phone}.`}
+              : `We've sent a mock OTP to ${phoneData.phone}.`}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {step === 1 ? (
+          {step === 'phone' ? (
             <Form {...phoneForm}>
               <form onSubmit={phoneForm.handleSubmit(onPhoneSubmit)} className="space-y-6">
                 <FormField
@@ -145,7 +145,7 @@ export default function LoginPage() {
                   {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                   Verify & Login
                 </Button>
-                <Button variant="link" onClick={() => setStep(1)} className="w-full">
+                <Button variant="link" onClick={() => { setStep('phone'); otpForm.reset(); }} className="w-full">
                   Change number
                 </Button>
               </form>
