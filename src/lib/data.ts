@@ -1,6 +1,7 @@
 
 
 
+
 import { Service, Customer, Order } from './types';
 import placeholderImages from './placeholder-images.json';
 
@@ -166,11 +167,11 @@ let MOCK_SERVICES: Service[] = [
   }
 ];
 
-let MOCK_CUSTOMERS: Customer[] = [
-    { id: 'user-1-uid', name: 'Srinivas Rao', phone: '+919876543210', createdAt: new Date('2023-10-15') },
-    { id: 'user-2-uid', name: 'Priya Reddy', phone: '+919123456789', createdAt: new Date('2023-11-02') },
-    { id: 'admin-uid', name: 'Rishi', phone: '8096092423', createdAt: new Date('2023-01-01') },
-    { id: 'admin-2-uid', name: 'sreekanth', phone: '+917997707697', createdAt: new Date('2024-01-01') },
+let MOCK_CUSTOMERS: Omit<Customer, 'createdAt'> & { createdAt: string }[] = [
+    { id: 'user-1-uid', name: 'Srinivas Rao', phone: '+919876543210', createdAt: '2023-10-15' },
+    { id: 'user-2-uid', name: 'Priya Reddy', phone: '+919123456789', createdAt: '2023-11-02' },
+    { id: 'admin-uid', name: 'Rishi', phone: '8096092423', createdAt: '2023-01-01' },
+    { id: 'admin-2-uid', name: 'sreekanth', phone: '+917997707697', createdAt: '2024-01-01' },
 ];
 
 let MOCK_ORDERS: Omit<Order, 'createdAt' | 'serviceDate'> & { createdAt: string, serviceDate: string }[] = [
@@ -305,11 +306,12 @@ export const updateOrderStatus = (orderId: string, status: Order['status']) => {
 };
 
 export const getAdminPhoneNumbers = (): string[] => ['8096092423', '7997707697'];
-export const getMockUserByPhone = (phone: string): Customer | undefined => MOCK_CUSTOMERS.find(c => c.phone === phone);
+export const getMockUserByPhone = (phone: string): (Omit<Customer, 'createdAt'> & { createdAt: string }) | undefined => MOCK_CUSTOMERS.find(c => c.phone === phone);
 
     
 
     
+
 
 
 
