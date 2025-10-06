@@ -1,3 +1,4 @@
+
 "use client";
 
 import { usePathname } from 'next/navigation';
@@ -5,6 +6,7 @@ import {
   LayoutDashboard,
   ListOrdered,
   LogOut,
+  Shield,
   Users,
   Wrench,
 } from 'lucide-react';
@@ -29,6 +31,7 @@ const menuItems = [
   { href: '/admin/orders', label: 'Orders', icon: ListOrdered, tooltip: 'Orders' },
   { href: '/admin/services', label: 'Services', icon: Wrench, tooltip: 'Services' },
   { href: '/admin/customers', label: 'Customers', icon: Users, tooltip: 'Customers' },
+  { href: '/admin/admins', label: 'Admins', icon: Shield, tooltip: 'Admins' },
 ];
 
 export function AdminSidebar() {

@@ -242,6 +242,13 @@ export const getServiceById = (id: string): Service | undefined => {
 
 export const getCustomers = (): Customer[] => MOCK_CUSTOMERS.map(c => ({...c, createdAt: new Date(c.createdAt)}));
 
+export const getAdmins = (): Customer[] => {
+    const adminPhones = getAdminPhoneNumbers();
+    return MOCK_CUSTOMERS
+        .filter(c => adminPhones.includes(c.phone.replace('+91', '')))
+        .map(c => ({...c, createdAt: new Date(c.createdAt)}));
+};
+
 export const deleteCustomer = (id: string): void => {
     MOCK_CUSTOMERS = MOCK_CUSTOMERS.filter(customer => customer.id !== id);
 };
@@ -297,11 +304,12 @@ export const updateOrderStatus = (orderId: string, status: Order['status']) => {
     }
 };
 
-export const getAdminPhoneNumbers = (): string[] => ['8096092423', '+917997707697'];
+export const getAdminPhoneNumbers = (): string[] => ['8096092423', '7997707697'];
 export const getMockUserByPhone = (phone: string): Customer | undefined => MOCK_CUSTOMERS.find(c => c.phone === phone);
 
     
 
     
+
 
 
