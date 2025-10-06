@@ -41,7 +41,7 @@ const otpFormSchema = z.object({
 
 export default function LoginPage() {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({ name: '', phone: '' });
+  const [phoneData, setPhoneData] = useState({ name: '', phone: '' });
   const { login, loading } = useAuth();
   
   const phoneForm = useForm<z.infer<typeof phoneFormSchema>>({
@@ -64,7 +64,7 @@ export default function LoginPage() {
   }
 
   function onPhoneSubmit(data: z.infer<typeof phoneFormSchema>) {
-    setFormData(data);
+    setPhoneData(data);
     // In a real app, you'd send an OTP here.
     // For this mock, we'll just move to the next step.
     setStep(2);
@@ -72,8 +72,8 @@ export default function LoginPage() {
 
   function onOtpSubmit(data: z.infer<typeof otpFormSchema>) {
     // In a real app, you'd verify the OTP here.
-    // We'll just use the mock login function.
-    login(formData.phone, formData.name);
+    // We'll just use the mock login function with the stored phone data.
+    login(phoneData.phone, phoneData.name);
   }
 
   return (
@@ -86,7 +86,7 @@ export default function LoginPage() {
           <CardDescription>
             {step === 1
               ? "Enter your details to receive an OTP for verification."
-              : `We've sent an OTP to ${formData.phone}.`}
+              : `We've sent an OTP to ${phoneData.phone}.`}
           </CardDescription>
         </CardHeader>
         <CardContent>
