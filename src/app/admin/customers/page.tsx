@@ -71,7 +71,7 @@ export default function AdminCustomersPage() {
                                   <div className="flex items-center gap-3">
                                       <Avatar>
                                           <AvatarImage src={`https://picsum.photos/seed/${customer.id}/100/100`} />
-                                          <AvatarFallback>{customer.name.charAt(0)}</AvatarFallback>
+                                          <AvatarFallback>{customer.name.charAt(0).toUpperCase()}</AvatarFallback>
                                       </Avatar>
                                       <span className="font-medium">{customer.name}</span>
                                   </div>
