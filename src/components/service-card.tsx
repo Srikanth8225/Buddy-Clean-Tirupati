@@ -24,9 +24,9 @@ import { CheckCircle, ShoppingCart, ChevronDown, ChevronUp, ArrowRight } from "l
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 
-export default function ServiceCard({ service }: { service: Service }) {
+function ServiceCard({ service }: { service: Service }) {
   const [selectedVariantId, setSelectedVariantId] = useState<string>(
     service.variants[0].id
   );
@@ -124,4 +124,4 @@ export default function ServiceCard({ service }: { service: Service }) {
 }
 
 
-
+export default React.memo(ServiceCard);
