@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm, FormProvider, useFormContext } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -24,30 +24,26 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { Loader2 } from "lucide-react";
-
-const phoneRegex = new RegExp(
-  /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
-);
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 const phoneSchema = z.object({
-  phone: z.string().regex(phoneRegex, "Invalid phone number format.").min(10, { message: "Phone number must be at least 10 digits." }),
+  phone: z.string().length(10, "Phone number must be 10 digits."),
 });
 
 const otpSchema = z.object({
-  otp: z.string().min(6, { message: "OTP must be 6 digits." }).max(6, { message: "OTP must be 6 digits." }),
+  otp: z.string().length(6, "OTP must be 6 digits."),
 });
 
+const PhoneStep = ({ onPhoneSubmit, loading }: { onPhoneSubmit: (phone: string) => void; loading: boolean }) => {
+  const form = useForm<z.infer<typeof phoneSchema>>({
+    resolver: zodResolver(phoneSchema),
+    defaultValues: { phone: "" },
+  });
 
-const PhoneStep = ({ onPhoneSubmit }: { onPhoneSubmit: (phone: string) => void; }) => {
-    const { login, loading } = useAuth();
-    const form = useForm<z.infer<typeof phoneSchema>>({
-        resolver: zodResolver(phoneSchema),
-        defaultValues: { phone: "" },
-    });
-
-    const handleSubmit = (data: z.infer<typeof phoneSchema>) => {
-        onPhoneSubmit(data.phone);
-    };
+  const handleSubmit = (data: z.infer<typeof phoneSchema>) => {
+    onPhoneSubmit(`+91${data.phone}`);
+  };
     
     return (
         <Form {...form}>
@@ -59,7 +55,12 @@ const PhoneStep = ({ onPhoneSubmit }: { onPhoneSubmit: (phone: string) => void; 
                 <FormItem>
                     <FormLabel>Phone Number</FormLabel>
                     <FormControl>
-                    <Input placeholder="+91 98765 43210" {...field} />
+                      <div className="flex items-center">
+                         <span className="flex h-10 items-center rounded-l-md border border-r-0 border-input bg-muted px-3 text-sm text-muted-foreground">
+                          +91
+                        </span>
+                        <Input placeholder="98765 43210" {...field} className="rounded-l-none" />
+                      </div>
                     </FormControl>
                     <FormMessage />
                 </FormItem>
@@ -74,17 +75,14 @@ const PhoneStep = ({ onPhoneSubmit }: { onPhoneSubmit: (phone: string) => void; 
     );
 };
 
-const OtpStep = ({ phone, onBack }: { phone: string; onBack: () => void; }) => {
-    const { login, loading } = useAuth();
+const OtpStep = ({ phone, onBack, onOtpSubmit, loading }: { phone: string; onBack: () => void; onOtpSubmit: (otp: string) => void, loading: boolean }) => {
     const form = useForm<z.infer<typeof otpSchema>>({
         resolver: zodResolver(otpSchema),
         defaultValues: { otp: "" },
     });
 
     const handleSubmit = (data: z.infer<typeof otpSchema>) => {
-        // In a real app, you'd verify the OTP (data.otp) here.
-        // We'll just use the mock login function with the stored phone data.
-        login(phone);
+        onOtpSubmit(data.otp);
     };
 
     return (
@@ -118,10 +116,28 @@ const OtpStep = ({ phone, onBack }: { phone: string; onBack: () => void; }) => {
 export default function LoginPage() {
   const [step, setStep] = useState<'phone' | 'otp'>('phone');
   const [phone, setPhone] = useState('');
+  const { login, loading, user } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirect') || '/';
+
+  useEffect(() => {
+    if (user) {
+        router.replace(redirect);
+    }
+  }, [user, router, redirect]);
   
   const handlePhoneSubmit = (submittedPhone: string) => {
     setPhone(submittedPhone);
+    // Here you would typically send an OTP. For this demo, we'll just move to the next step.
+    console.log(`Sending OTP to ${submittedPhone}`);
     setStep('otp');
+  };
+
+  const handleOtpSubmit = (otp: string) => {
+    // Here you would verify the OTP.
+    console.log(`Verifying OTP ${otp} for ${phone}`);
+    login(phone, otp); // Pass OTP to login function for verification
   };
 
   const handleBack = () => {
@@ -144,9 +160,9 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           {step === 'phone' ? (
-            <PhoneStep onPhoneSubmit={handlePhoneSubmit} />
+            <PhoneStep onPhoneSubmit={handlePhoneSubmit} loading={loading} />
           ) : (
-            <OtpStep phone={phone} onBack={handleBack} />
+            <OtpStep phone={phone} onBack={handleBack} onOtpSubmit={handleOtpSubmit} loading={loading} />
           )}
         </CardContent>
       </Card>

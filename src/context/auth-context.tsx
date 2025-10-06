@@ -3,13 +3,13 @@
 
 import { getAdminPhoneNumbers, getMockUserByPhone } from "@/lib/data";
 import type { User } from "@/lib/types";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (phone: string) => void;
+  login: (phone: string, otp: string) => void;
   logout: () => void;
   updateUser: (data: Partial<User>) => Promise<void>;
 }
@@ -20,6 +20,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     try {
@@ -35,16 +36,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const login = (phone: string) => {
+  const login = (phone: string, otp: string) => {
     setLoading(true);
-    // Simulate API call and OTP verification
+    // Simulate API call and OTP verification. In a real app, you'd verify the OTP here.
+    // For this demo, any 6-digit OTP is accepted.
     setTimeout(() => {
       const adminPhones = getAdminPhoneNumbers();
       const existingUser = getMockUserByPhone(phone);
 
-      const newUser: User = {
-        uid: existingUser ? existingUser.id : `user-${Date.now()}`,
-        name: existingUser ? existingUser.name : 'New User',
+      const newUser: User = existingUser ? 
+        {
+            uid: existingUser.id,
+            name: existingUser.name,
+            phone: existingUser.phone,
+            isAdmin: adminPhones.includes(existingUser.phone)
+        }
+      : {
+        uid: `user-${Date.now()}`,
+        name: 'New User',
         phone,
         isAdmin: adminPhones.includes(phone),
       };
@@ -52,7 +61,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.setItem("buddy-clean-user", JSON.stringify(newUser));
       setUser(newUser);
       setLoading(false);
-      router.push("/");
+      
+      const redirect = searchParams.get('redirect') || '/';
+      router.replace(redirect);
+
     }, 1000);
   };
 
