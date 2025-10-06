@@ -23,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { Loader2 } from "lucide-react";
+import { getMockUserByPhone } from "@/lib/data";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
@@ -52,12 +53,21 @@ export default function LoginPage() {
     defaultValues: { otp: "" },
   });
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const phone = e.target.value;
+    phoneForm.setValue('phone', phone);
+    const existingUser = getMockUserByPhone(phone);
+    if (existingUser) {
+        phoneForm.setValue('name', existingUser.name);
+    }
+  }
+
   function onPhoneSubmit(data: z.infer<typeof phoneFormSchema>) {
     setFormData(data);
     // In a real app, you'd send an OTP here.
-    // For this mock, we'll just move to the next step and pre-fill a demo OTP.
+    // For this mock, we'll just move to the next step.
     setStep(2);
-    otpForm.setValue("otp", "123456");
+    otpForm.setValue("otp", ""); // Clear any previous OTP
   }
 
   function onOtpSubmit(data: z.infer<typeof otpFormSchema>) {
@@ -76,7 +86,7 @@ export default function LoginPage() {
           <CardDescription>
             {step === 1
               ? "Enter your details to receive an OTP for verification."
-              : `We've sent an OTP to ${formData.phone}. (Demo: 123456)`}
+              : `We've sent an OTP to ${formData.phone}.`}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -103,7 +113,7 @@ export default function LoginPage() {
                     <FormItem>
                       <FormLabel>Phone Number</FormLabel>
                       <FormControl>
-                        <Input placeholder="+91 98765 43210" {...field} />
+                        <Input placeholder="+91 98765 43210" {...field} onChange={handlePhoneChange} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
