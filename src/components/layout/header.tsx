@@ -169,10 +169,6 @@ export default function Header() {
             <SheetContent side="right" className="w-full">
               <div className="flex justify-between items-center mb-6">
                 <Logo />
-                <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
-                  <X className="h-6 w-6" />
-                  <span className="sr-only">Close menu</span>
-                </Button>
               </div>
               <nav className="flex flex-col gap-4 text-lg font-medium">
                 {navLinks.map((link) => (
