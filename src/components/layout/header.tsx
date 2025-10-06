@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  ArrowLeft,
   Car,
   Home as HomeIcon,
   LogOut,
@@ -8,12 +9,10 @@ import {
   ShieldCheck,
   ShoppingCart,
   User as UserIcon,
-  X,
-  ListOrdered,
   Wrench,
 } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import Logo from '@/components/logo';
@@ -44,14 +43,23 @@ export default function Header() {
   const { user, logout, loading } = useAuth();
   const { cartCount } = useCart();
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isAdminPath = pathname.startsWith('/admin');
+  const isHomePage = pathname === '/';
+
   if (isAdminPath) return null; // Don't render the main header in the admin area
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
+        {!isHomePage ? (
+          <Button variant="ghost" size="icon" className="mr-2 md:hidden" onClick={() => router.back()}>
+            <ArrowLeft className="h-5 w-5" />
+            <span className="sr-only">Back</span>
+          </Button>
+        ) : null}
         <Logo />
         <nav className="hidden md:flex md:ml-6 md:items-center md:gap-6 text-sm font-medium">
           {navLinks.map((link) => (
