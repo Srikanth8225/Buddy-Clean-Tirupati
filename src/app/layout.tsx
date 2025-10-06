@@ -8,6 +8,7 @@ import Footer from '@/components/layout/footer';
 export const metadata: Metadata = {
   title: 'Buddy Clean',
   description: 'Car and Home Cleaning Services in Tirupati',
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
