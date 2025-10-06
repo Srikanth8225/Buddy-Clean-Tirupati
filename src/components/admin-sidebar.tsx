@@ -60,7 +60,16 @@ export function AdminSidebar() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className='border-t'>
+      <SidebarFooter className='border-t mt-auto'>
+         <SidebarMenu>
+            <SidebarMenuItem>
+                <SidebarMenuButton onClick={logout} tooltip={{children: "Logout", side: 'right'}}>
+                    <LogOut />
+                    <span>Logout</span>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+         </SidebarMenu>
+         <Separator />
          {user && (
             <div className='flex items-center gap-3 p-2'>
                 <Avatar className="h-9 w-9">
@@ -71,9 +80,6 @@ export function AdminSidebar() {
                     <p className="font-medium truncate">{user.name}</p>
                     <p className="text-xs text-muted-foreground truncate">{user.phone}</p>
                 </div>
-                <button onClick={logout} className="group-data-[collapsible=icon]:hidden">
-                    <LogOut className='h-5 w-5 text-muted-foreground hover:text-foreground' />
-                </button>
             </div>
          )}
       </SidebarFooter>
