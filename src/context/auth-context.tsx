@@ -9,7 +9,7 @@ import React, { createContext, useState, useEffect, ReactNode } from "react";
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (phone: string, otp: string) => void;
+  login: (phone: string, otp: string, name?: string) => void;
   logout: () => void;
   updateUser: (data: Partial<User>) => Promise<void>;
 }
@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const login = (phone: string, otp: string) => {
+  const login = (phone: string, otp: string, name?: string) => {
     setLoading(true);
     // Simulate API call and OTP verification. In a real app, you'd verify the OTP here.
     // For this demo, any 6-digit OTP is accepted.
@@ -53,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       : {
         uid: `user-${Date.now()}`,
-        name: 'New User',
+        name: name || 'New User',
         phone,
         isAdmin: adminPhones.includes(phone),
       };
