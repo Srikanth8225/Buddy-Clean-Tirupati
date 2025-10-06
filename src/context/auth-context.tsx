@@ -42,24 +42,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // For this demo, any 6-digit OTP is accepted.
     setTimeout(() => {
       const adminPhones = getAdminPhoneNumbers();
+      const phoneWithoutCountryCode = phone.replace('+91', '');
       const existingUser = getMockUserByPhone(phone);
+      
+      let finalUser: User;
 
-      const newUser: User = existingUser ? 
-        {
+      if (existingUser) {
+        // If user exists, use their stored details. Ignore the name from the login form.
+        finalUser = {
             uid: existingUser.id,
             name: existingUser.name,
             phone: existingUser.phone,
-            isAdmin: adminPhones.includes(existingUser.phone)
-        }
-      : {
-        uid: `user-${Date.now()}`,
-        name: name || 'New User',
-        phone,
-        isAdmin: adminPhones.includes(phone),
-      };
+            isAdmin: adminPhones.includes(phoneWithoutCountryCode)
+        };
+      } else {
+        // If user does not exist, create a new one.
+        finalUser = {
+            uid: `user-${Date.now()}`,
+            name: name || 'New User',
+            phone,
+            isAdmin: adminPhones.includes(phoneWithoutCountryCode),
+        };
+      }
 
-      localStorage.setItem("buddy-clean-user", JSON.stringify(newUser));
-      setUser(newUser);
+      localStorage.setItem("buddy-clean-user", JSON.stringify(finalUser));
+      setUser(finalUser);
       setLoading(false);
       
       const redirect = searchParams.get('redirect') || '/';
