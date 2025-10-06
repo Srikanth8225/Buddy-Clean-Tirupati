@@ -135,7 +135,7 @@ export default function LoginPage() {
                     <FormItem>
                       <FormLabel>One-Time Password</FormLabel>
                       <FormControl>
-                        <Input placeholder="123456" {...field} maxLength={6} />
+                        <Input type="tel" inputMode="numeric" pattern="[0-9]*" placeholder="123456" {...field} maxLength={6} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
