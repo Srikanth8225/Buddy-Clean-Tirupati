@@ -99,7 +99,7 @@ export default function Header() {
         <div className="ml-auto flex items-center gap-2">
             <Button asChild variant="ghost" size="icon">
                 <a href={whatsappLink} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
-                    <WhatsappIcon className="h-6 w-6 text-green-500" />
+                    <WhatsappIcon className="h-6 w-6 fill-green-500" />
                 </a>
             </Button>
 
