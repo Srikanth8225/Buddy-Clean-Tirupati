@@ -24,14 +24,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { Loader2 } from "lucide-react";
-import { getMockUserByPhone } from "@/lib/data";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
 );
 
 const phoneFormSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   phone: z.string().regex(phoneRegex, "Invalid phone number format.").min(10, { message: "Phone number must be at least 10 digits." }),
 });
 
@@ -41,12 +39,12 @@ const otpFormSchema = z.object({
 
 export default function LoginPage() {
   const [step, setStep] = useState<'phone' | 'otp'>('phone');
-  const [phoneData, setPhoneData] = useState({ name: '', phone: '' });
+  const [phone, setPhone] = useState('');
   const { login, loading } = useAuth();
   
   const phoneForm = useForm<z.infer<typeof phoneFormSchema>>({
     resolver: zodResolver(phoneFormSchema),
-    defaultValues: { name: "", phone: "" },
+    defaultValues: { phone: "" },
   });
 
   const otpForm = useForm<z.infer<typeof otpFormSchema>>({
@@ -54,17 +52,8 @@ export default function LoginPage() {
     defaultValues: { otp: "" },
   });
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const phone = e.target.value;
-    phoneForm.setValue('phone', phone);
-    const existingUser = getMockUserByPhone(phone);
-    if (existingUser) {
-        phoneForm.setValue('name', existingUser.name, { shouldValidate: true });
-    }
-  };
-
   function onPhoneSubmit(data: z.infer<typeof phoneFormSchema>) {
-    setPhoneData(data);
+    setPhone(data.phone);
     // In a real app, you'd send an OTP here.
     // For this mock, we'll just move to the next step.
     setStep('otp');
@@ -73,7 +62,7 @@ export default function LoginPage() {
   function onOtpSubmit(data: z.infer<typeof otpFormSchema>) {
     // In a real app, you'd verify the OTP (data.otp) here.
     // We'll just use the mock login function with the stored phone data.
-    login(phoneData.phone, phoneData.name);
+    login(phone);
   }
 
   return (
@@ -85,8 +74,8 @@ export default function LoginPage() {
           </CardTitle>
           <CardDescription>
             {step === 'phone'
-              ? "Enter your details to receive an OTP for verification."
-              : `We've sent a mock OTP to ${phoneData.phone}.`}
+              ? "Enter your phone number to receive an OTP for verification."
+              : `Enter the 6-digit OTP sent to ${phone}.`}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -95,25 +84,12 @@ export default function LoginPage() {
               <form onSubmit={phoneForm.handleSubmit(onPhoneSubmit)} className="space-y-6">
                 <FormField
                   control={phoneForm.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Srinivas Rao" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={phoneForm.control}
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Phone Number</FormLabel>
                       <FormControl>
-                        <Input placeholder="+91 98765 43210" {...field} onChange={handlePhoneChange} />
+                        <Input placeholder="+91 98765 43210" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

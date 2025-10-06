@@ -1,3 +1,4 @@
+
 "use client";
 
 import { getAdminPhoneNumbers, getMockUserByPhone } from "@/lib/data";
@@ -8,7 +9,7 @@ import React, { createContext, useState, useEffect, ReactNode } from "react";
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (phone: string, name: string) => void;
+  login: (phone: string) => void;
   logout: () => void;
   updateUser: (data: Partial<User>) => Promise<void>;
 }
@@ -34,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const login = (phone: string, name: string) => {
+  const login = (phone: string) => {
     setLoading(true);
     // Simulate API call and OTP verification
     setTimeout(() => {
@@ -43,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const newUser: User = {
         uid: existingUser ? existingUser.id : `user-${Date.now()}`,
-        name: existingUser ? existingUser.name : name,
+        name: existingUser ? existingUser.name : 'New User',
         phone,
         isAdmin: adminPhones.includes(phone),
       };
