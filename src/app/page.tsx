@@ -21,6 +21,7 @@ export default function Home() {
             fill
             priority
             className="object-cover"
+            sizes="100vw"
             data-ai-hint={heroImage.imageHint}
           />
         )}
