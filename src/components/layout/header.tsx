@@ -32,6 +32,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useAuth } from '@/hooks/use-auth';
 import { useCart } from '@/hooks/use-cart';
 import { cn } from '@/lib/utils';
+import { WhatsappIcon } from '@/components/icons/whatsapp-icon';
 
 const navLinks = [
   { href: '/', label: 'Home', icon: HomeIcon },
@@ -48,9 +49,10 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isAdminPath = pathname.startsWith('/admin');
-  const isHomePage = pathname === '/';
 
   if (isAdminPath) return null; // Don't render the main header in the admin area
+
+  const whatsappLink = `https://wa.me/918096092423?text=${encodeURIComponent("Hello Buddy Clean! I'm interested in your services.")}`;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -94,7 +96,13 @@ export default function Header() {
           )}
         </nav>
 
-        <div className="ml-auto flex items-center gap-4">
+        <div className="ml-auto flex items-center gap-2">
+            <Button asChild variant="ghost" size="icon">
+                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+                    <WhatsappIcon className="h-6 w-6 text-green-500" />
+                </a>
+            </Button>
+
           <Button asChild variant="ghost" size="icon" className="relative">
             <Link href="/cart" aria-label="Shopping Cart">
               <ShoppingCart className="h-5 w-5" />
