@@ -1,5 +1,6 @@
 
 
+
 import { Service, Customer, Order } from './types';
 import placeholderImages from './placeholder-images.json';
 
@@ -168,7 +169,7 @@ let MOCK_SERVICES: Service[] = [
 let MOCK_CUSTOMERS: Customer[] = [
     { id: 'user-1-uid', name: 'Srinivas Rao', phone: '+919876543210', createdAt: new Date('2023-10-15') },
     { id: 'user-2-uid', name: 'Priya Reddy', phone: '+919123456789', createdAt: new Date('2023-11-02') },
-    { id: 'admin-uid', name: 'Admin User', phone: '+919999999999', createdAt: new Date('2023-01-01') },
+    { id: 'admin-uid', name: 'Rishi', phone: '8096092423', createdAt: new Date('2023-01-01') },
     { id: 'admin-2-uid', name: 'sreekanth', phone: '+917997707697', createdAt: new Date('2024-01-01') },
 ];
 
@@ -296,10 +297,11 @@ export const updateOrderStatus = (orderId: string, status: Order['status']) => {
     }
 };
 
-export const getAdminPhoneNumbers = (): string[] => ['+919999999999', '+917997707697'];
+export const getAdminPhoneNumbers = (): string[] => ['8096092423', '+917997707697'];
 export const getMockUserByPhone = (phone: string): Customer | undefined => MOCK_CUSTOMERS.find(c => c.phone === phone);
 
     
 
     
+
 
