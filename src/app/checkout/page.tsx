@@ -57,6 +57,18 @@ export default function CheckoutPage() {
   });
 
   const selectedDate = form.watch("serviceDate");
+  const paymentMethod = form.watch("paymentMethod");
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+        document.body.removeChild(script);
+    }
+  }, []);
 
   useEffect(() => {
     setAllOrders(getOrders());
@@ -96,18 +108,10 @@ export default function CheckoutPage() {
     );
   };
 
-  function onSubmit(data: z.infer<typeof checkoutSchema>) {
-    if (!user) {
-        toast({ title: "Error", description: "You must be logged in to place an order.", variant: "destructive" });
-        return;
-    }
-    if (!selectedTime) {
-        toast({ title: "Error", description: "Please select a time slot.", variant: "destructive" });
-        return;
-    }
+  const placeOrder = (paymentDetails: { paymentMethod: 'Online' | 'Cash on Delivery', paymentId?: string }) => {
+    const data = form.getValues();
+    if (!user) return;
 
-    setSubmitting(true);
-    
     const serviceDateWithTime = new Date(data.serviceDate);
     const [time, modifier] = selectedTime.split(' ');
     let [hours, minutes] = time.split(':').map(Number);
@@ -125,21 +129,72 @@ export default function CheckoutPage() {
         address: data.address,
         serviceDate: serviceDateWithTime,
         status: 'Pending',
-        paymentMethod: data.paymentMethod,
+        paymentMethod: paymentDetails.paymentMethod,
         createdAt: new Date(),
     };
 
     saveOrder(newOrder);
     
-    setTimeout(() => {
-        toast({
-            title: "Order Placed! 🎉",
-            description: "Your booking is confirmed. We'll be in touch shortly.",
+    toast({
+        title: "Order Placed! 🎉",
+        description: "Your booking is confirmed. We'll be in touch shortly.",
+    });
+    clearCart();
+    setSubmitting(false);
+    router.push("/account/orders");
+  }
+
+  async function onSubmit(data: z.infer<typeof checkoutSchema>) {
+    if (!user) {
+        toast({ title: "Error", description: "You must be logged in to place an order.", variant: "destructive" });
+        return;
+    }
+    if (!selectedTime) {
+        toast({ title: "Error", description: "Please select a time slot.", variant: "destructive" });
+        return;
+    }
+
+    setSubmitting(true);
+
+    if (data.paymentMethod === 'Cash on Delivery') {
+        setTimeout(() => {
+            placeOrder({ paymentMethod: 'Cash on Delivery' });
+        }, 1500)
+    } else {
+        const options = {
+            key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+            amount: cartTotal * 100,
+            currency: 'INR',
+            name: 'Buddy Clean',
+            description: 'Cleaning Service Booking',
+            image: 'https://buddy-clean-demo.web.app/logo.png',
+            handler: function (response: any) {
+                placeOrder({ paymentMethod: 'Online', paymentId: response.razorpay_payment_id });
+            },
+            prefill: {
+                name: data.name,
+                contact: data.phone,
+            },
+            notes: {
+                address: data.address,
+            },
+            theme: {
+                color: '#166534', // This is a dark green from your theme
+            },
+        };
+
+        // @ts-ignore
+        const rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', function (response: any) {
+            toast({
+                title: "Payment Failed",
+                description: response.error.description || "Something went wrong.",
+                variant: "destructive"
+            });
+            setSubmitting(false);
         });
-        clearCart();
-        setSubmitting(false);
-        router.push("/account/orders");
-    }, 1500);
+        rzp.open();
+    }
   }
 
   if (authLoading || !user) {
@@ -299,7 +354,7 @@ export default function CheckoutPage() {
               <CardContent>
                 <Button type="submit" size="lg" className="w-full" disabled={submitting}>
                   {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                  Place Order
+                  {paymentMethod === 'Online' ? 'Pay & Place Order' : 'Place Order'}
                 </Button>
               </CardContent>
             </Card>

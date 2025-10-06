@@ -39,6 +39,12 @@ const nextConfig: NextConfig = {
         hostname: 'unsplash.com',
         port: '',
         pathname: '/**',
+      },
+       {
+        protocol: 'https',
+        hostname: 'buddy-clean-demo.web.app',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
