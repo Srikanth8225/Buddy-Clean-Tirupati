@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -50,7 +51,7 @@ export default function LoginPage() {
 
   const otpForm = useForm<z.infer<typeof otpFormSchema>>({
     resolver: zodResolver(otpFormSchema),
-    defaultValues: { otp: "" },
+    defaultValues: { otp: "123456" },
   });
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +68,6 @@ export default function LoginPage() {
     // In a real app, you'd send an OTP here.
     // For this mock, we'll just move to the next step.
     setStep(2);
-    otpForm.setValue("otp", ""); // Clear any previous OTP
   }
 
   function onOtpSubmit(data: z.infer<typeof otpFormSchema>) {
@@ -86,7 +86,7 @@ export default function LoginPage() {
           <CardDescription>
             {step === 1
               ? "Enter your details to receive an OTP for verification."
-              : `We've sent an OTP to ${formData.phone}.`}
+              : `We've sent an OTP to ${formData.phone}. (Demo OTP is 123456)`}
           </CardDescription>
         </CardHeader>
         <CardContent>
