@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { PT_Sans } from 'next/font/google';
 import './globals.css';
@@ -5,6 +6,7 @@ import { AppProviders } from '@/app/providers';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/header';
 import { cn } from '@/lib/utils';
+import Footer from '@/components/layout/footer';
 
 export const metadata: Metadata = {
   title: 'Buddy Clean',
@@ -30,7 +32,8 @@ export default function RootLayout({
         <AppProviders>
           <div className="flex min-h-screen flex-col">
             <Header />
-            <main>{children}</main>
+            <main className="flex-grow">{children}</main>
+            <Footer />
           </div>
           <Toaster />
         </AppProviders>

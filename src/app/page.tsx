@@ -6,8 +6,28 @@ import Link from 'next/link';
 import placeholderImages from '@/lib/placeholder-images.json';
 import { getServices } from '@/lib/data';
 import ServiceCard from '@/components/service-card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 const heroImage = placeholderImages.placeholderImages.find(p => p.id === 'hero-1');
+
+const faqItems = [
+    {
+        question: 'What areas in Tirupati do you serve?',
+        answer: 'We serve all major areas within Tirupati city limits. If you are unsure whether your location is covered, please feel free to contact us.'
+    },
+    {
+        question: 'How can I book a service?',
+        answer: 'You can book a service directly through our website. Simply browse our services, select the one you need, choose a variant, and add it to your cart. Then, proceed to checkout to schedule your appointment.'
+    },
+    {
+        question: 'What payment methods do you accept?',
+        answer: 'We accept online payments through Razorpay (which supports credit cards, debit cards, UPI, and more) as well as Cash on Delivery (COD).'
+    },
+    {
+        question: 'Are your cleaning products safe for pets and children?',
+        answer: 'Yes, we prioritize the safety of your family. We use high-quality, eco-friendly, and non-toxic cleaning products that are safe for both children and pets.'
+    }
+]
 
 export default function Home() {
   const featuredServices = getServices().slice(0, 3);
@@ -52,6 +72,50 @@ export default function Home() {
               </Link>
             </Button>
           </div>
+        </div>
+      </section>
+
+      <section id="featured-services" className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold font-headline">Featured Services</h2>
+                <p className="mt-2 text-lg text-muted-foreground">
+                    Our most popular cleaning packages.
+                </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {featuredServices.map((service) => (
+                    <ServiceCard key={service.id} service={service} />
+                ))}
+            </div>
+             <div className="text-center mt-12">
+                <Button asChild size="lg" variant="outline">
+                    <Link href="/services">View All Services</Link>
+                </Button>
+            </div>
+        </div>
+      </section>
+
+      <section id="faq" className="py-16 md:py-24 bg-muted/50">
+        <div className="container mx-auto px-4">
+           <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold font-headline">Frequently Asked Questions</h2>
+                <p className="mt-2 text-lg text-muted-foreground">
+                    Have questions? We've got answers.
+                </p>
+            </div>
+            <div className="max-w-3xl mx-auto">
+                <Accordion type="single" collapsible className="w-full">
+                    {faqItems.map((item, index) => (
+                        <AccordionItem value={`item-${index}`} key={index}>
+                            <AccordionTrigger className="text-lg font-semibold text-left">{item.question}</AccordionTrigger>
+                            <AccordionContent className="text-muted-foreground text-base">
+                                {item.answer}
+                            </AccordionContent>
+                        </AccordionItem>
+                    ))}
+                </Accordion>
+            </div>
         </div>
       </section>
     </div>
