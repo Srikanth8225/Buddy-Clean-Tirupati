@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 import { Service, Customer, Order } from './types';
 import placeholderImages from './placeholder-images.json';
 
@@ -160,7 +152,8 @@ let MOCK_SERVICES: Service[] = [
     ],
     features: ['Exterior foam wash', 'Tire and rim cleaning', 'Exterior window wipe'],
     variants: [
-      { id: 'hatchback-express', name: '5 Seater', price: 399 },
+      { id: 'hatchback-express-5', name: '5 Seater', price: 399 },
+      { id: 'hatchback-express-7', name: '7 Seater', price: 499 },
     ],
   },
   {
@@ -174,7 +167,8 @@ let MOCK_SERVICES: Service[] = [
     ],
     features: ['All Express Wash features', 'Interior vacuuming', 'Dashboard polishing'],
     variants: [
-      { id: 'sedan-deluxe', name: '5 Seater', price: 699 },
+      { id: 'sedan-deluxe-5', name: '5 Seater', price: 699 },
+      { id: 'sedan-deluxe-7', name: '7 Seater', price: 799 },
     ],
   },
   {
@@ -188,7 +182,8 @@ let MOCK_SERVICES: Service[] = [
     ],
     features: ['Deep interior vacuuming', 'Upholstery & carpet shampooing', 'Leather conditioning'],
     variants: [
-        { id: 'suv-inner', name: '5 Seater', price: 999 },
+        { id: 'suv-inner-5', name: '5 Seater', price: 999 },
+        { id: 'suv-inner-7', name: '7 Seater', price: 1199 },
     ]
   },
   {
@@ -202,7 +197,8 @@ let MOCK_SERVICES: Service[] = [
     ],
     features: ['All Deluxe Wash features', 'Exterior wax and polish', 'Engine bay cleaning'],
     variants: [
-        { id: 'suv-royal', name: '5 Seater', price: 1499 },
+        { id: 'suv-royal-5', name: '5 Seater', price: 1499 },
+        { id: 'suv-royal-7', name: '7 Seater', price: 1699 },
     ]
   },
   {
@@ -361,15 +357,3 @@ export const updateOrderStatus = (orderId: string, status: Order['status']) => {
 
 export const getAdminPhoneNumbers = (): string[] => ['8096092423', '7997707697'];
 export const getMockUserByPhone = (phone: string): (Omit<Customer, 'createdAt'> & { createdAt: string }) | undefined => MOCK_CUSTOMERS.find(c => c.phone === phone);
-
-    
-
-    
-
-
-
-
-
-
-
-
