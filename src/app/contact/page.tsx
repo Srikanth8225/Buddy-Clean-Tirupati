@@ -9,16 +9,16 @@ import Link from "next/link";
 
 export default function ContactUsPage() {
   return (
-    <div className="container mx-auto px-4 py-16">
-      <div className="text-center mb-12">
+    <div className="container mx-auto px-4 py-8 md:py-12">
+      <div className="text-center mb-8">
         <h1 className="text-4xl md:text-5xl font-bold font-headline">Contact Us</h1>
-        <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+        <p className="mt-2 max-w-2xl mx-auto text-lg text-muted-foreground">
           Have a question or need a custom quote? We'd love to hear from you.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-12">
-        <div className="space-y-8">
+      <div className="grid md:grid-cols-2 gap-8">
+        <div className="space-y-6">
             <Card>
                 <CardHeader className="flex-row items-start gap-4">
                     <div className="bg-primary/10 text-primary p-3 rounded-full">
@@ -49,7 +49,7 @@ export default function ContactUsPage() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                     <a href="mailto:buddycleanservices@gmail.com" className="text-lg font-semibold text-primary hover:underline">buddycleanservices@gmail.com</a>
+                     <a href="mailto:buddycleanservices@gmail.com" className="text-lg font-semibold text-primary hover:underline break-all">buddycleanservices@gmail.com</a>
                 </CardContent>
             </Card>
 
