@@ -49,7 +49,7 @@ export default function ContactUsPage() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                     <a href="mailto:support@buddyclean.in" className="text-lg font-semibold text-primary hover:underline">support@buddyclean.in</a>
+                     <a href="mailto:buddycleanservices@gmail.com" className="text-lg font-semibold text-primary hover:underline">buddycleanservices@gmail.com</a>
                 </CardContent>
             </Card>
 

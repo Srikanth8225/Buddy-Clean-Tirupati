@@ -35,7 +35,7 @@ export default function RefundPolicyPage() {
             For any cancellations, refund requests, or rescheduling, please contact us via:
           </p>
           <ul>
-            <li>Email: <a href="mailto:support@buddyclean.in">support@buddyclean.in</a></li>
+            <li>Email: <a href="mailto:buddycleanservices@gmail.com">buddycleanservices@gmail.com</a></li>
             <li>Phone: <a href="tel:+918096092423">+91 80960 92423</a></li>
           </ul>
 

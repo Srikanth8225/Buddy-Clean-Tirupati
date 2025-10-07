@@ -45,7 +45,7 @@ export default function Footer() {
                         <div className="space-y-2 text-sm text-muted-foreground">
                             <p>Tirupati, Andhra Pradesh</p>
                              <a href="tel:+918096092423" className="block hover:text-foreground">+91 80960 92423</a>
-                             <a href="mailto:support@buddyclean.in" className="block hover:text-foreground">support@buddyclean.in</a>
+                             <a href="mailto:buddycleanservices@gmail.com" className="block hover:text-foreground">buddycleanservices@gmail.com</a>
                         </div>
                     </div>
                 </div>
