@@ -9,7 +9,7 @@ export default function CarWashPage() {
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold font-headline">Vehicle Wash Services</h1>
         <p className="mt-4 max-w-3xl mx-auto text-lg text-muted-foreground">
-          Give your car the care it deserves. Our meticulous washing and detailing services will leave your vehicle looking brand new, inside and out.
+          Give your car the care it deserves. Our meticulous washing and detailing services will leave it looking brand new.
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
