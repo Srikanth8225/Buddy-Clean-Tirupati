@@ -125,6 +125,24 @@
       "description": "Bring your sofa back to life with our professional shampooing service.",
       "imageUrl": "https://images.unsplash.com/photo-1632061046575-e52a1fb056c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzb2ZhJTIwY2xlYW5pbmd8ZW58MHx8fHwxNzU5Njg2ODc2fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "sofa cleaning"
+    },
+    {
+      "id": "process-dusting",
+      "description": "A person dusting a wooden surface with a cloth.",
+      "imageUrl": "https://images.unsplash.com/photo-1585421514481-f3a2282270cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxkdXN0aW5nfGVufDB8fHx8MTc2MDM0MDIyNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dusting furniture"
+    },
+    {
+      "id": "process-wiping",
+      "description": "Hands in yellow gloves wiping a surface with a sponge.",
+      "imageUrl": "https://images.unsplash.com/photo-1583945032549-3a8385139556?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3aXBpbmclMjBzdXJmYWNlfGVufDB8fHx8MTc2MDM0MDIyNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wiping surface"
+    },
+    {
+      "id": "process-floor-cleaning",
+      "description": "A person mopping a wooden floor.",
+      "imageUrl": "https://images.unsplash.com/photo-1542856238-d2e1320078b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmbG9vciUyMGNsZWFuaW5nfGVufDB8fHx8MTc2MDM0MDIyNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "floor cleaning"
     }
   ]
 }

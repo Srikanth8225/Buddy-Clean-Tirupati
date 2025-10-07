@@ -4,6 +4,7 @@
 
 
 
+
 import { Service, Customer, Order } from './types';
 import placeholderImages from './placeholder-images.json';
 
@@ -29,11 +30,11 @@ let MOCK_SERVICES: Service[] = [
       { id: 'villa', name: 'Villa', price: 6999 },
     ],
     process: [
-        { step: 1, title: 'Dry Dusting & Cobweb Removal', description: 'We start by thoroughly dusting all surfaces, including walls, ceilings, furniture, and fixtures to remove loose dirt and cobwebs.' },
-        { step: 2, title: 'Scrubbing & Wiping', description: 'Next, we meticulously scrub and wipe down all areas, focusing on stubborn stains and high-touch surfaces to ensure everything is spotless.' },
-        { step: 3, title: 'Kitchen Deep Clean', description: 'The kitchen receives special attention. We deep clean countertops, sinks, cabinet exteriors, and the outside of appliances to remove grease and grime.' },
-        { step: 4, title: 'Bathroom Sanitization', description: 'We sanitize the entire bathroom, including the toilet, shower, sink, and floor, using high-quality disinfectants to ensure a hygienic space.' },
-        { step: 5, title: 'Floor Cleaning', description: 'Finally, we sweep and mop all floors, leaving them sparkling clean and fresh.' },
+        { step: 1, title: 'Dry Dusting & Cobweb Removal', description: 'We start by thoroughly dusting all surfaces, including walls, ceilings, furniture, and fixtures to remove loose dirt and cobwebs.', image: allImages.find(img => img.id === 'process-dusting')! },
+        { step: 2, title: 'Scrubbing & Wiping', description: 'Next, we meticulously scrub and wipe down all areas, focusing on stubborn stains and high-touch surfaces to ensure everything is spotless.', image: allImages.find(img => img.id === 'process-wiping')! },
+        { step: 3, title: 'Kitchen Deep Clean', description: 'The kitchen receives special attention. We deep clean countertops, sinks, cabinet exteriors, and the outside of appliances to remove grease and grime.', image: allImages.find(img => img.id === 'kitchen-cleaning')! },
+        { step: 4, title: 'Bathroom Sanitization', description: 'We sanitize the entire bathroom, including the toilet, shower, sink, and floor, using high-quality disinfectants to ensure a hygienic space.', image: allImages.find(img => img.id === 'bathroom-cleaning')! },
+        { step: 5, title: 'Floor Cleaning', description: 'Finally, we sweep and mop all floors, leaving them sparkling clean and fresh.', image: allImages.find(img => img.id === 'process-floor-cleaning')! },
     ]
   },
   {
@@ -363,6 +364,7 @@ export const getMockUserByPhone = (phone: string): (Omit<Customer, 'createdAt'> 
     
 
     
+
 
 
 

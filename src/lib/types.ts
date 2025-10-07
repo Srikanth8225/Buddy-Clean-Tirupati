@@ -20,6 +20,7 @@ export interface ServiceProcessStep {
     step: number;
     title: string;
     description: string;
+    image: ImagePlaceholder;
 }
 
 export interface Service {
