@@ -12,7 +12,7 @@ export default function ContactUsPage() {
     <div className="container mx-auto px-4 py-8 md:py-12">
       <div className="text-center mb-8">
         <h1 className="text-4xl md:text-5xl font-bold font-headline">Contact Us</h1>
-        <p className="mt-2 max-w-2xl mx-auto text-lg text-muted-foreground">
+        <p className="mt-2 max-w-2xl mx-auto text-base text-muted-foreground">
           Have a question or need a custom quote? We'd love to hear from you.
         </p>
       </div>
@@ -32,7 +32,7 @@ export default function ContactUsPage() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <a href="tel:+918096092423" className="text-lg font-semibold text-primary hover:underline">+91 80960 92423</a>
+                    <a href="tel:+918096092423" className="text-base font-semibold text-primary hover:underline">+91 80960 92423</a>
                 </CardContent>
             </Card>
 
@@ -49,7 +49,7 @@ export default function ContactUsPage() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                     <a href="mailto:buddycleanservices@gmail.com" className="text-lg font-semibold text-primary hover:underline break-all">buddycleanservices@gmail.com</a>
+                     <a href="mailto:buddycleanservices@gmail.com" className="text-base font-semibold text-primary hover:underline break-all">buddycleanservices@gmail.com</a>
                 </CardContent>
             </Card>
 
@@ -66,7 +66,7 @@ export default function ContactUsPage() {
                     </div>
                 </CardHeader>
                 <CardContent>
-                     <p className="text-lg font-semibold">Tirupati, Andhra Pradesh, India</p>
+                     <p className="text-base font-semibold">Tirupati, Andhra Pradesh, India</p>
                 </CardContent>
             </Card>
         </div>
