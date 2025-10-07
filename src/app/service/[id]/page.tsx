@@ -16,6 +16,7 @@ import {
 import { useCart } from '@/hooks/use-cart';
 import { CheckCircle, ShoppingCart } from 'lucide-react';
 import { Service, ServiceVariant } from '@/lib/types';
+import { Separator } from '@/components/ui/separator';
 
 export default function ServiceDetailPage({ params }: { params: { id: string } }) {
   const service = getServiceById(params.id);
@@ -117,6 +118,41 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
           </div>
         </div>
       </div>
+
+        {service.process && service.process.length > 0 && (
+            <div className="mt-16">
+                <Separator />
+                <div className="py-16">
+                    <h2 className="text-3xl md:text-4xl font-bold font-headline text-center mb-12">Our Cleaning Process</h2>
+                    <div className="relative">
+                        <div className="absolute left-1/2 h-full w-0.5 bg-border -translate-x-1/2 hidden md:block" aria-hidden="true"></div>
+                        <div className="space-y-12 md:space-y-16">
+                        {service.process.map((step, index) => (
+                            <div key={step.step} className="relative flex flex-col md:flex-row items-center gap-8">
+                                <div className="md:w-1/2 md:pr-8 flex-shrink-0 md:text-right">
+                                    <div className="bg-primary text-primary-foreground h-12 w-12 rounded-full flex items-center justify-center text-xl font-bold absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 md:relative md:left-auto md:top-auto md:translate-x-0 md:translate-y-0 md:float-right md:ml-8">
+                                        {step.step}
+                                    </div>
+                                    <div className="md:ml-auto md:max-w-md">
+                                        <h3 className="text-2xl font-bold font-headline">{step.title}</h3>
+                                        <p className="mt-2 text-muted-foreground">{step.description}</p>
+                                    </div>
+                                </div>
+                                <div className="md:w-1/2 md:pl-8">
+                                    {/* Placeholder for image - you can add images to your steps */}
+                                    <div className="relative aspect-video w-full max-w-md bg-muted rounded-lg border">
+                                      <div className="flex items-center justify-center h-full">
+                                        <p className="text-muted-foreground">Step {step.step} illustration</p>
+                                      </div>
+                                    </div>
+                                </div>
+                             </div>
+                        ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
     </div>
   );
 }

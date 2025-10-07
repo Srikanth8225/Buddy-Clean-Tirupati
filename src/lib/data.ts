@@ -3,6 +3,7 @@
 
 
 
+
 import { Service, Customer, Order } from './types';
 import placeholderImages from './placeholder-images.json';
 
@@ -20,13 +21,20 @@ let MOCK_SERVICES: Service[] = [
         allImages.find(img => img.id === 'home-cleaning-2')!,
         allImages.find(img => img.id === 'home-cleaning-3')!,
     ],
-    features: ['Complete dusting of all surfaces, furniture, and fixtures', 'Thorough sweeping and mopping of all floors', 'Deep cleaning of kitchen, including appliance exteriors'],
+    features: ['Complete dusting of all surfaces, furniture, and fixtures', 'Thorough sweeping and mopping of all floors', 'Deep cleaning of kitchen, including appliance exteriors', 'Sanitization of bathrooms, including toilets, showers, and sinks'],
     variants: [
       { id: '1bhk', name: '1 BHK', price: 1800 },
       { id: '2bhk', name: '2 BHK', price: 4200 },
       { id: '3bhk', name: '3 BHK', price: 4499 },
       { id: 'villa', name: 'Villa', price: 6999 },
     ],
+    process: [
+        { step: 1, title: 'Dry Dusting & Cobweb Removal', description: 'We start by thoroughly dusting all surfaces, including walls, ceilings, furniture, and fixtures to remove loose dirt and cobwebs.' },
+        { step: 2, title: 'Scrubbing & Wiping', description: 'Next, we meticulously scrub and wipe down all areas, focusing on stubborn stains and high-touch surfaces to ensure everything is spotless.' },
+        { step: 3, title: 'Kitchen Deep Clean', description: 'The kitchen receives special attention. We deep clean countertops, sinks, cabinet exteriors, and the outside of appliances to remove grease and grime.' },
+        { step: 4, title: 'Bathroom Sanitization', description: 'We sanitize the entire bathroom, including the toilet, shower, sink, and floor, using high-quality disinfectants to ensure a hygienic space.' },
+        { step: 5, title: 'Floor Cleaning', description: 'Finally, we sweep and mop all floors, leaving them sparkling clean and fresh.' },
+    ]
   },
   {
     id: 'move-in-out-cleaning',
@@ -355,6 +363,7 @@ export const getMockUserByPhone = (phone: string): (Omit<Customer, 'createdAt'> 
     
 
     
+
 
 
 

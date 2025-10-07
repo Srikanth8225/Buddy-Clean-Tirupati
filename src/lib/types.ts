@@ -16,6 +16,12 @@ export interface ServiceVariant {
   price: number;
 }
 
+export interface ServiceProcessStep {
+    step: number;
+    title: string;
+    description: string;
+}
+
 export interface Service {
   id: string;
   name: string;
@@ -25,6 +31,7 @@ export interface Service {
   gallery: ImagePlaceholder[];
   features: string[];
   variants: ServiceVariant[];
+  process?: ServiceProcessStep[];
 }
 
 export interface CartItem {
@@ -38,7 +45,7 @@ export interface CartItem {
 }
 
 export interface Order {
-  id: string;
+  id:string;
   customerId: string;
   customerName: string;
   customerPhone: string;
