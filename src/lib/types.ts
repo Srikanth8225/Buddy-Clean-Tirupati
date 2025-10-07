@@ -1,3 +1,4 @@
+
 import type placeholderImages from './placeholder-images.json';
 
 export type ImagePlaceholder = (typeof placeholderImages.placeholderImages)[number];
@@ -21,6 +22,7 @@ export interface Service {
   description: string;
   category: 'home' | 'car';
   image: ImagePlaceholder;
+  gallery: ImagePlaceholder[];
   features: string[];
   variants: ServiceVariant[];
 }

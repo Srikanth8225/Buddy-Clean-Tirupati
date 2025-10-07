@@ -54,6 +54,24 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
               sizes="(max-width: 768px) 100vw, 50vw"
             />
           </div>
+           {service.gallery && service.gallery.length > 0 && (
+            <div className="mt-4">
+                <h3 className="text-xl font-semibold mb-3">Gallery</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {service.gallery.map((img) => (
+                        <div key={img.id} className="relative aspect-square w-full rounded-lg overflow-hidden border">
+                            <Image
+                                src={img.imageUrl}
+                                alt={img.description}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+           )}
         </div>
         <div className="space-y-6">
           <h1 className="text-4xl md:text-5xl font-bold font-headline">{service.name}</h1>

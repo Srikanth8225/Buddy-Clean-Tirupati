@@ -2,6 +2,7 @@
 
 
 
+
 import { Service, Customer, Order } from './types';
 import placeholderImages from './placeholder-images.json';
 
@@ -14,6 +15,11 @@ let MOCK_SERVICES: Service[] = [
     description: 'The ultimate cleaning package for a pristine home, covering every corner.',
     category: 'home',
     image: allImages.find(img => img.id === 'home-cleaning-1')!,
+    gallery: [
+        allImages.find(img => img.id === 'home-cleaning-1')!,
+        allImages.find(img => img.id === 'home-cleaning-2')!,
+        allImages.find(img => img.id === 'home-cleaning-3')!,
+    ],
     features: ['Complete dusting of all surfaces, furniture, and fixtures', 'Thorough sweeping and mopping of all floors', 'Deep cleaning of kitchen, including appliance exteriors'],
     variants: [
       { id: '1bhk', name: '1 BHK', price: 1800 },
@@ -28,6 +34,9 @@ let MOCK_SERVICES: Service[] = [
     description: 'Prepare your new home or ensure you get your deposit back with our move in/out service.',
     category: 'home',
     image: allImages.find(img => img.id === 'move-in-out-cleaning')!,
+    gallery: [
+        allImages.find(img => img.id === 'move-in-out-cleaning')!,
+    ],
     features: ['Complete deep clean', 'Inside of all cabinets and closets', 'Wall mark removal'],
     variants: [
       { id: 'move-in-1bhk', name: '1 BHK', price: 2800 },
@@ -42,6 +51,9 @@ let MOCK_SERVICES: Service[] = [
     description: 'A specialized deep clean for your kitchen, tackling grease and grime.',
     category: 'home',
     image: allImages.find(img => img.id === 'kitchen-cleaning')!,
+    gallery: [
+        allImages.find(img => img.id === 'kitchen-cleaning')!,
+    ],
     features: ['Stove and chimney cleaning', 'Degreasing of surfaces', 'Cabinet interior/exterior'],
     variants: [
       { id: '1-kitchen', name: '1 Kitchen', price: 1500 },
@@ -54,6 +66,9 @@ let MOCK_SERVICES: Service[] = [
     description: 'A complete sanitization and deep clean of your bathrooms.',
     category: 'home',
     image: allImages.find(img => img.id === 'bathroom-cleaning')!,
+    gallery: [
+        allImages.find(img => img.id === 'bathroom-cleaning')!,
+    ],
     features: ['Tile and grout scrubbing', 'Descaling of taps and showers', 'Toilet bowl sanitization'],
     variants: [
       { id: '1-bathroom', name: '1 Bathroom', price: 800 },
@@ -69,6 +84,9 @@ let MOCK_SERVICES: Service[] = [
     description: 'A clean mattress for a healthy and restful sleep. Price is per mattress.',
     category: 'home',
     image: allImages.find(img => img.id === 'mattress-cleaning')!,
+    gallery: [
+        allImages.find(img => img.id === 'mattress-cleaning')!,
+    ],
     features: ['Dust mite removal', 'Sanitization', 'Deodorizing'],
     variants: [
       { id: 'mattress-single', name: 'Single', price: 599 },
@@ -81,6 +99,9 @@ let MOCK_SERVICES: Service[] = [
     description: 'Bring your sofa back to life with our professional shampooing service.',
     category: 'home',
     image: allImages.find(img => img.id === 'sofa-shampooing')!,
+    gallery: [
+        allImages.find(img => img.id === 'sofa-shampooing')!,
+    ],
     features: ['Removes stains & dirt', 'Kills germs & allergens', 'Fabric protection'],
     variants: [
       { id: 'sofa-5-seater', name: '5 Seater', price: 1499 },
@@ -93,6 +114,9 @@ let MOCK_SERVICES: Service[] = [
     description: 'Streak-free shine for all your windows and glass surfaces.',
     category: 'home',
     image: allImages.find(img => img.id === 'window-glass-polishing')!,
+    gallery: [
+        allImages.find(img => img.id === 'window-glass-polishing')!,
+    ],
     features: ['Interior & exterior windows', 'Mirrors & glass tables', 'Removes tough spots'],
     variants: [
       { id: 'window-standard', name: 'Standard Home', price: 799 },
@@ -104,6 +128,9 @@ let MOCK_SERVICES: Service[] = [
     description: 'Ensure your water storage is clean and hygienic with our professional tank cleaning service.',
     category: 'home',
     image: allImages.find(img => img.id === 'water-tank-cleaning')!,
+    gallery: [
+        allImages.find(img => img.id === 'water-tank-cleaning')!,
+    ],
     features: ['Mechanized dewatering', 'Sludge and sediment removal', 'High-pressure cleaning'],
     variants: [
       { id: 'tank-500l', name: 'Up to 500L', price: 499 },
@@ -116,6 +143,11 @@ let MOCK_SERVICES: Service[] = [
     description: 'A quick and efficient wash to get your car looking fresh in no time.',
     category: 'car',
     image: allImages.find(img => img.id === 'car-wash-1')!,
+    gallery: [
+        allImages.find(img => img.id === 'car-wash-1')!,
+        allImages.find(img => img.id === 'car-wash-2')!,
+        allImages.find(img => img.id === 'car-wash-3')!,
+    ],
     features: ['Exterior foam wash', 'Tire and rim cleaning', 'Exterior window wipe'],
     variants: [
       { id: 'hatchback-express', name: '5 Seater', price: 399 },
@@ -127,6 +159,9 @@ let MOCK_SERVICES: Service[] = [
     description: 'A comprehensive wash that includes interior vacuuming and dashboard polishing.',
     category: 'car',
     image: allImages.find(img => img.id === 'car-wash-red')!,
+    gallery: [
+        allImages.find(img => img.id === 'car-wash-red')!,
+    ],
     features: ['All Express Wash features', 'Interior vacuuming', 'Dashboard polishing'],
     variants: [
       { id: 'sedan-deluxe', name: '5 Seater', price: 699 },
@@ -138,6 +173,9 @@ let MOCK_SERVICES: Service[] = [
     description: "A deep clean for your car's interior, leaving it spotless and hygienic.",
     category: 'car',
     image: allImages.find(img => img.id === 'car-interior-detailing')!,
+    gallery: [
+        allImages.find(img => img.id === 'car-interior-detailing')!,
+    ],
     features: ['Deep interior vacuuming', 'Upholstery & carpet shampooing', 'Leather conditioning'],
     variants: [
         { id: 'suv-inner', name: '5 Seater', price: 999 },
@@ -149,6 +187,9 @@ let MOCK_SERVICES: Service[] = [
     description: 'The ultimate detailing package for a showroom finish, inside and out.',
     category: 'car',
     image: allImages.find(img => img.id === 'car-wash-bentley')!,
+    gallery: [
+        allImages.find(img => img.id === 'car-wash-bentley')!,
+    ],
     features: ['All Deluxe Wash features', 'Exterior wax and polish', 'Engine bay cleaning'],
     variants: [
         { id: 'suv-royal', name: '5 Seater', price: 1499 },
@@ -160,6 +201,9 @@ let MOCK_SERVICES: Service[] = [
     description: 'A professional wash to make your motorcycle sparkle.',
     category: 'car',
     image: allImages.find(img => img.id === 'bike-wash')!,
+    gallery: [
+        allImages.find(img => img.id === 'bike-wash')!,
+    ],
     features: ['Full body foam wash', 'Chain cleaning and lubrication', 'Tire and rim detailing'],
     variants: [
         { id: 'bike-express', name: 'Standard Bike', price: 249 },
@@ -311,6 +355,7 @@ export const getMockUserByPhone = (phone: string): (Omit<Customer, 'createdAt'> 
     
 
     
+
 
 
 
