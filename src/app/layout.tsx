@@ -1,6 +1,6 @@
 
 import type { Metadata } from 'next';
-import { PT_Sans } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import { AppProviders } from '@/app/providers';
 import { Toaster } from '@/components/ui/toaster';
@@ -14,11 +14,9 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
 };
 
-const ptSans = PT_Sans({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '700'],
-  style: ['normal', 'italic'],
-  variable: '--font-pt-sans',
+  variable: '--font-inter',
 });
 
 export default function RootLayout({
@@ -28,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn('font-body antialiased', ptSans.variable)}>
+      <body className={cn('font-body antialiased', inter.variable)}>
         <AppProviders>
           <div className="flex min-h-screen flex-col">
             <Header />
