@@ -6,10 +6,13 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Instagram } from "lucide-react";
+import { WhatsappIcon } from "@/components/icons/whatsapp-icon";
 
 export default function Footer() {
     const { user } = useAuth();
     const pathname = usePathname();
+    const whatsappLink = `https://wa.me/918096092423?text=${encodeURIComponent("Hello Buddy Clean! I'm interested in your services.")}`;
 
     const isAdminPath = pathname.startsWith('/admin');
     if (isAdminPath) return null;
@@ -21,6 +24,16 @@ export default function Footer() {
                     <div className="space-y-4">
                         <Logo />
                         <p className="text-sm text-muted-foreground">Your trusted partner for a sparkling clean home and car in Tirupati.</p>
+                        <div className="flex items-center gap-4">
+                            <a href="#" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground">
+                                <Instagram className="h-6 w-6" />
+                                <span className="sr-only">Instagram</span>
+                            </a>
+                            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground">
+                                <WhatsappIcon className="h-6 w-6 fill-current" />
+                                <span className="sr-only">WhatsApp</span>
+                            </a>
+                        </div>
                     </div>
                     <div>
                         <h4 className="font-semibold mb-4">Quick Links</h4>
