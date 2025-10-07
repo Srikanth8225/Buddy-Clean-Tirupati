@@ -16,8 +16,6 @@ import {
 import { useCart } from '@/hooks/use-cart';
 import { CheckCircle, ShoppingCart } from 'lucide-react';
 import { Service, ServiceVariant } from '@/lib/types';
-import ServiceCard from '@/components/service-card';
-import { getServices } from '@/lib/data';
 
 export default function ServiceDetailPage({ params }: { params: { id: string } }) {
   const service = getServiceById(params.id);
@@ -26,8 +24,6 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
     notFound();
   }
   
-  const relatedServices = getServices(service.category).filter(s => s.id !== service.id).slice(0, 3);
-
   const [selectedVariantId, setSelectedVariantId] = useState<string>(
     service.variants[0].id
   );
@@ -121,22 +117,6 @@ export default function ServiceDetailPage({ params }: { params: { id: string } }
           </div>
         </div>
       </div>
-      
-      {relatedServices.length > 0 && (
-        <div className="mt-20">
-            <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold font-headline">Related Services</h2>
-                <p className="mt-2 text-lg text-muted-foreground">
-                    Other services you might be interested in.
-                </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {relatedServices.map((relatedService) => (
-                    <ServiceCard key={relatedService.id} service={relatedService} />
-                ))}
-            </div>
-        </div>
-      )}
     </div>
   );
 }
