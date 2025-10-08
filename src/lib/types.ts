@@ -70,7 +70,6 @@ export interface Notification {
     id: string;
     title: string;
     message: string;
-    recipients: string[]; // Array of customer IDs
     createdAt: Date;
     sentAt: Date; // Can be in the future for scheduled notifications
 }

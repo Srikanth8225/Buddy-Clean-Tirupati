@@ -279,7 +279,6 @@ let MOCK_NOTIFICATIONS: Omit<Notification, 'createdAt' | 'sentAt'> & { createdAt
         id: 'notif-1',
         title: 'Diwali Special Offer!',
         message: 'Get 20% off on all home cleaning services this festive season. Book now!',
-        recipients: ['user-1-uid', 'user-2-uid'],
         createdAt: new Date('2023-10-20T10:00:00').toISOString(),
         sentAt: new Date('2023-10-20T10:05:00').toISOString(),
     },
@@ -287,7 +286,6 @@ let MOCK_NOTIFICATIONS: Omit<Notification, 'createdAt' | 'sentAt'> & { createdAt
         id: 'notif-2',
         title: 'Monsoon Car Care',
         message: 'Protect your car from the rains. Avail our deluxe car wash with waxing.',
-        recipients: ['user-2-uid'],
         createdAt: new Date('2023-07-01T12:00:00').toISOString(),
         sentAt: new Date('2023-07-01T12:00:00').toISOString(),
     }

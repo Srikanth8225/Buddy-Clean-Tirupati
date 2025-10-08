@@ -212,13 +212,6 @@
           "type": "string",
           "description": "The content of the notification."
         },
-        "recipients": {
-          "type": "array",
-          "description": "Array of customer UIDs who will receive the notification.",
-          "items": {
-            "type": "string"
-          }
-        },
         "createdAt": {
           "type": "string",
           "description": "The date and time the notification was created.",
@@ -230,7 +223,7 @@
           "format": "date-time"
         }
       },
-      "required": ["id", "title", "message", "recipients", "createdAt", "sentAt"]
+      "required": ["id", "title", "message", "createdAt", "sentAt"]
     }
   },
   "auth": {

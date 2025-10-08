@@ -13,11 +13,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { Check, ChevronsUpDown, Loader2, Calendar as CalendarIcon, BellRing, Bell } from "lucide-react";
-import { getCustomers, getNotifications, saveNotification } from "@/lib/data";
-import { Customer, Notification } from "@/lib/types";
+import { Loader2, Calendar as CalendarIcon, BellRing, Bell } from "lucide-react";
+import { getNotifications, saveNotification } from "@/lib/data";
+import { Notification } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
@@ -25,7 +24,6 @@ import { format } from "date-fns";
 const notificationSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters."),
   message: z.string().min(10, "Message must be at least 10 characters."),
-  recipients: z.array(z.string()).min(1, "Please select at least one recipient."),
   sendTime: z.enum(["now", "schedule"]),
   scheduledAt: z.date().optional(),
 }).refine(data => {
@@ -39,7 +37,6 @@ const notificationSchema = z.object({
 });
 
 export default function AdminNotificationsPage() {
-  const [customers, setCustomers] = useState<Customer[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -49,7 +46,6 @@ export default function AdminNotificationsPage() {
     defaultValues: {
       title: "",
       message: "",
-      recipients: [],
       sendTime: "now",
     },
   });
@@ -57,7 +53,6 @@ export default function AdminNotificationsPage() {
   const sendTime = form.watch("sendTime");
 
   useEffect(() => {
-    setCustomers(getCustomers());
     setNotifications(getNotifications());
   }, []);
 
@@ -68,7 +63,6 @@ export default function AdminNotificationsPage() {
         id: `notif-${Date.now()}`,
         title: data.title,
         message: data.message,
-        recipients: data.recipients,
         createdAt: new Date(),
         sentAt: data.sendTime === 'now' ? new Date() : data.scheduledAt!,
     };
@@ -114,74 +108,6 @@ export default function AdminNotificationsPage() {
                   <FormItem>
                     <FormLabel>Message</FormLabel>
                     <FormControl><Textarea placeholder="Describe the notification..." {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-               <FormField
-                control={form.control}
-                name="recipients"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Recipients</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              "w-full justify-between",
-                              !field.value.length && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value.length > 0
-                              ? `${field.value.length} customer(s) selected`
-                              : "Select customers"}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-full p-0">
-                        <Command>
-                          <CommandInput placeholder="Search customers..." />
-                          <CommandEmpty>No customer found.</CommandEmpty>
-                          <CommandGroup>
-                            <CommandItem
-                                onSelect={() => {
-                                  const allCustomerIds = customers.map(c => c.id);
-                                  form.setValue("recipients", allCustomerIds);
-                                }}
-                            >
-                                Select All
-                            </CommandItem>
-                            {customers.map((customer) => (
-                              <CommandItem
-                                value={customer.name}
-                                key={customer.id}
-                                onSelect={() => {
-                                  const currentValue = field.value;
-                                  const newValue = currentValue.includes(customer.id)
-                                    ? currentValue.filter((id) => id !== customer.id)
-                                    : [...currentValue, customer.id];
-                                  form.setValue("recipients", newValue);
-                                }}
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    field.value.includes(customer.id)
-                                      ? "opacity-100"
-                                      : "opacity-0"
-                                  )}
-                                />
-                                {customer.name}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -279,7 +205,7 @@ export default function AdminNotificationsPage() {
                             <p className="font-semibold">{notif.title}</p>
                             <p className="text-sm text-muted-foreground">{notif.message}</p>
                             <div className="text-xs text-muted-foreground mt-2 flex items-center gap-4">
-                                <span>Sent to: <Badge variant="secondary">{notif.recipients.length} users</Badge></span>
+                                <span>Sent to: <Badge variant="secondary">All users</Badge></span>
                                 <span>{format(notif.sentAt, "PPp")}</span>
                             </div>
                         </div>
