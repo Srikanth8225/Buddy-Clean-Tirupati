@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "Customer": {
@@ -192,6 +193,44 @@
         "id",
         "isAdmin"
       ]
+    },
+    "Notification": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Notification",
+      "type": "object",
+      "description": "Represents a notification sent to users.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the notification."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the notification."
+        },
+        "message": {
+          "type": "string",
+          "description": "The content of the notification."
+        },
+        "recipients": {
+          "type": "array",
+          "description": "Array of customer UIDs who will receive the notification.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The date and time the notification was created.",
+          "format": "date-time"
+        },
+        "sentAt": {
+          "type": "string",
+          "description": "The date and time the notification is scheduled to be sent.",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "title", "message", "recipients", "createdAt", "sentAt"]
     }
   },
   "auth": {
@@ -285,8 +324,26 @@
             }
           ]
         }
+      },
+      {
+        "path": "/notifications/{notificationId}",
+        "definition": {
+          "entityName": "Notification",
+          "schema": {
+            "$ref": "#/backend/entities/Notification"
+          },
+          "description": "Stores notifications sent to users. Publicly readable.",
+          "params": [
+            {
+              "name": "notificationId",
+              "description": "The unique identifier for the notification."
+            }
+          ]
+        }
       }
     ],
-    "reasoning": "The Firestore structure is designed to ensure security, scalability, and ease of debugging, following the principles of Authorization Independence, Clarity of Intent, DBAC (Database-Based Access Control), and QAPs (Rules are not Filters). Authorization Independence is achieved through denormalization. For example, the `orders` subcollection includes the `customerId` which enables validation of ownership without needing to `get()` the parent `customer` document. This allows atomic operations and simplifies security rules. Structural Segregation is implemented by separating user data (`/customers/{customerId}`) from global data (`/services/{serviceId}`, `/contacts/{contactId}`, `/roles_admin/{uid}`). Access Modeling follows consistent patterns: Path-Based ownership is used for private data (`/customers/{customerId}/orders/{orderId}`), and Existence over Content for global roles (`/roles_admin/{uid}`). The structure supports QAPs by allowing secure list operations based on ownership, without filtering based on document data.\n\n*   `/customers/{customerId}`: Stores customer profiles. `customerId` matches the Firebase Auth UID, providing implicit ownership.\n*   `/customers/{customerId}/orders/{orderId}`: Stores orders for each customer. The `customerId` is denormalized, enabling secure rules without `get()` calls. This supports the Customer 1:N Order relationship. This structure also enables listing orders only for the logged-in user.\n*   `/services/{serviceId}`: Stores details of cleaning services. Accessible to all users for listing, but create/update/delete operations are restricted to admins.\n*   `/contacts/{contactId}`: Stores contact messages. Accessible to all users for creating new contact messages, but listing/reading/deleting are restricted to admins.\n*   `/roles_admin/{uid}`: Indicates administrator roles. Uses Existence over Content (DBAC) to grant admin privileges, simplifying security rules. If a document exists, the user is an admin."
+    "reasoning": "The Firestore structure is designed to ensure security, scalability, and ease of debugging, following the principles of Authorization Independence, Clarity of Intent, DBAC (Database-Based Access Control), and QAPs (Rules are not Filters). Authorization Independence is achieved through denormalization. For example, the `orders` subcollection includes the `customerId` which enables validation of ownership without needing to `get()` the parent `customer` document. This allows atomic operations and simplifies security rules. Structural Segregation is implemented by separating user data (`/customers/{customerId}`) from global data (`/services/{serviceId}`, `/contacts/{contactId}`, `/roles_admin/{uid}`). Access Modeling follows consistent patterns: Path-Based ownership is used for private data (`/customers/{customerId}/orders/{orderId}`), and Existence over Content for global roles (`/roles_admin/{uid}`). The structure supports QAPs by allowing secure list operations based on ownership, without filtering based on document data.\n\n*   `/customers/{customerId}`: Stores customer profiles. `customerId` matches the Firebase Auth UID, providing implicit ownership.\n*   `/customers/{customerId}/orders/{orderId}`: Stores orders for each customer. The `customerId` is denormalized, enabling secure rules without `get()` calls. This supports the Customer 1:N Order relationship. This structure also enables listing orders only for the logged-in user.\n*   `/services/{serviceId}`: Stores details of cleaning services. Accessible to all users for listing, but create/update/delete operations are restricted to admins.\n*   `/contacts/{contactId}`: Stores contact messages. Accessible to all users for creating new contact messages, but listing/reading/deleting are restricted to admins.\n*   `/roles_admin/{uid}`: Indicates administrator roles. Uses Existence over Content (DBAC) to grant admin privileges, simplifying security rules. If a document exists, the user is an admin.\n* `/notifications/{notificationId}`: Stores notifications for users. This collection is publicly readable so that all users (authenticated or not) can see announcements, but only admins can create, update, or delete them."
   }
 }
+
+    

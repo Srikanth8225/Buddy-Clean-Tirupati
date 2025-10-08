@@ -1,4 +1,5 @@
-import { Service, Customer, Order } from './types';
+
+import { Service, Customer, Order, Notification } from './types';
 import placeholderImages from './placeholder-images.json';
 
 const allImages = placeholderImages.placeholderImages;
@@ -273,10 +274,35 @@ let MOCK_ORDERS: Omit<Order, 'createdAt' | 'serviceDate'> & { createdAt: string,
     },
 ];
 
+let MOCK_NOTIFICATIONS: Omit<Notification, 'createdAt' | 'sentAt'> & { createdAt: string, sentAt: string }[] = [
+    {
+        id: 'notif-1',
+        title: 'Diwali Special Offer!',
+        message: 'Get 20% off on all home cleaning services this festive season. Book now!',
+        recipients: ['user-1-uid', 'user-2-uid'],
+        createdAt: new Date('2023-10-20T10:00:00').toISOString(),
+        sentAt: new Date('2023-10-20T10:05:00').toISOString(),
+    },
+    {
+        id: 'notif-2',
+        title: 'Monsoon Car Care',
+        message: 'Protect your car from the rains. Avail our deluxe car wash with waxing.',
+        recipients: ['user-2-uid'],
+        createdAt: new Date('2023-07-01T12:00:00').toISOString(),
+        sentAt: new Date('2023-07-01T12:00:00').toISOString(),
+    }
+];
+
 const parseOrderDates = (order: any): Order => ({
     ...order,
     createdAt: new Date(order.createdAt),
     serviceDate: new Date(order.serviceDate),
+});
+
+const parseNotificationDates = (notification: any): Notification => ({
+    ...notification,
+    createdAt: new Date(notification.createdAt),
+    sentAt: new Date(notification.sentAt),
 });
 
 // API-like functions to simulate data fetching
@@ -355,5 +381,37 @@ export const updateOrderStatus = (orderId: string, status: Order['status']) => {
     }
 };
 
+export const getNotifications = (): Notification[] => {
+    let allNotifications = [...MOCK_NOTIFICATIONS.map(parseNotificationDates)];
+    if (typeof window !== 'undefined') {
+        try {
+            const stored = JSON.parse(localStorage.getItem("buddy-clean-notifications") || "[]");
+            const combined = [...MOCK_NOTIFICATIONS.map(parseNotificationDates), ...stored.map(parseNotificationDates)];
+            const unique = Array.from(new Map(combined.map(n => [n.id, n])).values());
+            return unique.sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime());
+        } catch (e) {
+            console.error("Failed to parse notifications from local storage", e);
+        }
+    }
+    return allNotifications.sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime());
+};
+
+export const saveNotification = (notification: Notification) => {
+    if (typeof window === 'undefined') return;
+    const allNotifications = getNotifications();
+    if (allNotifications.some(n => n.id === notification.id)) return;
+
+    const newNotifications = [...allNotifications, notification];
+    const serializable = newNotifications.map(n => ({
+        ...n,
+        createdAt: n.createdAt.toISOString(),
+        sentAt: n.sentAt.toISOString(),
+    }));
+    localStorage.setItem("buddy-clean-notifications", JSON.stringify(serializable.filter(n => !MOCK_NOTIFICATIONS.find(mn => mn.id === n.id))));
+};
+
+
 export const getAdminPhoneNumbers = (): string[] => ['8096092423', '7997707697'];
 export const getMockUserByPhone = (phone: string): (Omit<Customer, 'createdAt'> & { createdAt: string }) | undefined => MOCK_CUSTOMERS.find(c => c.phone === phone);
+
+    

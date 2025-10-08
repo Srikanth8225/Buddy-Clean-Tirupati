@@ -3,6 +3,7 @@
 
 import { usePathname } from 'next/navigation';
 import {
+  Bell,
   LayoutDashboard,
   ListOrdered,
   LogOut,
@@ -32,6 +33,7 @@ const menuItems = [
   { href: '/admin/services', label: 'Services', icon: Wrench, tooltip: 'Services' },
   { href: '/admin/customers', label: 'Customers', icon: Users, tooltip: 'Customers' },
   { href: '/admin/admins', label: 'Admins', icon: Shield, tooltip: 'Admins' },
+  { href: '/admin/notifications', label: 'Notifications', icon: Bell, tooltip: 'Notifications' },
 ];
 
 export function AdminSidebar() {
@@ -86,3 +88,5 @@ export function AdminSidebar() {
     </Sidebar>
   );
 }
+
+    
