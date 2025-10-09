@@ -308,15 +308,13 @@ function getFromLocalStorage<T>(key: string, defaultValue: T): T {
     if (typeof window === 'undefined') return defaultValue;
     try {
         const item = window.localStorage.getItem(key);
-        if (item === null && key === 'buddy-clean-data-initialized') {
-             return defaultValue;
-        }
-         if (item === null) {
+        if (item === null) {
+            // If the specific key is missing, we re-initialize everything to be safe
             initializeLocalStorage();
             const newItem = window.localStorage.getItem(key);
-            return newItem ? JSON.parse(newItem) : defaultValue;
+            return newItem ? JSON.parse(newItem, dateReviver) : defaultValue;
         }
-        return JSON.parse(item);
+        return JSON.parse(item, dateReviver);
     } catch (e) {
         console.error(`Error reading from localStorage key “${key}”:`, e);
         return defaultValue;
@@ -327,9 +325,7 @@ function getFromLocalStorage<T>(key: string, defaultValue: T): T {
 function saveToLocalStorage<T>(key: string, value: T): void {
     if (typeof window === 'undefined') return;
     try {
-        const serializedValue = JSON.stringify(value, (k, v) => 
-            v instanceof Date ? v.toISOString() : v
-        );
+        const serializedValue = JSON.stringify(value);
         window.localStorage.setItem(key, serializedValue);
         // Do not call triggerStorageUpdate for 'buddy-clean-data-initialized'
         if (key !== 'buddy-clean-data-initialized') {
@@ -340,9 +336,19 @@ function saveToLocalStorage<T>(key: string, value: T): void {
     }
 }
 
+// Reviver function to convert ISO strings back to Date objects
+const dateReviver = (key: string, value: any) => {
+    const isoDatePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/;
+    if (typeof value === 'string' && isoDatePattern.test(value)) {
+        return new Date(value);
+    }
+    return value;
+};
+
+
 // This function seeds localStorage with initial data if it's not already there.
 export const initializeLocalStorage = () => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || isInitialized) return;
     
     const isDataInitialized = localStorage.getItem('buddy-clean-data-initialized') === 'true';
 
@@ -357,24 +363,6 @@ export const initializeLocalStorage = () => {
     }
     isInitialized = true;
 };
-
-// --- Parsers ---
-const parseCustomerDates = (customer: any): Customer => ({
-    ...customer,
-    createdAt: new Date(customer.createdAt),
-});
-
-const parseOrderDates = (order: any): Order => ({
-    ...order,
-    createdAt: new Date(order.createdAt),
-    serviceDate: new Date(order.serviceDate),
-});
-
-const parseNotificationDates = (notification: any): Notification => ({
-    ...notification,
-    createdAt: new Date(notification.createdAt),
-    sentAt: new Date(notification.sentAt),
-});
 
 // --- Services ---
 export const getServices = (category?: 'home' | 'car'): Service[] => {
@@ -391,7 +379,7 @@ export const getServiceById = (id: string): Service | undefined => {
 
 // --- Customers ---
 export const getCustomers = (): Customer[] => {
-    return getFromLocalStorage('buddy-clean-customers', []).map(parseCustomerDates);
+    return getFromLocalStorage('buddy-clean-customers', []);
 }
 
 export const saveCustomer = (customer: Customer): void => {
@@ -423,7 +411,7 @@ export const getMockUserByPhone = (phone: string): Customer | undefined => {
 
 // --- Orders ---
 export const getOrders = (): Order[] => {
-    return getFromLocalStorage('buddy-clean-orders', []).map(parseOrderDates);
+    return getFromLocalStorage('buddy-clean-orders', []);
 }
 
 export const saveOrder = (order: Order) => {
@@ -448,7 +436,7 @@ export const updateOrderStatus = (orderId: string, status: Order['status']) => {
 
 // --- Notifications ---
 export const getNotifications = (): Notification[] => {
-    const notifications = getFromLocalStorage('buddy-clean-notifications', []).map(parseNotificationDates);
+    const notifications = getFromLocalStorage('buddy-clean-notifications', []);
     return notifications.sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime());
 };
 

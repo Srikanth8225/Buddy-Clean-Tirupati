@@ -16,14 +16,22 @@ import { useEffect, useState, useMemo } from "react";
 import { useLocalStorageSync } from "@/hooks/use-local-storage-sync";
 
 export default function AdminOrdersPage() {
-    const [orders, setOrders] = useState<Order[]>(getOrders());
+    const [orders, setOrders] = useState<Order[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const { toast } = useToast();
     const router = useRouter();
 
-    useLocalStorageSync('buddy-clean-orders', () => {
+    const fetchOrders = () => {
         setOrders(getOrders());
-    });
+    };
+
+    useEffect(() => {
+        fetchOrders();
+    }, []);
+
+    useLocalStorageSync('buddy-clean-orders', fetchOrders);
+    useLocalStorageSync('buddy-clean-customers', fetchOrders);
+
 
     const getStatusVariant = (status: Order['status']) => {
         switch (status) {
@@ -36,12 +44,11 @@ export default function AdminOrdersPage() {
 
     const handleStatusChange = (orderId: string, newStatus: Order['status']) => {
         updateOrderStatus(orderId, newStatus);
-        setOrders(getOrders()); // Refresh data
+        fetchOrders();
         toast({
             title: "Status Updated",
             description: `Order #${orderId} has been updated to "${newStatus}".`
         });
-        // No need for router.refresh() as local state is managed
     };
 
     const orderStatuses: Order['status'][] = ['Pending', 'In Progress', 'Completed', 'Cancelled'];
@@ -90,7 +97,7 @@ export default function AdminOrdersPage() {
                                     <div className="font-medium">{order.customerName}</div>
                                     <div className="text-sm text-muted-foreground">{order.customerPhone}</div>
                                 </TableCell>
-                                <TableCell>{order.serviceDate.toLocaleDateString()}</TableCell>
+                                <TableCell>{new Date(order.serviceDate).toLocaleDateString()}</TableCell>
                                 <TableCell className="text-right">INR {order.total.toFixed(2)}</TableCell>
                                 <TableCell>{order.paymentMethod}</TableCell>
                                 <TableCell>

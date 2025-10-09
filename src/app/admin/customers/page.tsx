@@ -27,19 +27,15 @@ export default function AdminCustomersPage() {
     const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null);
     const { toast } = useToast();
 
-    const [dataVersion, setDataVersion] = useState(0);
-
-    const updateCustomers = () => {
+    const fetchCustomers = () => {
         setCustomers(getCustomers());
     };
 
     useEffect(() => {
-        updateCustomers();
-    }, [dataVersion]);
+        fetchCustomers();
+    }, []);
 
-    useLocalStorageSync('buddy-clean-customers', () => {
-        setDataVersion(v => v + 1);
-    });
+    useLocalStorageSync('buddy-clean-customers', fetchCustomers);
 
     const handleDeleteClick = (customer: Customer) => {
         setCustomerToDelete(customer);
@@ -48,7 +44,7 @@ export default function AdminCustomersPage() {
     const handleConfirmDelete = () => {
         if (customerToDelete) {
             deleteCustomer(customerToDelete.id);
-            setDataVersion(v => v + 1); 
+            fetchCustomers();
             toast({
                 title: "Customer Deleted",
                 description: `${customerToDelete.name} has been removed.`,
