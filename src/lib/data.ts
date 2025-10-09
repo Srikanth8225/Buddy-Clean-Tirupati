@@ -1,6 +1,8 @@
 
 import { Service, Customer, Order, Notification } from './types';
 import placeholderImages from './placeholder-images.json';
+import { triggerStorageUpdate } from '@/hooks/use-local-storage-sync';
+
 
 const allImages = placeholderImages.placeholderImages;
 
@@ -318,6 +320,7 @@ function saveToLocalStorage<T>(key: string, value: T): void {
     if (typeof window === 'undefined') return;
     try {
         window.localStorage.setItem(key, JSON.stringify(value));
+        triggerStorageUpdate();
     } catch (e) {
         console.error(`Error saving to localStorage key “${key}”:`, e);
     }
@@ -329,7 +332,7 @@ export const initializeLocalStorage = () => {
 
     if (localStorage.getItem('buddy-clean-data-initialized') !== 'true') {
         console.log("Initializing local storage with mock data...");
-        // Stringify dates for storage
+        saveToLocalStorage('buddy-clean-services', INITIAL_MOCK_SERVICES);
         saveToLocalStorage('buddy-clean-customers', INITIAL_MOCK_CUSTOMERS.map(c => ({...c, createdAt: c.createdAt.toISOString()})));
         saveToLocalStorage('buddy-clean-orders', INITIAL_MOCK_ORDERS.map(o => ({...o, createdAt: o.createdAt.toISOString(), serviceDate: o.serviceDate.toISOString()})));
         saveToLocalStorage('buddy-clean-notifications', INITIAL_MOCK_NOTIFICATIONS.map(n => ({...n, createdAt: n.createdAt.toISOString(), sentAt: n.sentAt.toISOString()})));
@@ -358,16 +361,16 @@ const parseNotificationDates = (notification: any): Notification => ({
 });
 
 // --- Services ---
-// Services are considered static and don't need to be in localStorage for this app.
 export const getServices = (category?: 'home' | 'car'): Service[] => {
+  const services = getFromLocalStorage('buddy-clean-services', INITIAL_MOCK_SERVICES);
   if (category) {
-    return INITIAL_MOCK_SERVICES.filter(service => service.category === category);
+    return services.filter(service => service.category === category);
   }
-  return INITIAL_MOCK_SERVICES;
+  return services;
 };
 
 export const getServiceById = (id: string): Service | undefined => {
-    return INITIAL_MOCK_SERVICES.find(service => service.id === id);
+    return getServices().find(service => service.id === id);
 }
 
 // --- Customers ---
@@ -398,7 +401,6 @@ export const getAdmins = (): Customer[] => {
 };
 
 export const getMockUserByPhone = (phone: string): Customer | undefined => {
-    // This now checks the "live" data from localStorage instead of the initial mock array
     return getCustomers().find(c => c.phone === phone);
 };
 
@@ -431,12 +433,11 @@ export const updateOrderStatus = (orderId: string, status: Order['status']) => {
 // --- Notifications ---
 export const getNotifications = (): Notification[] => {
     const notifications = getFromLocalStorage('buddy-clean-notifications', []).map(parseNotificationDates);
-    // Always return sorted by most recent
     return notifications.sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime());
 };
 
 export const saveNotification = (notification: Notification) => {
-    const notifications = getNotifications(); // This gets the sorted list, but we don't need it sorted for saving
+    const notifications = getNotifications();
     notifications.push(notification);
     saveToLocalStorage('buddy-clean-notifications', notifications.map(n => ({...n, createdAt: n.createdAt.toISOString(), sentAt: n.sentAt.toISOString()})));
 };

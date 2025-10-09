@@ -8,6 +8,7 @@ import { Order } from "@/lib/types";
 import { DollarSign, ListOrdered, UserPlus } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { useEffect, useState } from "react";
+import { useLocalStorageSync } from "@/hooks/use-local-storage-sync";
 
 export default function AdminDashboardPage() {
     const [totalRevenue, setTotalRevenue] = useState(0);
@@ -15,7 +16,7 @@ export default function AdminDashboardPage() {
     const [newCustomers, setNewCustomers] = useState(0);
     const [chartData, setChartData] = useState<any[]>([]);
 
-    useEffect(() => {
+    const updateDashboardData = () => {
         const orders = getOrders();
         const customers = getCustomers();
 
@@ -48,7 +49,15 @@ export default function AdminDashboardPage() {
         }));
 
         setChartData(data);
+    };
+
+    useEffect(() => {
+        updateDashboardData();
     }, []);
+
+    useLocalStorageSync('buddy-clean-orders', updateDashboardData);
+    useLocalStorageSync('buddy-clean-customers', updateDashboardData);
+
 
     const chartConfig = {
         revenue: {

@@ -13,16 +13,17 @@ import { Order } from "@/lib/types";
 import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
+import { useLocalStorageSync } from "@/hooks/use-local-storage-sync";
 
 export default function AdminOrdersPage() {
-    const [orders, setOrders] = useState<Order[]>([]);
+    const [orders, setOrders] = useState<Order[]>(getOrders());
     const [searchQuery, setSearchQuery] = useState('');
     const { toast } = useToast();
     const router = useRouter();
 
-    useEffect(() => {
+    useLocalStorageSync('buddy-clean-orders', () => {
         setOrders(getOrders());
-    }, []);
+    });
 
     const getStatusVariant = (status: Order['status']) => {
         switch (status) {
@@ -40,7 +41,7 @@ export default function AdminOrdersPage() {
             title: "Status Updated",
             description: `Order #${orderId} has been updated to "${newStatus}".`
         });
-        router.refresh();
+        // No need for router.refresh() as local state is managed
     };
 
     const orderStatuses: Order['status'][] = ['Pending', 'In Progress', 'Completed', 'Cancelled'];
