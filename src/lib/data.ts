@@ -288,6 +288,13 @@ const INITIAL_MOCK_NOTIFICATIONS: Notification[] = [
         message: 'Protect your car from the rains. Avail our deluxe car wash with waxing.',
         createdAt: new Date('2023-07-01T12:00:00'),
         sentAt: new Date('2023-07-01T12:00:00'),
+    },
+    {
+        id: 'notif-3',
+        title: 'Welcome to Buddy Clean!',
+        message: 'Thanks for signing up. Explore our services for a sparkling clean experience.',
+        createdAt: new Date('2023-01-01T10:00:00'),
+        sentAt: new Date('2023-01-01T10:00:00'),
     }
 ];
 
