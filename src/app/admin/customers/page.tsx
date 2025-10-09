@@ -20,18 +20,22 @@ import { Customer } from "@/lib/types";
 import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useLocalStorageSync } from "@/hooks/use-local-storage-sync";
 
 export default function AdminCustomersPage() {
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null);
     const { toast } = useToast();
 
-    // Use a state to force re-render when local storage changes
     const [dataVersion, setDataVersion] = useState(0);
 
     useEffect(() => {
         setCustomers(getCustomers());
     }, [dataVersion]);
+
+    useLocalStorageSync('buddy-clean-customers', () => {
+        setDataVersion(v => v + 1);
+    });
 
     const handleDeleteClick = (customer: Customer) => {
         setCustomerToDelete(customer);
@@ -40,7 +44,6 @@ export default function AdminCustomersPage() {
     const handleConfirmDelete = () => {
         if (customerToDelete) {
             deleteCustomer(customerToDelete.id);
-            // Instead of filtering state, we force a re-read from the source of truth
             setDataVersion(v => v + 1); 
             toast({
                 title: "Customer Deleted",
