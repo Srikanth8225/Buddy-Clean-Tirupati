@@ -10,7 +10,8 @@ import {
   ShoppingCart,
   User as UserIcon,
   Wrench,
-  ListOrdered
+  ListOrdered,
+  Bell,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -101,6 +102,12 @@ export default function Header() {
                 <a href={whatsappLink} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
                     <WhatsappIcon className="h-5 w-5 fill-white" />
                 </a>
+            </Button>
+
+            <Button asChild variant="ghost" size="icon">
+                <Link href="/notifications" aria-label="Notifications">
+                    <Bell className="h-5 w-5" />
+                </Link>
             </Button>
 
           <Button asChild variant="ghost" size="icon" className="relative">
@@ -196,6 +203,17 @@ export default function Header() {
                     {link.label}
                   </Link>
                 ))}
+                 <Link
+                    href="/notifications"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={cn(
+                        'flex items-center gap-3 rounded-md p-2 transition-colors hover:bg-muted',
+                        pathname.startsWith('/notifications') ? 'bg-muted' : ''
+                    )}
+                >
+                    <Bell className="h-5 w-5" />
+                    Notifications
+                </Link>
                 {user && (
                     <Link
                         href="/account"
