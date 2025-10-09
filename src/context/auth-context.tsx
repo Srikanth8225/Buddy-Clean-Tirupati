@@ -1,7 +1,7 @@
 
 "use client";
 
-import { getAdminPhoneNumbers, getMockUserByPhone } from "@/lib/data";
+import { getAdminPhoneNumbers, getMockUserByPhone, saveCustomer } from "@/lib/data";
 import type { User } from "@/lib/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { createContext, useState, useEffect, ReactNode } from "react";
@@ -57,12 +57,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
       } else {
         // If user does not exist, create a new one.
+        const newUserId = `user-${Date.now()}`;
         finalUser = {
-            uid: `user-${Date.now()}`,
+            uid: newUserId,
             name: name || 'New User',
             phone,
             isAdmin: adminPhones.includes(phoneWithoutCountryCode),
         };
+        // Also save the new user to our customer database
+        saveCustomer({
+          id: newUserId,
+          name: finalUser.name,
+          phone: finalUser.phone,
+          createdAt: new Date(),
+        });
       }
 
       localStorage.setItem("buddy-clean-user", JSON.stringify(finalUser));

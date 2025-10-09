@@ -68,16 +68,17 @@ export default function AdminNotificationsPage() {
     };
 
     saveNotification(newNotification);
+    
+    // The UI now reads directly from the updated source of truth
+    setNotifications(getNotifications());
+    
+    toast({
+        title: "Notification Sent!",
+        description: `Your notification "${data.title}" has been successfully sent/scheduled.`
+    });
 
-    setTimeout(() => {
-        setNotifications(prev => [newNotification, ...prev].sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime()));
-        toast({
-            title: "Notification Sent!",
-            description: `Your notification "${data.title}" has been successfully sent/scheduled.`
-        });
-        form.reset();
-        setIsSubmitting(false);
-    }, 1000);
+    form.reset();
+    setIsSubmitting(false);
   };
 
   return (

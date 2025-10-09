@@ -26,9 +26,12 @@ export default function AdminCustomersPage() {
     const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null);
     const { toast } = useToast();
 
+    // Use a state to force re-render when local storage changes
+    const [dataVersion, setDataVersion] = useState(0);
+
     useEffect(() => {
         setCustomers(getCustomers());
-    }, []);
+    }, [dataVersion]);
 
     const handleDeleteClick = (customer: Customer) => {
         setCustomerToDelete(customer);
@@ -37,7 +40,8 @@ export default function AdminCustomersPage() {
     const handleConfirmDelete = () => {
         if (customerToDelete) {
             deleteCustomer(customerToDelete.id);
-            setCustomers(customers.filter(c => c.id !== customerToDelete.id));
+            // Instead of filtering state, we force a re-read from the source of truth
+            setDataVersion(v => v + 1); 
             toast({
                 title: "Customer Deleted",
                 description: `${customerToDelete.name} has been removed.`,
