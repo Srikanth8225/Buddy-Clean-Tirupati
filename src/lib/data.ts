@@ -308,7 +308,15 @@ function getFromLocalStorage<T>(key: string, defaultValue: T): T {
     if (typeof window === 'undefined') return defaultValue;
     try {
         const item = window.localStorage.getItem(key);
-        return item ? JSON.parse(item) : defaultValue;
+        if (item === null && key === 'buddy-clean-data-initialized') {
+             return defaultValue;
+        }
+         if (item === null) {
+            initializeLocalStorage();
+            const newItem = window.localStorage.getItem(key);
+            return newItem ? JSON.parse(newItem) : defaultValue;
+        }
+        return JSON.parse(item);
     } catch (e) {
         console.error(`Error reading from localStorage key “${key}”:`, e);
         return defaultValue;
@@ -319,8 +327,14 @@ function getFromLocalStorage<T>(key: string, defaultValue: T): T {
 function saveToLocalStorage<T>(key: string, value: T): void {
     if (typeof window === 'undefined') return;
     try {
-        window.localStorage.setItem(key, JSON.stringify(value));
-        triggerStorageUpdate();
+        const serializedValue = JSON.stringify(value, (k, v) => 
+            v instanceof Date ? v.toISOString() : v
+        );
+        window.localStorage.setItem(key, serializedValue);
+        // Do not call triggerStorageUpdate for 'buddy-clean-data-initialized'
+        if (key !== 'buddy-clean-data-initialized') {
+             triggerStorageUpdate();
+        }
     } catch (e) {
         console.error(`Error saving to localStorage key “${key}”:`, e);
     }
@@ -328,14 +342,16 @@ function saveToLocalStorage<T>(key: string, value: T): void {
 
 // This function seeds localStorage with initial data if it's not already there.
 export const initializeLocalStorage = () => {
-    if (typeof window === 'undefined' || isInitialized) return;
+    if (typeof window === 'undefined') return;
+    
+    const isDataInitialized = localStorage.getItem('buddy-clean-data-initialized') === 'true';
 
-    if (localStorage.getItem('buddy-clean-data-initialized') !== 'true') {
+    if (!isDataInitialized) {
         console.log("Initializing local storage with mock data...");
         saveToLocalStorage('buddy-clean-services', INITIAL_MOCK_SERVICES);
-        saveToLocalStorage('buddy-clean-customers', INITIAL_MOCK_CUSTOMERS.map(c => ({...c, createdAt: c.createdAt.toISOString()})));
-        saveToLocalStorage('buddy-clean-orders', INITIAL_MOCK_ORDERS.map(o => ({...o, createdAt: o.createdAt.toISOString(), serviceDate: o.serviceDate.toISOString()})));
-        saveToLocalStorage('buddy-clean-notifications', INITIAL_MOCK_NOTIFICATIONS.map(n => ({...n, createdAt: n.createdAt.toISOString(), sentAt: n.sentAt.toISOString()})));
+        saveToLocalStorage('buddy-clean-customers', INITIAL_MOCK_CUSTOMERS);
+        saveToLocalStorage('buddy-clean-orders', INITIAL_MOCK_ORDERS);
+        saveToLocalStorage('buddy-clean-notifications', INITIAL_MOCK_NOTIFICATIONS);
         
         localStorage.setItem('buddy-clean-data-initialized', 'true');
     }
@@ -380,19 +396,19 @@ export const getCustomers = (): Customer[] => {
 
 export const saveCustomer = (customer: Customer): void => {
     const customers = getCustomers();
-    const existingIndex = customers.findIndex(c => c.id === customer.id);
+    const existingIndex = customers.findIndex(c => c.id === customer.id || c.phone === customer.phone);
     if (existingIndex > -1) {
-        customers[existingIndex] = customer;
+        customers[existingIndex] = { ...customers[existingIndex], ...customer };
     } else {
         customers.push(customer);
     }
-    saveToLocalStorage('buddy-clean-customers', customers.map(c => ({...c, createdAt: c.createdAt.toISOString()})));
+    saveToLocalStorage('buddy-clean-customers', customers);
 }
 
 export const deleteCustomer = (id: string): void => {
     let customers = getCustomers();
     customers = customers.filter(customer => customer.id !== id);
-    saveToLocalStorage('buddy-clean-customers', customers.map(c => ({...c, createdAt: c.createdAt.toISOString()})));
+    saveToLocalStorage('buddy-clean-customers', customers);
 };
 
 export const getAdmins = (): Customer[] => {
@@ -418,7 +434,7 @@ export const saveOrder = (order: Order) => {
     } else {
         orders.push(order);
     }
-    saveToLocalStorage('buddy-clean-orders', orders.map(o => ({...o, createdAt: o.createdAt.toISOString(), serviceDate: o.serviceDate.toISOString()})));
+    saveToLocalStorage('buddy-clean-orders', orders);
 }
 
 export const updateOrderStatus = (orderId: string, status: Order['status']) => {
@@ -426,7 +442,7 @@ export const updateOrderStatus = (orderId: string, status: Order['status']) => {
     const orderIndex = orders.findIndex(o => o.id === orderId);
     if (orderIndex > -1) {
         orders[orderIndex].status = status;
-        saveToLocalStorage('buddy-clean-orders', orders.map(o => ({...o, createdAt: o.createdAt.toISOString(), serviceDate: o.serviceDate.toISOString()})));
+        saveToLocalStorage('buddy-clean-orders', orders);
     }
 };
 
@@ -439,7 +455,7 @@ export const getNotifications = (): Notification[] => {
 export const saveNotification = (notification: Notification) => {
     const notifications = getNotifications();
     notifications.push(notification);
-    saveToLocalStorage('buddy-clean-notifications', notifications.map(n => ({...n, createdAt: n.createdAt.toISOString(), sentAt: n.sentAt.toISOString()})));
+    saveToLocalStorage('buddy-clean-notifications', notifications);
 };
 
 

@@ -2,7 +2,7 @@
 "use client";
 
 import { getAdminPhoneNumbers, getMockUserByPhone, saveCustomer } from "@/lib/data";
-import type { User } from "@/lib/types";
+import type { User, Customer } from "@/lib/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 
@@ -65,12 +65,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             isAdmin: adminPhones.includes(phoneWithoutCountryCode),
         };
         // Also save the new user to our customer database
-        saveCustomer({
+        const newCustomer: Customer = {
           id: newUserId,
           name: finalUser.name,
           phone: finalUser.phone,
           createdAt: new Date(),
-        });
+        };
+        saveCustomer(newCustomer);
       }
 
       localStorage.setItem("buddy-clean-user", JSON.stringify(finalUser));

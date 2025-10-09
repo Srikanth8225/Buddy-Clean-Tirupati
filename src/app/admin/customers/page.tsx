@@ -29,8 +29,12 @@ export default function AdminCustomersPage() {
 
     const [dataVersion, setDataVersion] = useState(0);
 
-    useEffect(() => {
+    const updateCustomers = () => {
         setCustomers(getCustomers());
+    };
+
+    useEffect(() => {
+        updateCustomers();
     }, [dataVersion]);
 
     useLocalStorageSync('buddy-clean-customers', () => {
