@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Logo from '@/components/logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -34,6 +34,9 @@ import { useAuth } from '@/hooks/use-auth';
 import { useCart } from '@/hooks/use-cart';
 import { cn } from '@/lib/utils';
 import { WhatsappIcon } from '@/components/icons/whatsapp-icon';
+import { getNotifications } from '@/lib/data';
+import { Notification } from '@/lib/types';
+import { useLocalStorageSync } from '@/hooks/use-local-storage-sync';
 
 const navLinks = [
   { href: '/', label: 'Home', icon: HomeIcon },
@@ -48,6 +51,17 @@ export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  const fetchNotifications = () => {
+    setNotifications(getNotifications());
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  useLocalStorageSync('buddy-clean-notifications', fetchNotifications);
 
   const isAdminPath = pathname.startsWith('/admin');
 
@@ -104,9 +118,17 @@ export default function Header() {
                 </a>
             </Button>
 
-            <Button asChild variant="ghost" size="icon">
+            <Button asChild variant="ghost" size="icon" className="relative">
                 <Link href="/notifications" aria-label="Notifications">
                     <Bell className="h-5 w-5" />
+                    {notifications.length > 0 && (
+                        <Badge
+                        variant="destructive"
+                        className="absolute -top-1 -right-1 h-5 w-5 justify-center rounded-full p-0 text-xs"
+                        >
+                        {notifications.length}
+                        </Badge>
+                    )}
                 </Link>
             </Button>
 
