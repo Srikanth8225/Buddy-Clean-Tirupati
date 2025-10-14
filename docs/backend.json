@@ -1,67 +1,52 @@
-
 {
   "entities": {
     "Customer": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Customer",
       "type": "object",
-      "description": "Represents a customer of Buddy Clean.",
+      "description": "Represents a customer in the Buddy Clean application.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the customer. This is the Firebase Auth UID.",
-          "format": "uuid"
-        },
-        "name": {
-          "type": "string",
-          "description": "The customer's full name."
+          "description": "Unique identifier for the customer entity."
         },
         "phoneNumber": {
           "type": "string",
-          "description": "The customer's phone number."
+          "description": "Customer's phone number used for authentication and contact."
         },
-        "email": {
+        "name": {
           "type": "string",
-          "description": "The customer's email address.",
-          "format": "email"
+          "description": "Customer's full name."
         },
         "address": {
           "type": "string",
-          "description": "The customer's address."
+          "description": "Customer's address for service delivery."
         }
       },
       "required": [
         "id",
+        "phoneNumber",
         "name",
-        "phoneNumber"
+        "address"
       ]
     },
     "Order": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Order",
       "type": "object",
-      "description": "Represents an order placed by a customer.",
+      "description": "Represents an order placed by a customer for a cleaning service.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the order.",
-          "format": "uuid"
+          "description": "Unique identifier for the order entity."
         },
         "customerId": {
           "type": "string",
           "description": "Reference to Customer. (Relationship: Customer 1:N Order)"
         },
-        "serviceIds": {
-          "type": "array",
-          "description": "References to Services. (Relationship: Order N:N Service)",
-          "items": {
-            "type": "string"
-          }
-        },
-        "orderDate": {
+        "serviceId": {
           "type": "string",
-          "description": "The date the order was placed.",
-          "format": "date-time"
+          "description": "Reference to Service. (Relationship: Service 1:N Order)"
         },
         "serviceDate": {
           "type": "string",
@@ -78,17 +63,22 @@
         },
         "status": {
           "type": "string",
-          "description": "The status of the order (e.g., Pending, Confirmed, Completed, Cancelled)."
+          "description": "The status of the order (e.g., pending, confirmed, completed, cancelled)."
+        },
+        "variant": {
+          "type": "string",
+          "description": "The variant selected for this service. (e.g. 1BHK, 5-seater)"
         }
       },
       "required": [
         "id",
         "customerId",
-        "orderDate",
+        "serviceId",
         "serviceDate",
         "totalAmount",
         "paymentMethod",
-        "status"
+        "status",
+        "variant"
       ]
     },
     "Service": {
@@ -99,8 +89,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the service.",
-          "format": "uuid"
+          "description": "Unique identifier for the service entity."
         },
         "name": {
           "type": "string",
@@ -112,19 +101,12 @@
         },
         "imageUrl": {
           "type": "string",
-          "description": "URL of the service image.",
+          "description": "URL of the image representing the service.",
           "format": "uri"
         },
-        "variants": {
-          "type": "array",
-          "description": "Service variant (e.g. 1BHK, 2BHK, 5-seater, 7-seater)",
-          "items": {
-            "type": "string"
-          }
-        },
-        "pricing": {
+        "basePrice": {
           "type": "number",
-          "description": "The price of the service."
+          "description": "The base price of the service."
         }
       },
       "required": [
@@ -132,45 +114,38 @@
         "name",
         "description",
         "imageUrl",
-        "pricing"
+        "basePrice"
       ]
     },
     "Contact": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Contact",
       "type": "object",
-      "description": "Represents a contact message submitted by a user.",
+      "description": "Represents a contact message submitted through the contact form.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the contact message.",
-          "format": "uuid"
+          "description": "Unique identifier for the contact message entity."
         },
         "name": {
           "type": "string",
-          "description": "The name of the person submitting the message."
+          "description": "The name of the person submitting the contact message."
         },
         "email": {
           "type": "string",
-          "description": "The email address of the person submitting the message.",
+          "description": "The email address of the person submitting the contact message.",
           "format": "email"
         },
         "message": {
           "type": "string",
-          "description": "The contact message."
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "The date and time the message was created.",
-          "format": "date-time"
+          "description": "The content of the contact message."
         }
       },
       "required": [
         "id",
         "name",
         "email",
-        "message",
-        "createdAt"
+        "message"
       ]
     },
     "AdminRole": {
@@ -181,8 +156,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the administrator role. This should match the Firebase Auth UID.",
-          "format": "uuid"
+          "description": "Unique identifier for the admin role entity (Firebase Auth UID)."
         },
         "isAdmin": {
           "type": "boolean",
@@ -193,37 +167,6 @@
         "id",
         "isAdmin"
       ]
-    },
-    "Notification": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Notification",
-      "type": "object",
-      "description": "Represents a notification sent to users.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the notification."
-        },
-        "title": {
-          "type": "string",
-          "description": "The title of the notification."
-        },
-        "message": {
-          "type": "string",
-          "description": "The content of the notification."
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "The date and time the notification was created.",
-          "format": "date-time"
-        },
-        "sentAt": {
-          "type": "string",
-          "description": "The date and time the notification is scheduled to be sent.",
-          "format": "date-time"
-        }
-      },
-      "required": ["id", "title", "message", "createdAt", "sentAt"]
     }
   },
   "auth": {
@@ -241,7 +184,7 @@
           "schema": {
             "$ref": "#/backend/entities/Customer"
           },
-          "description": "Stores customer profile information. The customerId is the Firebase Auth UID, providing implicit ownership.",
+          "description": "Stores customer profile information. The customerId must be the Firebase Auth UID, enforcing path-based ownership.",
           "params": [
             {
               "name": "customerId",
@@ -257,7 +200,7 @@
           "schema": {
             "$ref": "#/backend/entities/Order"
           },
-          "description": "Stores orders for each customer. Includes denormalized 'customerId' for authorization independence.",
+          "description": "Stores orders for each customer, ensuring users can only access their own orders. Includes denormalized 'customerId' for authorization independence.",
           "params": [
             {
               "name": "customerId",
@@ -277,7 +220,7 @@
           "schema": {
             "$ref": "#/backend/entities/Service"
           },
-          "description": "Stores details of cleaning services.",
+          "description": "Stores details for each cleaning service offered.",
           "params": [
             {
               "name": "serviceId",
@@ -293,7 +236,7 @@
           "schema": {
             "$ref": "#/backend/entities/Contact"
           },
-          "description": "Stores contact messages.",
+          "description": "Stores contact form submissions.",
           "params": [
             {
               "name": "contactId",
@@ -309,7 +252,7 @@
           "schema": {
             "$ref": "#/backend/entities/AdminRole"
           },
-          "description": "Identifies administrators by their Firebase Auth UID. Existence of the document grants admin privileges.",
+          "description": "Identifies administrators by their Firebase Auth UID. Existence of a document grants admin privileges.",
           "params": [
             {
               "name": "uid",
@@ -317,26 +260,8 @@
             }
           ]
         }
-      },
-      {
-        "path": "/notifications/{notificationId}",
-        "definition": {
-          "entityName": "Notification",
-          "schema": {
-            "$ref": "#/backend/entities/Notification"
-          },
-          "description": "Stores notifications sent to users. Publicly readable.",
-          "params": [
-            {
-              "name": "notificationId",
-              "description": "The unique identifier for the notification."
-            }
-          ]
-        }
       }
     ],
-    "reasoning": "The Firestore structure is designed to ensure security, scalability, and ease of debugging, following the principles of Authorization Independence, Clarity of Intent, DBAC (Database-Based Access Control), and QAPs (Rules are not Filters). Authorization Independence is achieved through denormalization. For example, the `orders` subcollection includes the `customerId` which enables validation of ownership without needing to `get()` the parent `customer` document. This allows atomic operations and simplifies security rules. Structural Segregation is implemented by separating user data (`/customers/{customerId}`) from global data (`/services/{serviceId}`, `/contacts/{contactId}`, `/roles_admin/{uid}`). Access Modeling follows consistent patterns: Path-Based ownership is used for private data (`/customers/{customerId}/orders/{orderId}`), and Existence over Content for global roles (`/roles_admin/{uid}`). The structure supports QAPs by allowing secure list operations based on ownership, without filtering based on document data.\n\n*   `/customers/{customerId}`: Stores customer profiles. `customerId` matches the Firebase Auth UID, providing implicit ownership.\n*   `/customers/{customerId}/orders/{orderId}`: Stores orders for each customer. The `customerId` is denormalized, enabling secure rules without `get()` calls. This supports the Customer 1:N Order relationship. This structure also enables listing orders only for the logged-in user.\n*   `/services/{serviceId}`: Stores details of cleaning services. Accessible to all users for listing, but create/update/delete operations are restricted to admins.\n*   `/contacts/{contactId}`: Stores contact messages. Accessible to all users for creating new contact messages, but listing/reading/deleting are restricted to admins.\n*   `/roles_admin/{uid}`: Indicates administrator roles. Uses Existence over Content (DBAC) to grant admin privileges, simplifying security rules. If a document exists, the user is an admin.\n* `/notifications/{notificationId}`: Stores notifications for users. This collection is publicly readable so that all users (authenticated or not) can see announcements, but only admins can create, update, or delete them."
+    "reasoning": "The Firestore structure is designed to ensure data security, scalability, and ease of management for the Buddy Clean application. It follows the principle of Authorization Independence by denormalizing necessary authorization data.  Specifically, the `orders` subcollection includes the `customerId`, thus enforcing ownership, making security rules simpler, and supporting atomic operations.\n\n*   **Customers Collection (`/customers/{customerId}`):** Stores customer profiles. The `customerId` matches the Firebase Auth UID, ensuring that only the authenticated user can access their own profile data (Path-Based ownership). This structure naturally supports the QAP because listing is only allowed within the user's own path.\n*   **Orders Subcollection (`/customers/{customerId}/orders/{orderId}`):** A subcollection under each customer document stores the customer's orders.  This enforces a strict parent-child relationship, ensuring that orders can only be created, read, updated, or deleted within the context of a specific customer.  This uses Path-Based ownership and provides Authorization Independence because the `customerId` is present in both the path and the document.\n*   **Services Collection (`/services/{serviceId}`):** Stores the details of each cleaning service offered. This is a top-level collection where all service documents share the same security requirements, enabling secure `list` operations (QAP).  Since the services are managed via the admin panel, the rules can be configured to restrict write access to admin users only.\n*   **Contacts Collection (`/contacts/{contactId}`):** Stores contact form submissions.  The documents in this collection share the same security posture, allowing for secure `list` operations if needed, ensuring QAPs are followed.\n*   **Admin Roles Collection (`/roles_admin/{uid}`):** Uses the Existence over Content pattern for managing admin roles. The existence of a document with the user's UID in this collection grants admin privileges. This approach simplifies the rules by removing the need to inspect the document's content.\n\nThis design promotes Authorization Independence by avoiding the need for `get()` calls in security rules, which would introduce hierarchical authorization dependencies.  The use of path-based ownership (`/customers/{customerId}/orders/{orderId}`) and dedicated collections for different access requirements (`/services`, `/contacts`, `/roles_admin`) ensures that security rules are straightforward and easy to debug. The structure also supports QAPs by ensuring that collections with potentially sensitive data are secured appropriately, and that `list` operations can be performed safely without exposing unauthorized data."
   }
 }
-
-    
