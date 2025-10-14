@@ -34,8 +34,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useCart } from '@/hooks/use-cart';
 import { cn } from '@/lib/utils';
 import { WhatsappIcon } from '@/components/icons/whatsapp-icon';
-import { getNotifications } from '@/lib/data';
-import { Notification } from '@/lib/types';
+import { getNotifications, markAllNotificationsAsRead, Notification } from '@/lib/data';
 import { useLocalStorageSync } from '@/hooks/use-local-storage-sync';
 
 const navLinks = [
@@ -62,6 +61,13 @@ export default function Header() {
   }, []);
 
   useLocalStorageSync('buddy-clean-notifications', fetchNotifications);
+
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  const handleNotificationClick = () => {
+    markAllNotificationsAsRead();
+    fetchNotifications(); // Re-fetch to update the state immediately
+  }
 
   const isAdminPath = pathname.startsWith('/admin');
 
@@ -118,15 +124,15 @@ export default function Header() {
                 </a>
             </Button>
 
-            <Button asChild variant="ghost" size="icon" className="relative">
+            <Button asChild variant="ghost" size="icon" className="relative" onClick={handleNotificationClick}>
                 <Link href="/notifications" aria-label="Notifications">
                     <Bell className="h-5 w-5" />
-                    {notifications.length > 0 && (
+                    {unreadCount > 0 && (
                         <Badge
                         variant="destructive"
                         className="absolute -top-1 -right-1 h-5 w-5 justify-center rounded-full p-0 text-xs"
                         >
-                        {notifications.length}
+                        {unreadCount}
                         </Badge>
                     )}
                 </Link>
@@ -227,7 +233,10 @@ export default function Header() {
                 ))}
                  <Link
                     href="/notifications"
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={() => {
+                        handleNotificationClick();
+                        setMobileMenuOpen(false);
+                    }}
                     className={cn(
                         'flex items-center gap-3 rounded-md p-2 transition-colors hover:bg-muted',
                         pathname.startsWith('/notifications') ? 'bg-muted' : ''

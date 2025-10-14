@@ -1,4 +1,5 @@
 
+
 import { Service, Customer, Order, Notification } from './types';
 import placeholderImages from './placeholder-images.json';
 import { triggerStorageUpdate } from '@/hooks/use-local-storage-sync';
@@ -283,6 +284,7 @@ const INITIAL_MOCK_NOTIFICATIONS: Notification[] = [
         message: 'Get 20% off on all home cleaning services this festive season. Book now!',
         createdAt: new Date('2023-10-20T10:00:00'),
         sentAt: new Date('2023-10-20T10:05:00'),
+        read: false,
     },
     {
         id: 'notif-2',
@@ -290,6 +292,7 @@ const INITIAL_MOCK_NOTIFICATIONS: Notification[] = [
         message: 'Protect your car from the rains. Avail our deluxe car wash with waxing.',
         createdAt: new Date('2023-07-01T12:00:00'),
         sentAt: new Date('2023-07-01T12:00:00'),
+        read: false,
     },
     {
         id: 'notif-3',
@@ -297,6 +300,7 @@ const INITIAL_MOCK_NOTIFICATIONS: Notification[] = [
         message: 'Thanks for signing up. Explore our services for a sparkling clean experience.',
         createdAt: new Date('2023-01-01T10:00:00'),
         sentAt: new Date('2023-01-01T10:00:00'),
+        read: false,
     }
 ];
 
@@ -442,8 +446,14 @@ export const getNotifications = (): Notification[] => {
 
 export const saveNotification = (notification: Notification) => {
     const notifications = getNotifications();
-    notifications.push(notification);
+    notifications.unshift(notification);
     saveToLocalStorage('buddy-clean-notifications', notifications);
+};
+
+export const markAllNotificationsAsRead = (): void => {
+    const notifications = getNotifications();
+    const updatedNotifications = notifications.map(n => ({ ...n, read: true }));
+    saveToLocalStorage('buddy-clean-notifications', updatedNotifications);
 };
 
 

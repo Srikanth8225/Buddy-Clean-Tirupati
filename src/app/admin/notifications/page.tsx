@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -65,6 +66,7 @@ export default function AdminNotificationsPage() {
         message: data.message,
         createdAt: new Date(),
         sentAt: data.sendTime === 'now' ? new Date() : data.scheduledAt!,
+        read: false,
     };
 
     saveNotification(newNotification);
@@ -199,7 +201,7 @@ export default function AdminNotificationsPage() {
               {notifications.length > 0 ? (
                   notifications.map(notif => (
                     <div key={notif.id} className="flex items-start gap-4 p-4 border rounded-md">
-                        <div className="bg-primary/10 text-primary p-2 rounded-full mt-1">
+                        <div className={cn("p-2 rounded-full mt-1", notif.read ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary")}>
                             <Bell className="h-5 w-5" />
                         </div>
                         <div>

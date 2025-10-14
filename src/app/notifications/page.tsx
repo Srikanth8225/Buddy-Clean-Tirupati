@@ -7,15 +7,24 @@ import { format } from "date-fns";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getNotifications } from "@/lib/data";
+import { getNotifications, markAllNotificationsAsRead } from "@/lib/data";
 import { Notification } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { useLocalStorageSync } from "@/hooks/use-local-storage-sync";
 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  useEffect(() => {
+  const fetchNotifications = () => {
     setNotifications(getNotifications());
+  };
+
+  useEffect(() => {
+    markAllNotificationsAsRead();
+    fetchNotifications();
   }, []);
+
+  useLocalStorageSync('buddy-clean-notifications', fetchNotifications);
 
   return (
     <div className="container mx-auto px-4 py-12 md:py-16">
@@ -35,7 +44,7 @@ export default function NotificationsPage() {
               {notifications.length > 0 ? (
                   notifications.map(notif => (
                     <div key={notif.id} className="flex items-start gap-4 p-4 border rounded-md">
-                        <div className="bg-primary/10 text-primary p-2 rounded-full mt-1">
+                         <div className={cn("p-2 rounded-full mt-1", notif.read ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary")}>
                             <Bell className="h-5 w-5" />
                         </div>
                         <div>

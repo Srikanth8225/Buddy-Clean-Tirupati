@@ -72,6 +72,7 @@ export interface Notification {
     message: string;
     createdAt: Date;
     sentAt: Date; // Can be in the future for scheduled notifications
+    read: boolean;
 }
 
     
