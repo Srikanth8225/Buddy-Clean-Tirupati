@@ -26,7 +26,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const storedUser = localStorage.getItem("buddy-clean-user");
       if (storedUser) {
-        setUser(JSON.parse(storedUser));
+        const parsedUser = JSON.parse(storedUser);
+        
+        // CRITICAL: Re-verify admin status on mount to handle updates to the admin list
+        const adminPhones = getAdminPhoneNumbers();
+        const phoneWithoutCountryCode = parsedUser.phone.replace('+91', '');
+        const isAdmin = adminPhones.includes(phoneWithoutCountryCode);
+        
+        setUser({ ...parsedUser, isAdmin });
       }
     } catch (error) {
       console.error("Failed to parse user from localStorage", error);
@@ -38,8 +45,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = (phone: string, otp: string, name?: string) => {
     setLoading(true);
-    // Simulate API call and OTP verification. In a real app, you'd verify the OTP here.
-    // For this demo, any 6-digit OTP is accepted.
     setTimeout(() => {
       const adminPhones = getAdminPhoneNumbers();
       const phoneWithoutCountryCode = phone.replace('+91', '');
@@ -48,7 +53,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       let finalUser: User;
 
       if (existingUser) {
-        // If user exists, use their stored details. Ignore the name from the login form.
         finalUser = {
             uid: existingUser.id,
             name: existingUser.name,
@@ -56,7 +60,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             isAdmin: adminPhones.includes(phoneWithoutCountryCode)
         };
       } else {
-        // If user does not exist, create a new one.
         const newUserId = `user-${Date.now()}`;
         finalUser = {
             uid: newUserId,
@@ -64,7 +67,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             phone,
             isAdmin: adminPhones.includes(phoneWithoutCountryCode),
         };
-        // Also save the new user to our customer database
         const newCustomer: Customer = {
           id: newUserId,
           name: finalUser.name,

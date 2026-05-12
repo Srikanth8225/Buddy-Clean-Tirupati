@@ -5,8 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { getCustomers, getOrders } from "@/lib/data";
 import { Order } from "@/lib/types";
-import { DollarSign, ListOrdered, UserPlus } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { DollarSign, ListOrdered, UserPlus, Loader2 } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, XAxis, ResponsiveContainer } from "recharts";
 import { useEffect, useState } from "react";
 import { useLocalStorageSync } from "@/hooks/use-local-storage-sync";
 
@@ -43,8 +43,9 @@ export default function AdminDashboardPage() {
         });
 
         const monthOrder = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const currentMonthIdx = new Date().getMonth();
         
-        const data = monthOrder.slice(0, new Date().getMonth() + 1).map(month => ({
+        const data = monthOrder.slice(0, currentMonthIdx + 1).map(month => ({
             date: month,
             revenue: monthlyRevenue[month] || 0
         }));
@@ -78,7 +79,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">INR {totalRevenue.toLocaleString('en-IN')}</div>
-            <p className="text-xs text-muted-foreground">Across all orders</p>
+            <p className="text-xs text-muted-foreground">Across all time</p>
           </CardContent>
         </Card>
         <Card>
@@ -88,7 +89,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+{newOrders}</div>
-            <p className="text-xs text-muted-foreground">in the last 30 days</p>
+            <p className="text-xs text-muted-foreground">Last 30 days</p>
           </CardContent>
         </Card>
         <Card>
@@ -98,7 +99,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+{newCustomers}</div>
-            <p className="text-xs text-muted-foreground">in the last 30 days</p>
+            <p className="text-xs text-muted-foreground">Last 30 days</p>
           </CardContent>
         </Card>
       </div>
@@ -106,23 +107,26 @@ export default function AdminDashboardPage() {
         <CardHeader>
             <CardTitle>Revenue Overview</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="h-[350px]">
             {mounted ? (
-              <ChartContainer config={chartConfig} className="h-[250px] w-full">
-                  <BarChart accessibilityLayer data={chartData}>
-                      <CartesianGrid vertical={false} />
+              <ChartContainer config={chartConfig} className="h-full w-full">
+                  <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                      <CartesianGrid vertical={false} strokeDasharray="3 3" opacity={0.2} />
                       <XAxis
-                      dataKey="date"
-                      tickLine={false}
-                      tickMargin={10}
-                      axisLine={false}
+                        dataKey="date"
+                        tickLine={false}
+                        tickMargin={10}
+                        axisLine={false}
+                        fontSize={12}
                       />
                       <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="revenue" fill="var(--color-revenue)" radius={4} />
+                      <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} />
                   </BarChart>
               </ChartContainer>
             ) : (
-              <div className="h-[250px] w-full bg-muted/20 animate-pulse rounded-md" />
+              <div className="h-full w-full flex items-center justify-center bg-muted/10 rounded-md">
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              </div>
             )}
         </CardContent>
       </Card>

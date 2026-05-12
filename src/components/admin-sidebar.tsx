@@ -41,45 +41,55 @@ export function AdminSidebar() {
   const { user, logout } = useAuth();
 
   return (
-    <Sidebar>
-      <SidebarHeader>
-        <Logo />
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="h-16 flex items-center px-4">
+        <Logo className="group-data-[collapsible=icon]:hidden" />
+        <div className="hidden group-data-[collapsible=icon]:flex h-8 w-8 items-center justify-center bg-primary rounded-lg text-primary-foreground">
+             <Shield className="h-5 w-5" />
+        </div>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu>
-          {menuItems.map((item) => (
-            <SidebarMenuItem key={item.href}>
-              <Link href={item.href} className="w-full">
-                <SidebarMenuButton
-                  isActive={pathname === item.href}
-                  tooltip={{ children: item.tooltip, side: 'right' }}
-                >
-                  <item.icon />
-                  <span>{item.label}</span>
-                </SidebarMenuButton>
-              </Link>
-            </SidebarMenuItem>
-          ))}
+        <SidebarMenu className="px-2">
+          {menuItems.map((item) => {
+            // Check if the current path starts with the menu item href for better active state detection
+            const isActive = item.href === '/admin' 
+                ? pathname === '/admin' 
+                : pathname.startsWith(item.href);
+
+            return (
+              <SidebarMenuItem key={item.href}>
+                <Link href={item.href} className="w-full">
+                  <SidebarMenuButton
+                    isActive={isActive}
+                    tooltip={item.tooltip}
+                  >
+                    <item.icon />
+                    <span>{item.label}</span>
+                  </SidebarMenuButton>
+                </Link>
+              </SidebarMenuItem>
+            );
+          })}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className='border-t mt-auto'>
+      <SidebarFooter className='border-t mt-auto p-2'>
          <SidebarMenu>
             <SidebarMenuItem>
-                <SidebarMenuButton onClick={logout} tooltip={{children: "Logout", side: 'right'}}>
+                <SidebarMenuButton onClick={logout} tooltip="Logout">
                     <LogOut />
                     <span>Logout</span>
                 </SidebarMenuButton>
             </SidebarMenuItem>
          </SidebarMenu>
-         <Separator />
+         <Separator className="my-2" />
          {user && (
-            <div className='flex items-center gap-3 p-2'>
-                <Avatar className="h-9 w-9">
+            <div className='flex items-center gap-3 p-2 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:justify-center'>
+                <Avatar className="h-9 w-9 shrink-0">
                     <AvatarImage src={`https://picsum.photos/seed/${user.uid}/100/100`} alt={user.name} />
                     <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 overflow-hidden group-data-[collapsible=icon]:hidden">
-                    <p className="font-medium truncate">{user.name}</p>
+                    <p className="font-medium truncate text-sm">{user.name}</p>
                     <p className="text-xs text-muted-foreground truncate">{user.phone}</p>
                 </div>
             </div>
@@ -88,5 +98,3 @@ export function AdminSidebar() {
     </Sidebar>
   );
 }
-
-    
