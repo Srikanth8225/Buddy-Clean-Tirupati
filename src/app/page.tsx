@@ -39,13 +39,13 @@ export default function Home() {
             priority
             className="object-cover"
             sizes="100vw"
-            quality={85}
+            quality={90}
             data-ai-hint={heroImage.imageHint}
           />
         )}
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 flex flex-col items-center gap-6 p-4">
-          <div className="flex items-center gap-3 rounded-full bg-primary/20 px-4 py-2 text-primary-foreground backdrop-blur-sm">
+          <div className="flex items-center gap-3 rounded-full bg-primary/20 px-4 py-2 text-primary-foreground backdrop-blur-sm border border-primary/30">
             <Sparkles className="h-6 w-6 text-accent" />
             <span className="font-semibold">Your Trusted Cleaning Partner in Tirupati</span>
           </div>
@@ -62,7 +62,7 @@ export default function Home() {
                 Book Home Cleaning
               </Link>
             </Button>
-            <Button asChild size="lg" variant="secondary" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+            <Button asChild size="lg" variant="secondary" className="bg-accent hover:bg-accent/90 text-accent-foreground border-none">
               <Link href="/services/car-wash">
                 <Car className="mr-2 h-5 w-5" />
                 Book Car Wash

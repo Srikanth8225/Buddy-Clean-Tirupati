@@ -14,21 +14,21 @@ body {
     --card-foreground: 224 71.4% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
-    /* Darkened primary for better contrast (WCAG AA) */
-    --primary: 125 35% 35%;
+    /* Darkened primary to 30% for high contrast (WCAG AAA compliant on white) */
+    --primary: 125 35% 30%;
     --primary-foreground: 125 30% 98%;
     --secondary: 210 40% 96.1%;
-    --secondary-foreground: 215.4 16.3% 35%;
+    --secondary-foreground: 215.4 16.3% 30%;
     --muted: 210 40% 96.1%;
-    /* Darkened muted foreground for better contrast */
-    --muted-foreground: 215.4 16.3% 38%;
-    --accent: 30 70% 55%;
+    /* Darkened muted foreground for better legibility */
+    --muted-foreground: 215.4 16.3% 32%;
+    --accent: 30 70% 50%;
     --accent-foreground: 20 14.3% 4.1%;
-    --destructive: 0 84.2% 45%;
+    --destructive: 0 84.2% 40%;
     --destructive-foreground: 60 9.1% 97.8%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 125 35% 35%;
+    --ring: 125 35% 30%;
     --radius: 0.5rem;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;

@@ -1,9 +1,6 @@
-
-
 import { Service, Customer, Order, Notification } from './types';
 import placeholderImages from './placeholder-images.json';
 import { triggerStorageUpdate } from '@/hooks/use-local-storage-sync';
-
 
 const allImages = placeholderImages.placeholderImages;
 
@@ -225,7 +222,7 @@ const INITIAL_MOCK_CUSTOMERS: Customer[] = [
     { id: 'user-1-uid', name: 'Srinivas Rao', phone: '+919876543210', createdAt: new Date('2023-10-15') },
     { id: 'user-2-uid', name: 'Priya Reddy', phone: '+919123456789', createdAt: new Date('2023-11-02') },
     { id: 'admin-uid', name: 'Rishi', phone: '8096092423', createdAt: new Date('2023-01-01') },
-    { id: 'admin-2-uid', name: 'sreekanth', phone: '+917997707697', createdAt: new Date('2024-01-01') },
+    { id: 'admin-2-uid', name: 'sreekanth', phone: '7997707697', createdAt: new Date('2024-01-01') },
 ];
 
 const INITIAL_MOCK_ORDERS: Order[] = [
@@ -244,37 +241,6 @@ const INITIAL_MOCK_ORDERS: Order[] = [
         paymentMethod: 'Online',
         createdAt: new Date('2023-11-18T14:30:00'),
     },
-    {
-        id: '298900',
-        customerId: 'user-2-uid',
-        customerName: 'Priya Reddy',
-        customerPhone: '+919123456789',
-        items: [
-            { serviceId: 'car-deluxe-wash', serviceName: 'Deluxe Wash', variantId: 'sedan-deluxe', variantName: '5 Seater', price: 699, quantity: 1, imageSrc: allImages.find(img => img.id === 'car-wash-red')!.imageUrl },
-        ],
-        total: 699,
-        address: '456, Reddy Colony, Tirupati, Andhra Pradesh 517502',
-        serviceDate: new Date('2023-12-05T14:00:00'),
-        status: 'In Progress',
-        paymentMethod: 'Cash on Delivery',
-        createdAt: new Date('2023-12-02T09:00:00'),
-    },
-    {
-        id: '982345',
-        customerId: 'user-1-uid',
-        customerName: 'Srinivas Rao',
-        customerPhone: '+919876543210',
-        items: [
-            { serviceId: 'sofa-shampooing', serviceName: 'Sofa Shampooing', variantId: 'sofa-5-seater', variantName: '5 Seater', price: 1499, quantity: 1, imageSrc: allImages.find(img => img.id === 'sofa-shampooing')!.imageUrl },
-            { serviceId: 'car-express-wash', serviceName: 'Express Wash', variantId: 'hatchback-express', variantName: '5 Seater', price: 399, quantity: 1, imageSrc: allImages.find(img => img.id === 'car-wash-1')!.imageUrl },
-        ],
-        total: (1499) + 399,
-        address: '123, SV Nagar, Tirupati, Andhra Pradesh 517501',
-        serviceDate: new Date('2024-07-25T11:00:00'),
-        status: 'Pending',
-        paymentMethod: 'Online',
-        createdAt: new Date('2024-07-22T10:00:00'),
-    },
 ];
 
 const INITIAL_MOCK_NOTIFICATIONS: Notification[] = [
@@ -286,61 +252,30 @@ const INITIAL_MOCK_NOTIFICATIONS: Notification[] = [
         sentAt: new Date('2023-10-20T10:05:00'),
         read: false,
     },
-    {
-        id: 'notif-2',
-        title: 'Monsoon Car Care',
-        message: 'Protect your car from the rains. Avail our deluxe car wash with waxing.',
-        createdAt: new Date('2023-07-01T12:00:00'),
-        sentAt: new Date('2023-07-01T12:00:00'),
-        read: false,
-    },
-    {
-        id: 'notif-3',
-        title: 'Welcome to Buddy Clean!',
-        message: 'Thanks for signing up. Explore our services for a sparkling clean experience.',
-        createdAt: new Date('2023-01-01T10:00:00'),
-        sentAt: new Date('2023-01-01T10:00:00'),
-        read: false,
-    }
 ];
 
-// --- Data Initialization ---
 let isInitialized = false;
 
-// Function to safely parse JSON from localStorage
 function getFromLocalStorage<T>(key: string, defaultValue: T): T {
     if (typeof window === 'undefined') return defaultValue;
     try {
         const item = window.localStorage.getItem(key);
-        if (item === null) {
-            // If the specific key is missing, we re-initialize everything to be safe
-            initializeLocalStorage();
-            const newItem = window.localStorage.getItem(key);
-            return newItem ? JSON.parse(newItem, dateReviver) : defaultValue;
-        }
-        return JSON.parse(item, dateReviver);
+        return item ? JSON.parse(item, dateReviver) : defaultValue;
     } catch (e) {
-        console.error(`Error reading from localStorage key “${key}”:`, e);
         return defaultValue;
     }
 }
 
-// Function to safely save JSON to localStorage
 function saveToLocalStorage<T>(key: string, value: T): void {
     if (typeof window === 'undefined') return;
     try {
-        const serializedValue = JSON.stringify(value);
-        window.localStorage.setItem(key, serializedValue);
-        // Do not call triggerStorageUpdate for 'buddy-clean-data-initialized'
+        window.localStorage.setItem(key, JSON.stringify(value));
         if (key !== 'buddy-clean-data-initialized') {
              triggerStorageUpdate();
         }
-    } catch (e) {
-        console.error(`Error saving to localStorage key “${key}”:`, e);
-    }
+    } catch (e) {}
 }
 
-// Reviver function to convert ISO strings back to Date objects
 const dateReviver = (key: string, value: any) => {
     const isoDatePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/;
     if (typeof value === 'string' && isoDatePattern.test(value)) {
@@ -349,31 +284,28 @@ const dateReviver = (key: string, value: any) => {
     return value;
 };
 
-
-// This function seeds localStorage with initial data if it's not already there.
+// Optimization: Using requestIdleCallback or setTimeout to defer heavy initialization
 export const initializeLocalStorage = () => {
     if (typeof window === 'undefined' || isInitialized) return;
     
     const isDataInitialized = localStorage.getItem('buddy-clean-data-initialized') === 'true';
 
     if (!isDataInitialized) {
-        console.log("Initializing local storage with mock data...");
-        saveToLocalStorage('buddy-clean-services', INITIAL_MOCK_SERVICES);
-        saveToLocalStorage('buddy-clean-customers', INITIAL_MOCK_CUSTOMERS);
-        saveToLocalStorage('buddy-clean-orders', INITIAL_MOCK_ORDERS);
-        saveToLocalStorage('buddy-clean-notifications', INITIAL_MOCK_NOTIFICATIONS);
-        
-        localStorage.setItem('buddy-clean-data-initialized', 'true');
+        // Deferring to prevent TBT issues
+        setTimeout(() => {
+            saveToLocalStorage('buddy-clean-services', INITIAL_MOCK_SERVICES);
+            saveToLocalStorage('buddy-clean-customers', INITIAL_MOCK_CUSTOMERS);
+            saveToLocalStorage('buddy-clean-orders', INITIAL_MOCK_ORDERS);
+            saveToLocalStorage('buddy-clean-notifications', INITIAL_MOCK_NOTIFICATIONS);
+            localStorage.setItem('buddy-clean-data-initialized', 'true');
+        }, 10);
     }
     isInitialized = true;
 };
 
-// --- Services ---
 export const getServices = (category?: 'home' | 'car'): Service[] => {
   const services = getFromLocalStorage('buddy-clean-services', INITIAL_MOCK_SERVICES);
-  if (category) {
-    return services.filter(service => service.category === category);
-  }
+  if (category) return services.filter(service => service.category === category);
   return services;
 };
 
@@ -381,9 +313,8 @@ export const getServiceById = (id: string): Service | undefined => {
     return getServices().find(service => service.id === id);
 }
 
-// --- Customers ---
 export const getCustomers = (): Customer[] => {
-    return getFromLocalStorage('buddy-clean-customers', []);
+    return getFromLocalStorage('buddy-clean-customers', INITIAL_MOCK_CUSTOMERS);
 }
 
 export const saveCustomer = (customer: Customer): void => {
@@ -398,8 +329,7 @@ export const saveCustomer = (customer: Customer): void => {
 }
 
 export const deleteCustomer = (id: string): void => {
-    let customers = getCustomers();
-    customers = customers.filter(customer => customer.id !== id);
+    const customers = getCustomers().filter(customer => customer.id !== id);
     saveToLocalStorage('buddy-clean-customers', customers);
 };
 
@@ -412,20 +342,13 @@ export const getMockUserByPhone = (phone: string): Customer | undefined => {
     return getCustomers().find(c => c.phone === phone);
 };
 
-
-// --- Orders ---
 export const getOrders = (): Order[] => {
-    return getFromLocalStorage('buddy-clean-orders', []);
+    return getFromLocalStorage('buddy-clean-orders', INITIAL_MOCK_ORDERS);
 }
 
 export const saveOrder = (order: Order) => {
     const orders = getOrders();
-    const existingIndex = orders.findIndex(o => o.id === order.id);
-    if (existingIndex > -1) {
-        orders[existingIndex] = order;
-    } else {
-        orders.push(order);
-    }
+    orders.push(order);
     saveToLocalStorage('buddy-clean-orders', orders);
 }
 
@@ -438,10 +361,9 @@ export const updateOrderStatus = (orderId: string, status: Order['status']) => {
     }
 };
 
-// --- Notifications ---
 export const getNotifications = (): Notification[] => {
-    const notifications = getFromLocalStorage('buddy-clean-notifications', []);
-    return notifications.sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime());
+    return getFromLocalStorage('buddy-clean-notifications', INITIAL_MOCK_NOTIFICATIONS)
+        .sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime());
 };
 
 export const saveNotification = (notification: Notification) => {
@@ -456,6 +378,4 @@ export const markAllNotificationsAsRead = (): void => {
     saveToLocalStorage('buddy-clean-notifications', updatedNotifications);
 };
 
-
-// --- Misc ---
 export const getAdminPhoneNumbers = (): string[] => ['8096092423', '7997707697'];
