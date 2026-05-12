@@ -15,6 +15,7 @@ export default function AdminDashboardPage() {
     const [newOrders, setNewOrders] = useState(0);
     const [newCustomers, setNewCustomers] = useState(0);
     const [chartData, setChartData] = useState<any[]>([]);
+    const [mounted, setMounted] = useState(false);
 
     const updateDashboardData = () => {
         const orders = getOrders();
@@ -52,6 +53,7 @@ export default function AdminDashboardPage() {
     };
 
     useEffect(() => {
+        setMounted(true);
         updateDashboardData();
     }, []);
 
@@ -105,19 +107,23 @@ export default function AdminDashboardPage() {
             <CardTitle>Revenue Overview</CardTitle>
         </CardHeader>
         <CardContent>
-            <ChartContainer config={chartConfig} className="h-[250px] w-full">
-                <BarChart accessibilityLayer data={chartData}>
-                    <CartesianGrid vertical={false} />
-                    <XAxis
-                    dataKey="date"
-                    tickLine={false}
-                    tickMargin={10}
-                    axisLine={false}
-                    />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="revenue" fill="var(--color-revenue)" radius={4} />
-                </BarChart>
-            </ChartContainer>
+            {mounted ? (
+              <ChartContainer config={chartConfig} className="h-[250px] w-full">
+                  <BarChart accessibilityLayer data={chartData}>
+                      <CartesianGrid vertical={false} />
+                      <XAxis
+                      dataKey="date"
+                      tickLine={false}
+                      tickMargin={10}
+                      axisLine={false}
+                      />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Bar dataKey="revenue" fill="var(--color-revenue)" radius={4} />
+                  </BarChart>
+              </ChartContainer>
+            ) : (
+              <div className="h-[250px] w-full bg-muted/20 animate-pulse rounded-md" />
+            )}
         </CardContent>
       </Card>
     </div>

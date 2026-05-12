@@ -1,3 +1,4 @@
+
 "use client";
 
 import { AdminSidebar } from "@/components/admin-sidebar";
@@ -39,7 +40,8 @@ export default function AdminLayout({
   }
 
   const isDashboard = pathname === '/admin';
-  const pageTitle = pathname.split('/').pop()?.replace('-', ' ')?.replace(/\b\w/g, l => l.toUpperCase()) || 'Dashboard';
+  const rawTitle = pathname.split('/').pop() || 'Dashboard';
+  const pageTitle = rawTitle === 'admin' ? 'Dashboard' : rawTitle.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
 
   return (
     <SidebarProvider>
@@ -58,7 +60,7 @@ export default function AdminLayout({
                 )}
                 <h1 className="text-lg font-semibold">{pageTitle}</h1>
             </header>
-            <main className="flex-1 p-4 md:p-6 bg-muted/40">
+            <main className="flex-1 p-4 md:p-6 bg-muted/40 overflow-auto">
                 {children}
             </main>
         </SidebarInset>
