@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { Car, Home as HomeIcon, Sparkles } from 'lucide-react';
 import Image from 'next/image';
@@ -40,6 +39,7 @@ export default function Home() {
             priority
             className="object-cover"
             sizes="100vw"
+            quality={85}
             data-ai-hint={heroImage.imageHint}
           />
         )}
@@ -49,7 +49,7 @@ export default function Home() {
             <Sparkles className="h-6 w-6 text-accent" />
             <span className="font-semibold">Your Trusted Cleaning Partner in Tirupati</span>
           </div>
-          <h1 className="text-4xl font-bold md:text-6xl font-headline tracking-tight text-shadow-lg">
+          <h1 className="text-4xl font-bold md:text-6xl font-headline tracking-tight">
             Your Cleaning Buddy.
           </h1>
           <p className="max-w-2xl text-lg text-primary-foreground/90">
