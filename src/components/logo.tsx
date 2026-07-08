@@ -1,4 +1,4 @@
-import { Sparkles } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
@@ -11,8 +11,14 @@ export default function Logo({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="rounded-lg bg-primary p-2 text-primary-foreground">
-        <Sparkles className="h-5 w-5" />
+      <div className="relative h-9 w-9 overflow-hidden rounded-md border border-[#A7D1AB]/30">
+        <Image 
+          src="/logo.png" 
+          alt="Buddy Clean Logo" 
+          fill
+          sizes="36px"
+          className="object-cover" 
+        />
       </div>
       <span className="font-headline text-foreground">Buddy Clean</span>
     </Link>
