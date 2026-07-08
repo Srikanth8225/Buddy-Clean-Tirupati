@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Buddy Clean',
   webDir: 'out',
   server: {
-    url: 'https://buddyclean.vercel.app',
+    url: 'https://buddyclean.in',
     cleartext: true
   }
 };
