@@ -1,7 +1,6 @@
-
 'use client';
 
-import { useState } from 'react';
+import { useState, use } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { getServiceById } from '@/lib/data';
@@ -18,8 +17,9 @@ import { CheckCircle, ShoppingCart } from 'lucide-react';
 import { Service, ServiceVariant } from '@/lib/types';
 import { Separator } from '@/components/ui/separator';
 
-export default function ServiceDetailPage({ params }: { params: { id: string } }) {
-  const service = getServiceById(params.id);
+export default function ServiceDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const service = getServiceById(id);
 
   if (!service) {
     notFound();
