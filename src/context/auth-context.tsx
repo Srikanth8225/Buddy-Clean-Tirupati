@@ -27,14 +27,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (isLoaded) {
       if (isSignedIn && clerkUser) {
         const phone = clerkUser.primaryPhoneNumber?.phoneNumber || "";
+        const email = clerkUser.primaryEmailAddress?.emailAddress || "";
         const adminPhones = getAdminPhoneNumbers();
         const phoneWithoutCountryCode = phone.replace("+91", "").trim();
-        const isAdmin = adminPhones.includes(phoneWithoutCountryCode);
+        const isAdmin = adminPhones.includes(phoneWithoutCountryCode) || email.toLowerCase() === "admin@buddyclean.store";
         
         setUser({
           uid: clerkUser.id,
           name: clerkUser.fullName || clerkUser.username || "User",
-          phone: phone,
+          phone: phone || email,
           isAdmin: isAdmin
         });
       } else {

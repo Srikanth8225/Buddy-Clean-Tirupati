@@ -54,7 +54,7 @@ export interface Order {
   total: number;
   address: string;
   serviceDate: Date;
-  status: 'Pending' | 'In Progress' | 'Completed' | 'Cancelled';
+  status: 'Pending' | 'In Progress' | 'Completed' | 'Cancelled' | 'Failed';
   paymentMethod: 'Online' | 'Cash on Delivery';
   createdAt: Date;
 }
