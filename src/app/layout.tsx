@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import Footer from '@/components/layout/footer';
 import { ClerkProvider } from '@clerk/nextjs';
 import { shadcn } from '@clerk/ui/themes';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'Buddy Clean - Professional Cleaning Services in Tirupati',
@@ -65,14 +66,16 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn('font-body antialiased min-h-screen bg-background', inter.variable)}>
         <ClerkProvider appearance={{ theme: shadcn }}>
-          <AppProviders>
-            <div className="flex min-h-screen flex-col">
-              <Header />
-              <main className="flex-grow">{children}</main>
-              <Footer />
-            </div>
-            <Toaster />
-          </AppProviders>
+          <Suspense fallback={null}>
+            <AppProviders>
+              <div className="flex min-h-screen flex-col">
+                <Header />
+                <main className="flex-grow">{children}</main>
+                <Footer />
+              </div>
+              <Toaster />
+            </AppProviders>
+          </Suspense>
         </ClerkProvider>
       </body>
     </html>
