@@ -96,14 +96,62 @@ export default function CheckoutPage() {
   }, [selectedDate, allOrders]);
 
   const handleUseLocation = () => {
+    toast({ title: "Fetching Location", description: "Requesting GPS coordinates..." });
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        // In a real app, you would use a geocoding service to convert lat/lng to an address
-        toast({ title: "Location Found!", description: "Mock address filled in." });
-        form.setValue("address", "123 Mockingbird Lane, Geolocation City, 517501");
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+          );
+          const data = await response.json();
+          if (data && data.display_name) {
+            const addressStr = data.display_name;
+            const lowerAddr = addressStr.toLowerCase();
+            
+            // Validate against whitelisted service areas in Tirupati
+            const isRenigunta = lowerAddr.includes("renigunta");
+            const isChandragiri = lowerAddr.includes("chandragiri");
+            const isTirupati = lowerAddr.includes("tirupati");
+            const isChittoor = lowerAddr.includes("chittoor") || lowerAddr.includes("andhra pradesh");
+
+            let matchedArea = "";
+            if (isRenigunta) matchedArea = "Renigunta";
+            else if (isChandragiri) matchedArea = "Chandragiri";
+            else if (isTirupati) matchedArea = "Tirupati";
+            
+            if (matchedArea) {
+              form.setValue("address", addressStr);
+              toast({
+                title: "Location Verified! 📍",
+                description: `Successfully detected address in ${matchedArea}.`,
+              });
+            } else if (isChittoor || (latitude >= 13.5 && latitude <= 13.75 && longitude >= 79.2 && longitude <= 79.6)) {
+              // Bounding box/geofence match fallback
+              form.setValue("address", addressStr);
+              toast({
+                title: "Location Verified! 📍",
+                description: "Address verified in Tirupati Rural / Chittoor district.",
+              });
+            } else {
+              form.setValue("address", addressStr);
+              toast({
+                title: "Service Area Warning ⚠️",
+                description: "Detected location is outside our service area (Tirupati, Renigunta, Chandragiri). Please verify your entry.",
+                variant: "destructive",
+              });
+            }
+          } else {
+            form.setValue("address", `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
+            toast({ title: "Location Found", description: "GPS coordinates filled. Geocoder returned empty." });
+          }
+        } catch (error) {
+          form.setValue("address", `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
+          toast({ title: "Location Found", description: "GPS coordinates filled. Geocoding server unavailable." });
+        }
       },
       () => {
-        toast({ title: "Error", description: "Could not get your location. Please enable location services.", variant: "destructive" });
+        toast({ title: "Error", description: "Could not retrieve GPS coordinates. Please enable location permissions.", variant: "destructive" });
       }
     );
   };
