@@ -56,7 +56,7 @@ export default function EditServicePage() {
   
   const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({
     control: form.control,
-    name: "features",
+    name: "features" as any,
   });
 
   const { fields: variantFields, append: appendVariant, remove: removeVariant } = useFieldArray({

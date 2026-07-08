@@ -1,10 +1,10 @@
-
 "use client";
 
-import { getAdminPhoneNumbers, getMockUserByPhone, saveCustomer } from "@/lib/data";
-import type { User, Customer } from "@/lib/types";
+import { getAdminPhoneNumbers } from "@/lib/data";
+import type { User } from "@/lib/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { createContext, useState, useEffect, ReactNode } from "react";
+import { useUser, useClerk } from "@clerk/nextjs";
 
 interface AuthContextType {
   user: User | null;
@@ -17,98 +17,61 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const { isLoaded, isSignedIn, user: clerkUser } = useUser();
+  const { signOut } = useClerk();
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem("buddy-clean-user");
-      if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        
-        // CRITICAL: Re-verify admin status on mount to handle updates to the admin list
+    if (isLoaded) {
+      if (isSignedIn && clerkUser) {
+        const phone = clerkUser.primaryPhoneNumber?.phoneNumber || "";
         const adminPhones = getAdminPhoneNumbers();
-        const phoneWithoutCountryCode = parsedUser.phone.replace('+91', '');
+        const phoneWithoutCountryCode = phone.replace("+91", "").trim();
         const isAdmin = adminPhones.includes(phoneWithoutCountryCode);
         
-        setUser({ ...parsedUser, isAdmin });
+        setUser({
+          uid: clerkUser.id,
+          name: clerkUser.fullName || clerkUser.username || "User",
+          phone: phone,
+          isAdmin: isAdmin
+        });
+      } else {
+        setUser(null);
       }
-    } catch (error) {
-      console.error("Failed to parse user from localStorage", error);
-      localStorage.removeItem("buddy-clean-user");
-    } finally {
-      setLoading(false);
     }
-  }, []);
+  }, [isLoaded, isSignedIn, clerkUser]);
 
   const login = (phone: string, otp: string, name?: string) => {
-    setLoading(true);
-    setTimeout(() => {
-      const adminPhones = getAdminPhoneNumbers();
-      const phoneWithoutCountryCode = phone.replace('+91', '');
-      const existingUser = getMockUserByPhone(phone);
-      
-      let finalUser: User;
-
-      if (existingUser) {
-        finalUser = {
-            uid: existingUser.id,
-            name: existingUser.name,
-            phone: existingUser.phone,
-            isAdmin: adminPhones.includes(phoneWithoutCountryCode)
-        };
-      } else {
-        const newUserId = `user-${Date.now()}`;
-        finalUser = {
-            uid: newUserId,
-            name: name || 'New User',
-            phone,
-            isAdmin: adminPhones.includes(phoneWithoutCountryCode),
-        };
-        const newCustomer: Customer = {
-          id: newUserId,
-          name: finalUser.name,
-          phone: finalUser.phone,
-          createdAt: new Date(),
-        };
-        saveCustomer(newCustomer);
-      }
-
-      localStorage.setItem("buddy-clean-user", JSON.stringify(finalUser));
-      setUser(finalUser);
-      setLoading(false);
-      
-      const redirect = searchParams.get('redirect') || '/';
-      router.replace(redirect);
-
-    }, 1000);
+    const redirect = searchParams.get("redirect") || "/";
+    router.push(`/login?redirect=${encodeURIComponent(redirect)}`);
   };
 
-  const logout = () => {
-    localStorage.removeItem("buddy-clean-user");
+  const logout = async () => {
+    await signOut();
     setUser(null);
     router.push("/");
   };
   
   const updateUser = async (data: Partial<User>) => {
-    return new Promise<void>((resolve) => {
-        setLoading(true);
-        setTimeout(() => {
-            if (user) {
-                const updatedUser = { ...user, ...data };
-                setUser(updatedUser);
-                localStorage.setItem("buddy-clean-user", JSON.stringify(updatedUser));
-            }
-            setLoading(false);
-            resolve();
-        }, 500);
-    });
-  }
+    if (clerkUser && data.name) {
+      const parts = data.name.split(" ");
+      const firstName = parts[0] || "";
+      const lastName = parts.slice(1).join(" ") || "";
+      try {
+        await clerkUser.update({
+          firstName,
+          lastName
+        });
+      } catch (err) {
+        console.error("Failed to update name in Clerk:", err);
+      }
+    }
+  };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, loading: !isLoaded, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

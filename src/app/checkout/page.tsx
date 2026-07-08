@@ -21,7 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { CalendarIcon, Loader2, LocateIcon, MapPin } from "lucide-react";
-import { format, isSameDay } from "date-fns";
+import { format } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
 import { getOrders, saveOrder } from "@/lib/data";
@@ -91,7 +91,7 @@ export default function CheckoutPage() {
     if (!selectedDate) return [];
     
     return allOrders
-      .filter(order => isSameDay(order.serviceDate, selectedDate))
+      .filter(order => new Date(order.serviceDate).toDateString() === new Date(selectedDate).toDateString())
       .map(order => format(order.serviceDate, "hh:mm a"));
   }, [selectedDate, allOrders]);
 

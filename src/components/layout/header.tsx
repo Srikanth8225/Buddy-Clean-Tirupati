@@ -34,8 +34,10 @@ import { useAuth } from '@/hooks/use-auth';
 import { useCart } from '@/hooks/use-cart';
 import { cn } from '@/lib/utils';
 import { WhatsappIcon } from '@/components/icons/whatsapp-icon';
-import { getNotifications, markAllNotificationsAsRead, Notification } from '@/lib/data';
+import { getNotifications, markAllNotificationsAsRead } from '@/lib/data';
 import { useLocalStorageSync } from '@/hooks/use-local-storage-sync';
+import { Show, UserButton } from '@clerk/nextjs';
+import { Notification } from '@/lib/types';
 
 const navLinks = [
   { href: '/', label: 'Home', icon: HomeIcon },
@@ -152,57 +154,25 @@ export default function Header() {
             </Link>
           </Button>
 
-          {!loading &&
-            (user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={`https://picsum.photos/seed/${user.uid}/100/100`} alt={user.name} />
-                      <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{user.name}</p>
-                      <p className="text-xs leading-none text-muted-foreground">{user.phone}</p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/account">
-                      <UserIcon className="mr-2 h-4 w-4" />
-                      <span>My Account</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/account/orders">
-                      <ListOrdered className="mr-2 h-4 w-4" />
-                      <span>My Orders</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  {user.isAdmin && (
-                    <DropdownMenuItem asChild>
-                      <Link href="/admin">
-                        <ShieldCheck className="mr-2 h-4 w-4" />
-                        <span>Admin Panel</span>
-                      </Link>
-                    </DropdownMenuItem>
+          {!loading && (
+            <>
+              <Show when="signed-out">
+                <Button asChild size="sm" className="hidden md:flex">
+                  <Link href="/login">Login</Link>
+                </Button>
+              </Show>
+              <Show when="signed-in">
+                <div className="flex items-center gap-4">
+                  {user?.isAdmin && (
+                    <Button asChild variant="outline" size="sm" className="hidden md:flex">
+                      <Link href="/admin">Admin Panel</Link>
+                    </Button>
                   )}
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={logout}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Button asChild size="sm" className="hidden md:flex">
-                <Link href="/login">Login</Link>
-              </Button>
-            ))}
+                  <UserButton />
+                </div>
+              </Show>
+            </>
+          )}
 
           {/* Mobile Menu */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -272,10 +242,19 @@ export default function Header() {
                     </Link>
                 )}
               </nav>
-              {!user && (
-                 <Button asChild size="lg" className="w-full mt-8">
-                    <Link href="/login" onClick={() => setMobileMenuOpen(false)}>Login</Link>
-                </Button>
+              {!loading && (
+                <>
+                  <Show when="signed-out">
+                    <Button asChild size="lg" className="w-full mt-8">
+                      <Link href="/login" onClick={() => setMobileMenuOpen(false)}>Login</Link>
+                    </Button>
+                  </Show>
+                  <Show when="signed-in">
+                    <div className="mt-8 flex justify-center">
+                      <UserButton />
+                    </div>
+                  </Show>
+                </>
               )}
             </SheetContent>
           </Sheet>
