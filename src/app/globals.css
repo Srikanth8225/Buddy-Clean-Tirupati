@@ -84,3 +84,27 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Clerk UI solid background fixes */
+.cl-card,
+.cl-userButtonPopoverCard,
+.cl-modalContent,
+.cl-profileSection,
+.cl-scrollBox,
+.cl-navbar,
+.cl-pageScrollBox {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+}
+
+.cl-modalBackdrop {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+.cl-userButtonPopoverActionButton,
+.cl-userButtonPopoverActionButtonText,
+.cl-userButtonPopoverFooter,
+.cl-userButtonPopoverFooter * {
+  color: #1a1a1a !important;
+}
