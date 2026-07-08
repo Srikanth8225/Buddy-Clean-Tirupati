@@ -35,7 +35,39 @@ export default function AdminOrdersPage() {
     // WhatsApp Template Dialog States
     const [whatsappOpen, setWhatsappOpen] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-    const [selectedTemplate, setSelectedTemplate] = useState<'confirm' | 'fail'>('confirm');
+    const [selectedTemplate, setSelectedTemplate] = useState<string>('confirm');
+    const [whatsappMessage, setWhatsappMessage] = useState('');
+
+    useEffect(() => {
+        if (!selectedOrder) return;
+        const name = selectedOrder.customerName;
+        const service = selectedOrder.items[0]?.serviceName || "Cleaning Service";
+        const date = new Date(selectedOrder.serviceDate).toLocaleDateString();
+        const total = selectedOrder.total;
+
+        let msg = '';
+        if (selectedTemplate === 'confirm') {
+            msg = `Hello *${name}*, thank you for choosing Buddy Clean! Your booking for *${service}* on *${date}* has been confirmed. The total amount is *INR ${total}*. Our team will reach out to you shortly before arrival. Have a great day!`;
+        } else if (selectedTemplate === 'pending') {
+            msg = `Hello *${name}*, this is Buddy Clean. We have received your booking request for *${service}* on *${date}*. It is currently under review, and we will confirm it shortly. Thank you for your patience!`;
+        } else if (selectedTemplate === 'fail') {
+            msg = `Hello *${name}*, we noticed your booking request for *${service}* on *${date}* was unsuccessful or cancelled. If this was unexpected, please let us know or click here to reschedule. We are here to help!`;
+        } else if (selectedTemplate === 'complete') {
+            msg = `Hello *${name}*, your Buddy Clean service for *${service}* has been successfully completed! We hope you are delighted with the clean. Please reply with any feedback or questions. Thank you!`;
+        }
+        setWhatsappMessage(msg);
+    }, [selectedOrder, selectedTemplate]);
+
+    const openWhatsAppDialog = (order: Order) => {
+        setSelectedOrder(order);
+        let initialTemplate = 'confirm';
+        if (order.status === 'Pending') initialTemplate = 'pending';
+        else if (order.status === 'Completed') initialTemplate = 'complete';
+        else if (order.status === 'Failed' || order.status === 'Cancelled') initialTemplate = 'fail';
+        
+        setSelectedTemplate(initialTemplate);
+        setWhatsappOpen(true);
+    };
 
     const fetchOrders = () => {
         setOrders(getOrders());
@@ -136,20 +168,8 @@ export default function AdminOrdersPage() {
     const handleSendWhatsApp = () => {
         if (!selectedOrder) return;
         
-        const name = selectedOrder.customerName;
         const phone = selectedOrder.customerPhone.replace(/\D/g, '');
-        const service = selectedOrder.items[0]?.serviceName || "Cleaning Service";
-        const date = new Date(selectedOrder.serviceDate).toLocaleDateString();
-        const total = selectedOrder.total;
-
-        let message = '';
-        if (selectedTemplate === 'confirm') {
-            message = `Hello *${name}*, your Buddy Clean booking for *${service}* is confirmed on *${date}*. Total amount: *INR ${total}*. Thank you for choosing us!`;
-        } else {
-            message = `Hello *${name}*, we noticed your booking request for *${service}* has failed or was cancelled. Would you like to reschedule or customize your request? Please reply here to coordinate!`;
-        }
-
-        const whatsappUrl = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(whatsappMessage)}`;
         window.open(whatsappUrl, '_blank');
         setWhatsappOpen(false);
     };
@@ -313,10 +333,7 @@ export default function AdminOrdersPage() {
                                         variant="outline" 
                                         size="icon" 
                                         className="border-green-300 text-green-700 hover:bg-green-50"
-                                        onClick={() => {
-                                            setSelectedOrder(order);
-                                            setWhatsappOpen(true);
-                                        }}
+                                        onClick={() => openWhatsAppDialog(order)}
                                         title="Send WhatsApp Alert"
                                     >
                                         <MessageSquare className="h-4 w-4" />
@@ -336,7 +353,7 @@ export default function AdminOrdersPage() {
                             <MessageSquare className="h-5 w-5 text-green-600" /> WhatsApp Template Dispatcher
                         </DialogTitle>
                         <DialogDescription>
-                            Configure notification dispatch for customer *{selectedOrder?.customerName}*.
+                            Select a template and customize the message for customer *{selectedOrder?.customerName}*.
                         </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
@@ -345,22 +362,22 @@ export default function AdminOrdersPage() {
                             <Select onValueChange={(val: any) => setSelectedTemplate(val)} value={selectedTemplate}>
                                 <SelectTrigger><SelectValue /></SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="confirm">Order Confirmation Template</SelectItem>
-                                    <SelectItem value="fail">Order Failed/Cancelled Template</SelectItem>
+                                    <SelectItem value="pending">1. Booking Pending Review</SelectItem>
+                                    <SelectItem value="confirm">2. Booking Confirmed</SelectItem>
+                                    <SelectItem value="fail">3. Booking Failed/Cancelled</SelectItem>
+                                    <SelectItem value="complete">4. Service Completed & Feedback</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
-                        <div className="rounded-md bg-muted p-3 text-sm space-y-2 border">
-                            <Label className="text-xs text-muted-foreground">Message Preview:</Label>
-                            {selectedTemplate === 'confirm' ? (
-                                <p className="text-xs italic text-foreground">
-                                    "Hello *{selectedOrder?.customerName}*, your Buddy Clean booking for *{selectedOrder?.items[0]?.serviceName || 'Cleaning Service'}* is confirmed on *{selectedOrder ? new Date(selectedOrder.serviceDate).toLocaleDateString() : ''}*. Total amount: *INR {selectedOrder?.total}*. Thank you for choosing us!"
-                                </p>
-                            ) : (
-                                <p className="text-xs italic text-red-700">
-                                    "Hello *{selectedOrder?.customerName}*, we noticed your booking request for *{selectedOrder?.items[0]?.serviceName || 'Cleaning Service'}* has failed or was cancelled. Would you like to reschedule or customize your request? Please reply here to coordinate!"
-                                </p>
-                            )}
+                        <div className="grid gap-2">
+                            <Label htmlFor="customMessage">Message Content</Label>
+                            <textarea 
+                                id="customMessage"
+                                className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                value={whatsappMessage}
+                                onChange={(e) => setWhatsappMessage(e.target.value)}
+                            />
+                            <p className="text-xs text-muted-foreground">You can edit the message text directly before sending.</p>
                         </div>
                     </div>
                     <DialogFooter>
