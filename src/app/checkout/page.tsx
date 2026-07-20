@@ -29,7 +29,8 @@ import { Order } from "@/lib/types";
 
 const checkoutSchema = z.object({
   name: z.string().min(2, "Name is required"),
-  phone: z.string().min(10, "Phone number is required"),
+  phone: z.string().regex(/^[6-9]\d{9}$/, "Please enter a valid 10-digit Indian mobile number (starts with 6-9)"),
+  email: z.string().email("Invalid email address").optional().or(z.literal('')),
   address: z.string().min(10, "A detailed address is required"),
   serviceDate: z.date({ required_error: "Please select a date for the service." }),
   paymentMethod: z.enum(["Online", "Cash on Delivery"], { required_error: "Please select a payment method." }),
@@ -52,6 +53,7 @@ export default function CheckoutPage() {
     defaultValues: {
       name: "",
       phone: "",
+      email: "",
       paymentMethod: "Online",
     },
   });
@@ -82,6 +84,7 @@ export default function CheckoutPage() {
       form.reset({
         name: user.name,
         phone: user.phone,
+        email: user.email || "",
         paymentMethod: "Online",
       });
     }
@@ -287,9 +290,12 @@ export default function CheckoutPage() {
                     <FormItem><FormLabel>Full Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
                   )} />
                   <FormField control={form.control} name="phone" render={({ field }) => (
-                    <FormItem><FormLabel>Phone Number</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>Phone Number</FormLabel><FormControl><Input type="tel" placeholder="Enter your 10-digit mobile number" {...field} onChange={(e) => field.onChange(e.target.value.replace(/\D/g, "").slice(0, 10))} /></FormControl><FormMessage /></FormItem>
                   )} />
                 </div>
+                <FormField control={form.control} name="email" render={({ field }) => (
+                  <FormItem><FormLabel>Email</FormLabel><FormControl><Input type="email" placeholder="name@example.com" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
                 <FormField control={form.control} name="address" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Service Address</FormLabel>

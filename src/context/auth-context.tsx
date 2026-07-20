@@ -35,7 +35,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser({
           uid: clerkUser.id,
           name: clerkUser.fullName || clerkUser.username || "User",
-          phone: phone || email,
+          phone: phone,
+          email: email,
           isAdmin: isAdmin
         });
       } else {
