@@ -24,7 +24,7 @@ import { CalendarIcon, Loader2, LocateIcon, MapPin } from "lucide-react";
 import { format } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
-import { getOrders, saveOrder } from "@/lib/data";
+import { getOrders, saveOrder, getTimeSlots } from "@/lib/data";
 import { Order } from "@/lib/types";
 
 const checkoutSchema = z.object({
@@ -36,8 +36,6 @@ const checkoutSchema = z.object({
   paymentMethod: z.enum(["Online", "Cash on Delivery"], { required_error: "Please select a payment method." }),
 });
 
-const timeSlots = ["09:00 AM", "11:00 AM", "01:00 PM", "03:00 PM", "05:00 PM"];
-
 export default function CheckoutPage() {
   const { user, loading: authLoading } = useAuth();
   const { items, cartTotal, clearCart } = useCart();
@@ -47,6 +45,7 @@ export default function CheckoutPage() {
   const [selectedTime, setSelectedTime] = useState('');
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [allOrders, setAllOrders] = useState<Order[]>([]);
+  const [timeSlots, setTimeSlots] = useState<string[]>([]);
 
   const form = useForm<z.infer<typeof checkoutSchema>>({
     resolver: zodResolver(checkoutSchema),
@@ -74,6 +73,7 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     setAllOrders(getOrders());
+    setTimeSlots(getTimeSlots());
   }, []);
 
   useEffect(() => {

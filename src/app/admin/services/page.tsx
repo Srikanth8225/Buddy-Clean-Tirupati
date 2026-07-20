@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { getServices } from "@/lib/data";
+import { getServices, deleteService } from "@/lib/data";
 import { Car, Edit, Home as HomeIcon, MoreHorizontal, PlusCircle, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -40,8 +40,8 @@ export default function AdminServicesPage() {
 
   const handleConfirmDelete = () => {
     if (serviceToDelete) {
-      // In mock mode, we just update local state or simulate deletion
-      setServices(prev => prev.filter(s => s.id !== serviceToDelete.id));
+      deleteService(serviceToDelete.id);
+      setServices(getServices());
       toast({
         title: "Service Deleted",
         description: `${serviceToDelete.name} has been removed.`,

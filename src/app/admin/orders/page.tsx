@@ -15,10 +15,12 @@ import { useLocalStorageSync } from "@/hooks/use-local-storage-sync";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export default function AdminOrdersPage() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [statusFilter, setStatusFilter] = useState('all');
     const [services, setServices] = useState<Service[]>([]);
     const { toast } = useToast();
 
@@ -177,16 +179,23 @@ export default function AdminOrdersPage() {
     const orderStatuses: Order['status'][] = ['Pending', 'In Progress', 'Completed', 'Cancelled', 'Failed'];
 
     const filteredOrders = useMemo(() => {
-        if (!searchQuery) {
-            return orders;
+        let result = orders;
+        
+        if (statusFilter !== 'all') {
+            result = result.filter(order => order.status.toLowerCase() === statusFilter.toLowerCase());
         }
-        return orders.filter(order =>
-            order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            order.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            order.status.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            order.total.toString().includes(searchQuery)
-        );
-    }, [orders, searchQuery]);
+
+        if (searchQuery) {
+            result = result.filter(order =>
+                order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                order.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                order.status.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                order.total.toString().includes(searchQuery)
+            );
+        }
+        
+        return result;
+    }, [orders, searchQuery, statusFilter]);
 
     const activeService = services.find(s => s.id === selectedServiceId);
 
@@ -275,13 +284,21 @@ export default function AdminOrdersPage() {
                 </div>
             </CardHeader>
             <CardContent>
-                <div className="pb-4">
+                <div className="pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <Input 
-                        placeholder="Search by Order ID, Customer Name, Status..."
+                        placeholder="Search by Order ID, Customer Name..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="border-[#A7D1AB]/30 max-w-sm"
                     />
+                    <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-full md:w-auto">
+                        <TabsList>
+                            <TabsTrigger value="all">All</TabsTrigger>
+                            <TabsTrigger value="pending">Pending</TabsTrigger>
+                            <TabsTrigger value="completed">Completed</TabsTrigger>
+                            <TabsTrigger value="failed">Failed</TabsTrigger>
+                        </TabsList>
+                    </Tabs>
                 </div>
                 <Table>
                     <TableHeader>

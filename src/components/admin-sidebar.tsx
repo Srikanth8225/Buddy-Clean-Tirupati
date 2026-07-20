@@ -10,6 +10,7 @@ import {
   Shield,
   Users,
   Wrench,
+  Settings,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -34,6 +35,7 @@ const menuItems = [
   { href: '/admin/customers', label: 'Customers', icon: Users, tooltip: 'Customers' },
   { href: '/admin/admins', label: 'Admins', icon: Shield, tooltip: 'Admins' },
   { href: '/admin/notifications', label: 'Notifications', icon: Bell, tooltip: 'Notifications' },
+  { href: '/admin/settings', label: 'Settings', icon: Settings, tooltip: 'Settings' },
 ];
 
 export function AdminSidebar() {

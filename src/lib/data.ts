@@ -313,6 +313,36 @@ export const getServiceById = (id: string): Service | undefined => {
     return getServices().find(service => service.id === id);
 }
 
+export const saveService = (service: Service): void => {
+    const services = getServices();
+    const index = services.findIndex(s => s.id === service.id);
+    if (index > -1) {
+        services[index] = service;
+    } else {
+        services.push(service);
+    }
+    saveToLocalStorage('buddy-clean-services', services);
+};
+
+export const deleteService = (id: string): void => {
+    const services = getServices().filter(s => s.id !== id);
+    saveToLocalStorage('buddy-clean-services', services);
+};
+
+const DEFAULT_TIME_SLOTS = [
+  "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", 
+  "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", 
+  "05:00 PM", "06:00 PM", "07:00 PM"
+];
+
+export const getTimeSlots = (): string[] => {
+    return getFromLocalStorage('buddy-clean-timeslots', DEFAULT_TIME_SLOTS);
+};
+
+export const saveTimeSlots = (slots: string[]): void => {
+    saveToLocalStorage('buddy-clean-timeslots', slots);
+};
+
 export const getCustomers = (): Customer[] => {
     return getFromLocalStorage('buddy-clean-customers', INITIAL_MOCK_CUSTOMERS);
 }

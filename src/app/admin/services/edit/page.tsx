@@ -10,7 +10,8 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { getServiceById, getServices } from "@/lib/data";
+import { getServiceById, getServices, saveService } from "@/lib/data";
+import { Service } from "@/lib/types";
 import { Loader2, PlusCircle, Trash2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -82,8 +83,24 @@ export default function EditServicePage() {
 
   const onSubmit = (data: z.infer<typeof serviceSchema>) => {
     setSubmitting(true);
-    console.log("Form data:", data);
-    // In a real app, you would save this data to your backend.
+    
+    // Create new service object
+    const newService: Service = {
+      id: serviceId || data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      name: data.name,
+      description: data.description,
+      category: data.category as "home" | "car",
+      // @ts-ignore - bypassing strict image type check for dynamic images
+      image: { id: "custom", description: data.name, imageUrl: data.imageUrl, imageHint: "custom" },
+      // @ts-ignore
+      gallery: [{ id: "custom", description: data.name, imageUrl: data.imageUrl, imageHint: "custom" }],
+      features: data.features,
+      process: [], // Optional field based on data.ts
+      variants: data.variants.map((v, i) => ({ id: v.id || `var-${Date.now()}-${i}`, name: v.name, price: v.price })),
+    };
+
+    saveService(newService);
+
     setTimeout(() => {
       toast({
         title: serviceId ? "Service Updated" : "Service Created",
@@ -91,7 +108,7 @@ export default function EditServicePage() {
       });
       setSubmitting(false);
       router.push("/admin/services");
-    }, 1500);
+    }, 500);
   };
   
   const imageUrl = form.watch("imageUrl");
