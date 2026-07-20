@@ -19,9 +19,9 @@ export default function AccountLayout({
 
   useEffect(() => {
     if (!loading && !user) {
-      router.replace("/login");
+      router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, pathname]);
 
   if (loading || !user) {
     return (
