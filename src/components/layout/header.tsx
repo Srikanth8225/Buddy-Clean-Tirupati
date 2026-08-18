@@ -41,9 +41,10 @@ import { Notification } from '@/lib/types';
 
 const navLinks = [
   { href: '/', label: 'Home', icon: HomeIcon },
-  { href: '/services', label: 'All Services', icon: Wrench },
+  { href: '/services', label: 'All Services', icon: ListOrdered },
   { href: '/services/home-cleaning', label: 'Home Cleaning', icon: HomeIcon },
   { href: '/services/car-wash', label: 'Car Wash', icon: Car },
+  { href: '/services/appliance-repair', label: 'Appliance Repair', icon: Wrench },
 ];
 
 export default function Header() {

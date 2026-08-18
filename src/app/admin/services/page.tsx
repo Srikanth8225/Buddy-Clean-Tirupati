@@ -84,7 +84,13 @@ export default function AdminServicesPage() {
                   <TableCell className="font-medium">{service.name}</TableCell>
                   <TableCell>
                     <span className="flex items-center gap-2">
-                      {service.category === 'home' ? <HomeIcon className="h-4 w-4 text-muted-foreground"/> : <Car className="h-4 w-4 text-muted-foreground"/>}
+                      {service.category === 'home' ? (
+                        <HomeIcon className="h-4 w-4 text-muted-foreground" />
+                      ) : service.category === 'appliance' ? (
+                        <Wrench className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <Car className="h-4 w-4 text-muted-foreground" />
+                      )}
                       {service.category.charAt(0).toUpperCase() + service.category.slice(1)}
                     </span>
                   </TableCell>

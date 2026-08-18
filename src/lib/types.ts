@@ -28,7 +28,7 @@ export interface Service {
   id: string;
   name: string;
   description: string;
-  category: 'home' | 'car';
+  category: 'home' | 'car' | 'appliance';
   image: ImagePlaceholder;
   gallery: ImagePlaceholder[];
   features: string[];

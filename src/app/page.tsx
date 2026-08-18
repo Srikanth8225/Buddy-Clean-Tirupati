@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Car, Home as HomeIcon, Sparkles } from 'lucide-react';
+import { Car, Home as HomeIcon, Sparkles, Wrench } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import placeholderImages from '@/lib/placeholder-images.json';
@@ -55,7 +55,7 @@ export default function Home() {
           <p className="max-w-2xl text-lg text-primary-foreground/90">
             Home & car cleaning, tailored for you. Book now for a sparkling clean experience.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 mt-4">
+          <div className="flex flex-col sm:flex-row gap-4 mt-4 flex-wrap justify-center">
             <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
               <Link href="/services/home-cleaning">
                 <HomeIcon className="mr-2 h-5 w-5" />
@@ -66,6 +66,12 @@ export default function Home() {
               <Link href="/services/car-wash">
                 <Car className="mr-2 h-5 w-5" />
                 Book Car Wash
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white/40 backdrop-blur-sm">
+              <Link href="/services/appliance-repair">
+                <Wrench className="mr-2 h-5 w-5" />
+                Book Appliance Repair
               </Link>
             </Button>
           </div>

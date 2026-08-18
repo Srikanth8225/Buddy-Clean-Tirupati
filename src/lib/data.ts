@@ -215,6 +215,54 @@ const INITIAL_MOCK_SERVICES: Service[] = [
       variants: [
           { id: 'bike-express', name: 'Standard Bike', price: 249 },
       ]
+    },
+    {
+      id: 'ac-repair-service',
+      name: 'AC Repair & Service',
+      description: 'Expert AC installation, uninstallation, deep cleaning and gas refilling service at your doorstep.',
+      category: 'appliance',
+      image: allImages.find(img => img.id === 'home-cleaning-1')!,
+      gallery: [
+          allImages.find(img => img.id === 'home-cleaning-1')!,
+      ],
+      features: ['Basic inspection & fault diagnosis', 'Filter & cooling coil cleaning', 'Gas pressure & refrigerant check', 'Safety & electric leakage check'],
+      variants: [
+        { id: 'ac-general-service', name: 'General Service (AC)', price: 300 },
+        { id: 'ac-gas-refilling', name: 'AC Gas Refilling', price: 300 },
+        { id: 'ac-installation', name: 'AC Installation', price: 300 },
+        { id: 'ac-uninstallation', name: 'AC Uninstallation', price: 300 },
+      ]
+    },
+    {
+      id: 'washing-machine-service',
+      name: 'Washing Machine Repair',
+      description: 'Complete washing machine diagnosis, drum cleaning, motor repair, and installation.',
+      category: 'appliance',
+      image: allImages.find(img => img.id === 'home-cleaning-2')!,
+      gallery: [
+          allImages.find(img => img.id === 'home-cleaning-2')!,
+      ],
+      features: ['Comprehensive drum check', 'Drain pump & inlet valve inspection', 'Vibration & noise troubleshooting', 'Genuine spare parts guarantee'],
+      variants: [
+        { id: 'wm-general-check', name: 'General Inspection', price: 300 },
+        { id: 'wm-drum-cleaning', name: 'Deep Drum Cleaning', price: 499 },
+        { id: 'wm-installation', name: 'Installation / Uninstallation', price: 399 },
+      ]
+    },
+    {
+      id: 'refrigerator-service',
+      name: 'Refrigerator Repair',
+      description: 'Quick & reliable repair for single door, double door, and side-by-side refrigerators.',
+      category: 'appliance',
+      image: allImages.find(img => img.id === 'kitchen-cleaning')!,
+      gallery: [
+          allImages.find(img => img.id === 'kitchen-cleaning')!,
+      ],
+      features: ['Compressor & thermostat testing', 'Gas leak detection & charging', 'Cooling coil & defrost system check', 'Door gasket & seal inspection'],
+      variants: [
+        { id: 'fridge-general-check', name: 'General Inspection', price: 300 },
+        { id: 'fridge-gas-charge', name: 'Gas Charging Check', price: 300 },
+      ]
     }
 ];
 
@@ -303,7 +351,7 @@ export const initializeLocalStorage = () => {
     isInitialized = true;
 };
 
-export const getServices = (category?: 'home' | 'car'): Service[] => {
+export const getServices = (category?: 'home' | 'car' | 'appliance'): Service[] => {
   const services = getFromLocalStorage('buddy-clean-services', INITIAL_MOCK_SERVICES);
   if (category) return services.filter(service => service.category === category);
   return services;

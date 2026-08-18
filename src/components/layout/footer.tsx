@@ -40,6 +40,7 @@ export default function Footer() {
                         <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
                             <Link href="/services/home-cleaning" className="hover:text-foreground">Home Cleaning</Link>
                             <Link href="/services/car-wash" className="hover:text-foreground">Car Wash</Link>
+                            <Link href="/services/appliance-repair" className="hover:text-foreground">Appliance Repair</Link>
                              {user?.isAdmin && (
                                 <Link href="/admin" className="hover:text-foreground font-medium text-primary">Admin Dashboard</Link>
                             )}

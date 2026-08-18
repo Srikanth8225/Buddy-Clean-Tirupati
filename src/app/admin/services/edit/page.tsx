@@ -28,7 +28,7 @@ const variantSchema = z.object({
 const serviceSchema = z.object({
   name: z.string().min(3, "Service name must be at least 3 characters."),
   description: z.string().min(10, "Description is too short."),
-  category: z.enum(["home", "car"], { required_error: "Please select a category." }),
+  category: z.enum(["home", "car", "appliance"], { required_error: "Please select a category." }),
   imageUrl: z.string().url("Please enter a valid image URL.").regex(/^https:\/\/images\.unsplash\.com\//, "Only images from images.unsplash.com are allowed."),
   features: z.array(z.string().min(3, "Feature description is too short.")).min(1, "At least one feature is required."),
   variants: z.array(variantSchema).min(1, "At least one service variant is required."),
@@ -89,7 +89,7 @@ export default function EditServicePage() {
       id: serviceId || data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       name: data.name,
       description: data.description,
-      category: data.category as "home" | "car",
+      category: data.category as "home" | "car" | "appliance",
       // @ts-ignore - bypassing strict image type check for dynamic images
       image: { id: "custom", description: data.name, imageUrl: data.imageUrl, imageHint: "custom" },
       // @ts-ignore
@@ -100,39 +100,38 @@ export default function EditServicePage() {
     };
 
     saveService(newService);
-
-    setTimeout(() => {
-      toast({
-        title: serviceId ? "Service Updated" : "Service Created",
-        description: `The service "${data.name}" has been successfully saved.`,
-      });
-      setSubmitting(false);
-      router.push("/admin/services");
-    }, 500);
+    toast({
+      title: "Service saved successfully",
+      description: `The service '${data.name}' has been saved.`,
+    });
+    router.push("/admin/services");
   };
   
   const imageUrl = form.watch("imageUrl");
 
   if (loading) {
-    return <div className="flex justify-center items-center h-64"><Loader2 className="h-8 w-8 animate-spin" /></div>
+    return <div className="p-8 text-center">Loading...</div>;
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>{serviceId ? "Edit Service" : "Add New Service"}</CardTitle>
-            <CardDescription>Fill out the details for the service.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
+    <div className="container mx-auto p-4 md:p-8 max-w-3xl">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl">{serviceId ? "Edit Service" : "Add New Service"}</CardTitle>
+          <CardDescription>
+            {serviceId ? "Update details of the existing service." : "Fill out the form below to create a new service."}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Service Name</FormLabel>
-                  <FormControl><Input {...field} placeholder="e.g., Full Home Clean" /></FormControl>
+                  <FormControl><Input {...field} placeholder="e.g. Full Home Clean" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -143,7 +142,7 @@ export default function EditServicePage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
-                  <FormControl><Textarea {...field} placeholder="Describe the service..." /></FormControl>
+                  <FormControl><Textarea {...field} placeholder="A short description of the service" /></FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -159,6 +158,7 @@ export default function EditServicePage() {
                     <SelectContent>
                       <SelectItem value="home">Home Cleaning</SelectItem>
                       <SelectItem value="car">Car Wash</SelectItem>
+                      <SelectItem value="appliance">Appliance Repair</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
