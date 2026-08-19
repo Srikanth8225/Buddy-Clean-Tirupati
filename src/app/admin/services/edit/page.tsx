@@ -14,7 +14,7 @@ import { getServiceById, getServices, saveService } from "@/lib/data";
 import { Service } from "@/lib/types";
 import { Loader2, PlusCircle, Trash2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -34,7 +34,7 @@ const serviceSchema = z.object({
   variants: z.array(variantSchema).min(1, "At least one service variant is required."),
 });
 
-export default function EditServicePage() {
+function EditServiceForm() {
   const searchParams = useSearchParams();
   const serviceId = searchParams.get("id");
   const { toast } = useToast();
@@ -115,158 +115,165 @@ export default function EditServicePage() {
 
   return (
     <div className="container mx-auto p-4 md:p-8 max-w-3xl">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">{serviceId ? "Edit Service" : "Add New Service"}</CardTitle>
-          <CardDescription>
-            {serviceId ? "Update details of the existing service." : "Fill out the form below to create a new service."}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Service Name</FormLabel>
-                  <FormControl><Input {...field} placeholder="e.g. Full Home Clean" /></FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl><Textarea {...field} placeholder="A short description of the service" /></FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl><SelectTrigger><SelectValue placeholder="Select a category" /></SelectTrigger></FormControl>
-                    <SelectContent>
-                      <SelectItem value="home">Home Cleaning</SelectItem>
-                      <SelectItem value="car">Car Wash</SelectItem>
-                      <SelectItem value="appliance">Appliance Repair</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="imageUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Image URL</FormLabel>
-                  <FormControl><Input {...field} placeholder="https://images.unsplash.com/..." /></FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {imageUrl && form.getFieldState('imageUrl').invalid === false && (
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-2xl">{serviceId ? "Edit Service" : "Add New Service"}</CardTitle>
+              <CardDescription>
+                {serviceId ? "Update details of the existing service." : "Fill out the form below to create a new service."}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Service Name</FormLabel>
+                    <FormControl><Input {...field} placeholder="e.g. Full Home Clean" /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl><Textarea {...field} placeholder="A short description of the service" /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Category</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl><SelectTrigger><SelectValue placeholder="Select a category" /></SelectTrigger></FormControl>
+                      <SelectContent>
+                        <SelectItem value="home">Home Cleaning</SelectItem>
+                        <SelectItem value="car">Car Wash</SelectItem>
+                        <SelectItem value="appliance">Appliance Repair</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="imageUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Image URL</FormLabel>
+                    <FormControl><Input {...field} placeholder="https://images.unsplash.com/..." /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {imageUrl && !form.getFieldState('imageUrl').invalid && (
                 <div className="relative aspect-video w-full max-w-sm rounded-md overflow-hidden border">
-                    <Image src={imageUrl} alt="Service Image Preview" fill className="object-cover" />
+                  <Image src={imageUrl} alt="Service Image Preview" fill className="object-cover" />
                 </div>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-            <CardHeader>
-                <CardTitle>Features</CardTitle>
-                <CardDescription>List the key features of this service.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                {featureFields.map((field, index) => (
-                    <FormField
-                        key={field.id}
-                        control={form.control}
-                        name={`features.${index}`}
-                        render={({ field }) => (
-                            <FormItem>
-                               <div className="flex items-center gap-2">
-                                    <FormControl><Input {...field} placeholder={`Feature ${index + 1}`} /></FormControl>
-                                    <Button type="button" variant="destructive" size="icon" onClick={() => removeFeature(index)} disabled={featureFields.length <= 1}>
-                                        <Trash2 className="h-4 w-4" />
-                                    </Button>
-                               </div>
-                               <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                ))}
-                <Button type="button" variant="outline" size="sm" onClick={() => appendFeature("")}>
-                    <PlusCircle className="mr-2 h-4 w-4" /> Add Feature
-                </Button>
+              )}
             </CardContent>
-        </Card>
+          </Card>
 
-        <Card>
+          <Card>
             <CardHeader>
-                <CardTitle>Variants & Pricing</CardTitle>
-                <CardDescription>Define the different options and prices for this service.</CardDescription>
+              <CardTitle>Features</CardTitle>
+              <CardDescription>List the key features of this service.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-                {variantFields.map((field, index) => (
-                    <div key={field.id} className="flex items-start gap-4 p-4 border rounded-md">
-                        <div className="grid grid-cols-2 gap-4 flex-grow">
-                            <FormField
-                                control={form.control}
-                                name={`variants.${index}.name`}
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Variant Name</FormLabel>
-                                        <FormControl><Input {...field} placeholder="e.g., 2 BHK" /></FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                             <FormField
-                                control={form.control}
-                                name={`variants.${index}.price`}
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Price (INR)</FormLabel>
-                                        <FormControl><Input type="number" {...field} /></FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        <Button type="button" variant="destructive" size="icon" onClick={() => removeVariant(index)} disabled={variantFields.length <= 1} className="mt-8">
-                            <Trash2 className="h-4 w-4" />
+              {featureFields.map((field, index) => (
+                <FormField
+                  key={field.id}
+                  control={form.control}
+                  name={`features.${index}`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center gap-2">
+                        <FormControl><Input {...field} placeholder={`Feature ${index + 1}`} /></FormControl>
+                        <Button type="button" variant="destructive" size="icon" onClick={() => removeFeature(index)} disabled={featureFields.length <= 1}>
+                          <Trash2 className="h-4 w-4" />
                         </Button>
-                    </div>
-                ))}
-                 <Button type="button" variant="outline" size="sm" onClick={() => appendVariant({ name: "", price: 0 })}>
-                    <PlusCircle className="mr-2 h-4 w-4" /> Add Variant
-                </Button>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
+              <Button type="button" variant="outline" size="sm" onClick={() => appendFeature("")}>
+                <PlusCircle className="mr-2 h-4 w-4" /> Add Feature
+              </Button>
             </CardContent>
-        </Card>
+          </Card>
 
-        <div className="flex justify-end gap-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Variants & Pricing</CardTitle>
+              <CardDescription>Define the different options and prices for this service.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {variantFields.map((field, index) => (
+                <div key={field.id} className="flex items-start gap-4 p-4 border rounded-md">
+                  <div className="grid grid-cols-2 gap-4 flex-grow">
+                    <FormField
+                      control={form.control}
+                      name={`variants.${index}.name`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Variant Name</FormLabel>
+                          <FormControl><Input {...field} placeholder="e.g., 2 BHK" /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`variants.${index}.price`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Price (INR)</FormLabel>
+                          <FormControl><Input type="number" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <Button type="button" variant="destructive" size="icon" onClick={() => removeVariant(index)} disabled={variantFields.length <= 1} className="mt-8">
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button type="button" variant="outline" size="sm" onClick={() => appendVariant({ name: "", price: 0 })}>
+                <PlusCircle className="mr-2 h-4 w-4" /> Add Variant
+              </Button>
+            </CardContent>
+          </Card>
+
+          <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
             <Button type="submit" disabled={submitting}>
-                {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {serviceId ? "Update Service" : "Create Service"}
+              {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {serviceId ? "Update Service" : "Create Service"}
             </Button>
-        </div>
-      </form>
-    </Form>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }
 
-    
+export default function EditServicePage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center">Loading editor...</div>}>
+      <EditServiceForm />
+    </Suspense>
+  );
+}
